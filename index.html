@@ -22,7 +22,7 @@
   --bl:#3B82F6;--bl2:rgba(59,130,246,0.12);--bl3:rgba(59,130,246,0.25);
   --cy:#06B6D4;--cy2:rgba(6,182,212,0.12);--cy3:rgba(6,182,212,0.25);
   --pu:#8B5CF6;--pu2:rgba(139,92,246,0.12);
-  --t:#F0F9FF;--t2:#94A3B8;--t3:#475569;--t4:#2D3F56;
+  --t:#F0F9FF;--t2:#F5C842;--t3:#C9A227;--t4:#2D3F56;
 }
 body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--t);font-size:14px;min-height:100vh;overflow-x:hidden;}
 #toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--s1);border:1px solid var(--gn3);border-radius:12px;padding:12px 20px;font-size:13px;font-weight:600;color:var(--gn);z-index:9999;opacity:0;transition:all .3s;pointer-events:none;white-space:nowrap;max-width:92vw;text-align:center;}
@@ -1116,7 +1116,7 @@ async function confirmarEnvioLista(){
     const wpp=fornec?.whatsapp||'';
     const linhas=prods.map(p=>`• ${p.emoji||'📦'} ${p.nome}: *${numFmt(p.qtdPedido)} ${p.unidade||'un'}*`).join('\n');
     const dest=fornec?fornec.nome:'Lista Geral';
-    const msg=encodeURIComponent(`🛒 *Pedido de Compras — ${dest}*\n${data}\n\n${linhas}\n\n_Gerencion Estoque v3.1_`);
+    const msg=encodeURIComponent(`🛒 *Pedido de Compras — ${dest}*\n🏪 ${REST_NOME||''}${FUNC_NOME?' · '+FUNC_NOME:''}\n${data}\n\n${linhas}\n\n_Gerencion Estoque v3.1_`);
     if(wpp){window.open(`https://wa.me/${wpp}?text=${msg}`,'_blank');enviados++;}
     else{
       const num=prompt(`Fornecedor "${dest}" sem WhatsApp.\nDigite o número (55+DDD+número):`);
@@ -1164,7 +1164,7 @@ const TUTORIAIS={
     hi('📊','Resumo do Mês','Mostra entradas, saídas e perdas do mês atual. Compare os números e identifique tendências no seu negócio.'),
     hi('📈','Comparativo por Categoria','Barras mostram o consumo de cada categoria. Quanto maior a barra, mais saiu naquele período. Ótimo para planejar compras.'),
     hi('⚠️','Relatório de Perdas','Lista todas as perdas e vencimentos do mês com quantidade. Use para identificar o que mais desperdiça e tomar ação.'),
-    hi('🛒','Lista de Compras Automática','O sistema identifica todos os produtos abaixo do mínimo e monta a lista. Ao clicar <strong>Enviar ao Fornecedor</strong>, cada fornecedor recebe <strong>somente os seus produtos</strong> pelo WhatsApp. Produtos sem fornecedor: o sistema pede o número na hora.'),
+    hi('🛒','Lista de Compras Automática','O sistema identifica todos os produtos abaixo do mínimo e monta a lista. Ao clicar <strong>Enviar ao Fornecedor</strong>, abre uma tela para você <strong>revisar e ajustar as quantidades</strong> antes de enviar. Use − e + ou digite direto. Cada fornecedor recebe <strong>somente os seus produtos</strong> pelo WhatsApp.'),
   ],
   config:[
     hi('🔗','Link para Funcionários','Envie o link pelo WhatsApp. O funcionário abre no celular, o sistema já reconhece o estabelecimento. Ele cria o PIN e instala. Muito mais fácil que digitar código.'),
