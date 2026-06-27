@@ -672,7 +672,7 @@ let emojiTabSel=0;
 const $=id=>document.getElementById(id);
 const toast=(m,t='ok',d=2600)=>{const el=$('toast');el.textContent=m;el.className='show'+(t==='err'?' err':t==='warn'?' warn':t==='info'?' info':'');clearTimeout(el._t);el._t=setTimeout(()=>el.className='',d);};
 const fmt=v=>(v||0).toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
-const fmtN=v=>(v||0).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});
+const fmtN=v=>{const n=parseFloat(v)||0;return n%1===0?n.toLocaleString('pt-BR'):n.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});};
 const numFmt=v=>{const n=parseFloat(v)||0;return n%1===0?n.toString():n.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});};
 const diasParaVencer=dt=>{
   if(!dt)return null;
