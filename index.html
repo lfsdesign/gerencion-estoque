@@ -573,7 +573,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--t);font-siz
       <label class="fl">Quantidade</label>
       <div class="qty-p">
         <button class="qp-b" onclick="ajQ(-1)">−</button>
-        <div class="qp-v" id="qpV">1</div>
+        <input class="qp-v" id="qpV" type="number" value="1" min="0" step="1" inputmode="numeric" style="border:none;outline:none;background:transparent;width:100%;text-align:center;font-size:23px;font-weight:800;color:var(--t);font-family:Inter,sans-serif;" oninput="movQty=Math.max(0,parseFloat(this.value)||0);updPrev();" onfocus="this.select()">
         <button class="qp-b" onclick="ajQ(1)">+</button>
       </div>
     </div>
@@ -804,10 +804,19 @@ async function salvarProd(){const nome=$('mpNome').value.trim();if(!nome)return 
 async function excluirProd(){if(!confirm('Excluir produto?'))return;try{await sb(`ge_produtos?id=eq.${$('mpId').value}`,{method:'DELETE'});toast('Produto removido');fM('ovProd');await carregarProds();renderProds();}catch(e){toast('Erro ao excluir','err');}}
 
 // MOVIMENTOS
-function abrirMov(tipo){movQty=1;subtipoSaida='normal';$('mmTit').textContent=tipo==='entrada'?'📥 Registrar Entrada':'📤 Registrar Saída';$('mmSub').textContent=tipo==='entrada'?'Compra, recebimento ou ajuste':'Consumo, venda, perda ou vencimento';$('mmTipo').value=tipo;$('mmStWrap').style.display=tipo==='saida'?'block':'none';$('mmEstBox').style.display='none';$('qpV').textContent='1';$('mmObs').value='';const sel=$('mmProd');sel.innerHTML='<option value="">Selecione um produto...</option>'+todosProds.map(p=>`<option value="${p.id}">${p.emoji||'📦'} ${p.nome} (${fmtN(p.quantidade||0)} ${p.unidade||'un'})</option>`).join('');['N','P','V','A'].forEach(l=>{const b=$('tb'+l);if(b)b.classList.remove('on');});$('tbN')&&$('tbN').classList.add('on');abrirModal('ovMov');}
+function abrirMov(tipo){movQty=1;subtipoSaida='normal';$('mmTit').textContent=tipo==='entrada'?'📥 Registrar Entrada':'📤 Registrar Saída';$('mmSub').textContent=tipo==='entrada'?'Compra, recebimento ou ajuste':'Consumo, venda, perda ou vencimento';$('mmTipo').value=tipo;$('mmStWrap').style.display=tipo==='saida'?'block':'none';$('mmEstBox').style.display='none';movQty=1;const qv=$('qpV');if(qv)qv.value=1;$('mmObs').value='';const sel=$('mmProd');sel.innerHTML='<option value="">Selecione um produto...</option>'+todosProds.map(p=>`<option value="${p.id}">${p.emoji||'📦'} ${p.nome} (${fmtN(p.quantidade||0)} ${p.unidade||'un'})</option>`).join('');['N','P','V','A'].forEach(l=>{const b=$('tb'+l);if(b)b.classList.remove('on');});$('tbN')&&$('tbN').classList.add('on');abrirModal('ovMov');}
 function setSt(sub){subtipoSaida=sub;['N','P','V','A'].forEach(l=>{const b=$('tb'+l);if(b)b.classList.remove('on');});const map={normal:'N',perda:'P',vencimento:'V',ajuste:'A'};const btn=$('tb'+map[sub]);if(btn)btn.classList.add('on');}
-function updEst(){const id=$('mmProd').value;const p=todosProds.find(x=>x.id===id);$('mmEstBox').style.display=p?'block':'none';if(p){$('mmEstV').textContent=fmtN(p.quantidade||0)+' '+(p.unidade||'un');$('mmEstV').style.color=(p.quantidade||0)<=(p.estoque_minimo||0)?'var(--rd)':'var(--gn)';}}
-function ajQ(d){movQty=Math.max(0.01,parseFloat((movQty+d).toFixed(3)));$('qpV').textContent=fmtN(movQty);const id=$('mmProd').value;const p=todosProds.find(x=>x.id===id);if(p){const tipo=$('mmTipo').value;const prev=tipo==='entrada'?(p.quantidade||0)+movQty:Math.max(0,(p.quantidade||0)-movQty);$('mmPrevEl').textContent=`→ Ficará: ${fmtN(prev)} ${p.unidade||'un'}`;}}
+function updEst(){const id=$('mmProd').value;const p=todosProds.find(x=>x.id===id);$('mmEstBox').style.display=p?'block':'none';if(p){$('mmEstV').textContent=fmtN(p.quantidade||0)+' '+(p.unidade||'un');$('mmEstV').style.color=(p.quantidade||0)<=(p.estoque_minimo||0)?'var(--rd)':'var(--gn)';updPrev();}}
+function ajQ(d){
+  movQty=Math.max(0,movQty+d);
+  const el=$('qpV');if(el)el.value=movQty;
+  updPrev();
+}
+function updPrev(){
+  const id=$('mmProd').value;const p=todosProds.find(x=>x.id===id);
+  if(p){const tipo=$('mmTipo').value;const prev=tipo==='entrada'?(p.quantidade||0)+movQty:Math.max(0,(p.quantidade||0)-movQty);
+  $('mmPrevEl').textContent=`→ Ficará: ${prev % 1 === 0 ? prev : prev.toFixed(2)} ${p.unidade||'un'}`;}
+}
 async function registrarMov(){const pid=$('mmProd').value;const tipo=$('mmTipo').value;if(!pid)return toast('Selecione um produto','err');const p=todosProds.find(x=>x.id===pid);if(!p)return;const qtdAntes=p.quantidade||0;const novaQtd=tipo==='entrada'?qtdAntes+movQty:Math.max(0,qtdAntes-movQty);try{await sb(`ge_produtos?id=eq.${pid}`,{method:'PATCH',body:JSON.stringify({quantidade:novaQtd,atualizado_por:FUNC_ID,atualizado_em:new Date().toISOString()})});await sb('ge_movimentacoes',{method:'POST',body:JSON.stringify({restaurante_id:REST_ID,produto_id:pid,tipo,subtipo:tipo==='saida'?subtipoSaida:null,quantidade:movQty,quantidade_anterior:qtdAntes,quantidade_nova:novaQtd,funcionario_id:FUNC_ID,funcionario_nome:FUNC_NOME,observacao:$('mmObs').value||null})});toast(`✅ ${tipo==='entrada'?'Entrada':'Saída'} registrada!`);fM('ovMov');p.quantidade=novaQtd;renderDash();}catch(e){toast('Erro: '+e.message,'err');}}
 
 // DASHBOARD
