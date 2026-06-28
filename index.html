@@ -22,10 +22,10 @@
   --bl:#3B82F6;--bl2:rgba(59,130,246,0.12);--bl3:rgba(59,130,246,0.25);
   --cy:#06B6D4;--cy2:rgba(6,182,212,0.12);--cy3:rgba(6,182,212,0.25);
   --pu:#8B5CF6;--pu2:rgba(139,92,246,0.12);
-  --t:#F0F9FF;--t2:#94A3B8;--t3:#64748B;--t4:#2D3F56;
+  --t:#F0F9FF;--t2:rgba(255,255,255,0.70);--t3:rgba(255,255,255,0.45);--t4:#2D3F56;
 }
 body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--t);font-size:14px;min-height:100vh;overflow-x:hidden;}
-#toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--s1);border:1px solid var(--gn3);border-radius:12px;padding:12px 20px;font-size:13px;font-weight:600;color:var(--gn);z-index:9999;opacity:0;transition:all .3s;pointer-events:none;white-space:nowrap;max-width:92vw;text-align:center;}
+#toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--s1);border:1px solid var(--gn3);border-radius:12px;padding:12px 20px;font-size:13px;font-weight:600;color:var(--gn);z-index:9999;opacity:0;transition:all .3s;pointer-events:none;white-space:normal;max-width:96vw;text-align:center;line-height:1.6;}
 #toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
 #toast.err{border-color:var(--rd3);color:var(--rd);}
 #toast.warn{border-color:var(--am3);color:var(--am);}
@@ -817,7 +817,13 @@ function pinD(d){if(pinDigitos.length>=4)return;pinDigitos+=d;renderPin();if(pin
 function pinDel(){if(pinDigitos.length>0){pinDigitos=pinDigitos.slice(0,-1);renderPin();}}
 function renderPin(){for(let i=0;i<4;i++){const el=$('pd'+i);if(el)el.classList.toggle('filled',i<pinDigitos.length);}const err=$('pinErro');if(err)err.textContent='';}
 async function validarPin(){try{const rp=await sb(`ge_restaurantes?id=eq.${REST_ID}&pin_dono=eq.${pinDigitos}&select=id,nome,nome_proprietario`);if(rp.length){FUNC_ID=null;FUNC_NOME=rp[0].nome_proprietario||rp[0].nome;REST_NOME=rp[0].nome;FUNC_ROLE='proprietario';salvarSessao('PROP');await entrarApp();return;}const rf=await sb(`ge_funcionarios?restaurante_id=eq.${REST_ID}&select=*`);const rfF=rf.filter(f=>f.pin===pinDigitos);if(rfF&&rfF.length){FUNC_ID=rfF[0].id;FUNC_NOME=rfF[0].nome;FUNC_ROLE='funcionario';FUNC_PERMS={historico:rfF[0].perm_historico,insights:rfF[0].perm_insights,produtos:rfF[0].perm_produtos,valor:rfF[0].perm_valor_estoque,estornar:rfF[0].perm_estornar};salvarSessao(rfF[0].id);const rrest=await sb(`ge_restaurantes?id=eq.${REST_ID}&select=nome`);REST_NOME=rrest.length?rrest[0].nome:'';await entrarApp();return;}pinDigitos='';renderPin();const err=$('pinErro');if(err){err.textContent='PIN incorreto. Tente novamente.';setTimeout(()=>err.textContent='',2000);}}catch(e){toast('Erro: '+e.message,'err');pinDigitos='';renderPin();}}
-function trocarEst(){if(confirm('Sair e trocar de estabelecimento?')){REST_ID=null;FUNC_ID=null;FUNC_NOME=null;FUNC_ROLE=null;localStorage.removeItem('ge_rest_id');limparSessao();mostrarTela('tela1Acesso');}}
+function trocarEst(){
+  const el=$('toast');
+  el.innerHTML='🔄 Trocar de estabelecimento? <span onclick="confirmarTrocarEst()" style="text-decoration:underline;cursor:pointer;margin-left:8px;font-weight:900;background:rgba(255,255,255,0.2);padding:2px 8px;border-radius:6px;">✓ Sim</span> <span onclick="this.parentElement.className='';" style="cursor:pointer;margin-left:4px;background:rgba(255,255,255,0.2);padding:2px 8px;border-radius:6px;">✗ Não</span>';
+  el.className='show info';
+  clearTimeout(el._t);el._t=setTimeout(()=>{el.className='';el.textContent='';},5000);
+}
+function confirmarTrocarEst(){REST_ID=null;FUNC_ID=null;FUNC_NOME=null;FUNC_ROLE=null;FUNC_PERMS={};localStorage.removeItem('ge_rest_id');limparSessao();mostrarTela('tela1Acesso');}
 
 // ENTRAR NO APP
 async function entrarApp(){mostrarTela('telaApp');$('topNome').textContent=REST_NOME||'Gerencion Estoque';$('topUser').textContent=FUNC_ROLE==='proprietario'?'👑 '+FUNC_NOME+' · Proprietário(a)':'👤 '+FUNC_NOME+' · Funcionário(a)';
@@ -838,7 +844,13 @@ async function entrarApp(){mostrarTela('telaApp');$('topNome').textContent=REST_
   // Registrar service worker
   registrarSW();
 }
-function sair(){if(confirm('Deseja sair?')){limparSessao();REST_ID=null;FUNC_ID=null;FUNC_NOME=null;FUNC_ROLE=null;FUNC_PERMS={};pinDigitos='';mostrarTela('tela1Acesso');}}
+function sair(){
+  const el=$('toast');
+  el.innerHTML='👋 Deseja sair? <span onclick="confirmarSair()" style="text-decoration:underline;cursor:pointer;margin-left:8px;font-weight:900;background:rgba(255,255,255,0.2);padding:2px 8px;border-radius:6px;">✓ Sair</span> <span onclick="this.parentElement.className='';" style="cursor:pointer;margin-left:4px;background:rgba(255,255,255,0.2);padding:2px 8px;border-radius:6px;">✗ Ficar</span>';
+  el.className='show info';
+  clearTimeout(el._t);el._t=setTimeout(()=>{el.className='';el.textContent='';},5000);
+}
+function confirmarSair(){limparSessao();REST_ID=null;FUNC_ID=null;FUNC_NOME=null;FUNC_ROLE=null;FUNC_PERMS={};pinDigitos='';mostrarTela('tela1Acesso');}
 
 // PÁGINAS
 let pgAtual='dash';
@@ -942,14 +954,30 @@ async function excluirProd(){if(!confirm('Excluir produto?'))return;try{await sb
 // MOVIMENTOS
 function abrirMov(tipo){movQty=1;subtipoSaida='normal';$('mmTit').textContent=tipo==='entrada'?'📥 Registrar Entrada':'📤 Registrar Saída';$('mmSub').textContent=tipo==='entrada'?'Compra, recebimento ou ajuste':'Consumo, venda, perda ou vencimento';$('mmTipo').value=tipo;$('mmStWrap').style.display=tipo==='saida'?'block':'none';$('mmEstBox').style.display='none';movQty=1;const qv=$('qpV');if(qv)qv.value=1;$('mmObs').value='';const sel=$('mmProd');sel.innerHTML='<option value="">Selecione um produto...</option>'+todosProds.map(p=>`<option value="${p.id}">${p.emoji||'📦'} ${p.nome} (${fmtN(p.quantidade||0)} ${p.unidade||'un'})</option>`).join('');['N','P','V','A'].forEach(l=>{const b=$('tb'+l);if(b)b.classList.remove('on');});$('tbN')&&$('tbN').classList.add('on');abrirModal('ovMov');}
 function setSt(sub){
-  // Confirmação para perda e vencimento
-  if(sub==='perda'){
-    if(!confirm('⚠️ Registrar como PERDA?\n\nUse isso quando o produto estragou, foi desperdiçado ou descartado.\n\nTem certeza?')){return;}
-  }
-  if(sub==='vencimento'){
-    if(!confirm('📅 Registrar como VENCIDO?\n\nUse isso quando o produto passou da data de validade.\n\nTem certeza?')){return;}
+  if(sub==='perda'||sub==='vencimento'){
+    // Toast de confirmação elegante
+    const msg=sub==='perda'
+      ?'⚠️ Registrar como PERDA? (produto estragou ou foi desperdiçado)'
+      :'📅 Registrar como VENCIDO? (produto passou da validade)';
+    const el=$('toast');
+    el.innerHTML=`${msg} <span onclick="confirmarSt('${sub}')" style="text-decoration:underline;cursor:pointer;margin-left:8px;font-weight:900;background:rgba(255,255,255,0.2);padding:2px 8px;border-radius:6px;">✓ Sim</span> <span onclick="cancelarSt()" style="text-decoration:underline;cursor:pointer;margin-left:4px;font-weight:900;background:rgba(255,255,255,0.2);padding:2px 8px;border-radius:6px;">✗ Não</span>`;
+    el.className='show warn';
+    clearTimeout(el._t);
+    el._t=setTimeout(()=>{el.className='';el.textContent='';},6000);
+    return;
   }
   subtipoSaida=sub;['N','P','V','A'].forEach(l=>{const b=$('tb'+l);if(b)b.classList.remove('on');});const map={normal:'N',perda:'P',vencimento:'V',ajuste:'A'};const btn=$('tb'+map[sub]);if(btn)btn.classList.add('on');
+}
+function confirmarSt(sub){
+  const el=$('toast');el.className='';el.textContent='';
+  subtipoSaida=sub;['N','P','V','A'].forEach(l=>{const b=$('tb'+l);if(b)b.classList.remove('on');});const map={normal:'N',perda:'P',vencimento:'V',ajuste:'A'};const btn=$('tb'+map[sub]);if(btn)btn.classList.add('on');
+  toast(sub==='perda'?'⚠️ Tipo: Perda selecionado':'📅 Tipo: Vencido selecionado','warn');
+}
+function cancelarSt(){
+  const el=$('toast');el.className='';el.textContent='';
+  // Volta para normal
+  subtipoSaida='normal';['N','P','V','A'].forEach(l=>{const b=$('tb'+l);if(b)b.classList.remove('on');});$('tbN')&&$('tbN').classList.add('on');
+  toast('Mantido como Consumo Normal','info');
 }
 function updEst(){const id=$('mmProd').value;const p=todosProds.find(x=>x.id===id);$('mmEstBox').style.display=p?'block':'none';if(p){$('mmEstV').textContent=fmtN(p.quantidade||0)+' '+(p.unidade||'un');$('mmEstV').style.color=(p.quantidade||0)<=(p.estoque_minimo||0)?'var(--rd)':'var(--gn)';updPrev();}}
 function ajQ(d){
@@ -1057,7 +1085,9 @@ async function excluirFunc(){if(!confirm('Remover funcionário?'))return;try{awa
 
 // LINK DE ACESSO
 function compartilharLink(){const link=$('linkFuncEl').textContent;const cod=$('codVal').textContent;if(!link||link==='—')return toast('Carregando...','warn');const msg=encodeURIComponent(`👋 Acesso ao sistema de estoque!\n\n🔗 ${link}\n\n📱 Abra o link, adicione à tela inicial e entre com o PIN que te passei.\n\nCódigo alternativo: ${cod}`);window.open('https://wa.me/?text='+msg,'_blank');}
-async function regenerarCod(){if(!confirm('Gerar novo link? O link anterior para de funcionar.'))return;const cod=Math.random().toString(36).substring(2,8).toUpperCase();try{await sb(`ge_restaurantes?id=eq.${REST_ID}`,{method:'PATCH',body:JSON.stringify({codigo_acesso:cod})});toast('✅ Novo link gerado!');carregarConfig();}catch(e){toast('Erro','err');}}
+async function regenerarCod(){
+  toast('🔄 Gerando novo link...','info');
+  await new Promise(r=>setTimeout(r,1500));const cod=Math.random().toString(36).substring(2,8).toUpperCase();try{await sb(`ge_restaurantes?id=eq.${REST_ID}`,{method:'PATCH',body:JSON.stringify({codigo_acesso:cod})});toast('✅ Novo link gerado!');carregarConfig();}catch(e){toast('Erro','err');}}
 
 // CATEGORIAS
 async function carregarCats(){try{todasCats=await sb(`ge_categorias?restaurante_id=eq.${REST_ID}&select=*&order=nome.asc`);}catch(e){todasCats=[];}}
@@ -1179,7 +1209,16 @@ function relWpp(){const raw=($('cfgWpp').value||'').replace(/\D/g,'');if(!raw)re
 function relEmail(){const email=$('cfgEmail')&&$('cfgEmail').value;if(!email)return toast('Digite um e-mail','warn');const linhas=todosProds.map(p=>`${p.emoji||'📦'} ${p.nome}: ${fmtN(p.quantidade||0)} ${p.unidade||'un'}`).join('%0A');const sub=encodeURIComponent('Relatório de Estoque - '+new Date().toLocaleDateString('pt-BR'));window.open(`mailto:${email}?subject=${sub}&body=${linhas}`,'_blank');}
 function relPDF(){if(!todosProds.length)return toast('Sem produtos','warn');const w=window.open('','_blank');const linhas=todosProds.map(p=>`<tr><td>${p.emoji||'📦'} ${p.nome}</td><td>${p.categoria||'-'}</td><td>${fmtN(p.quantidade||0)}</td><td>${p.unidade||'un'}</td><td>${fmtN(p.estoque_minimo||0)}</td><td>R$ ${fmtN(p.preco_custo||0)}</td><td>${p.data_validade||'-'}</td><td>${p.data_fabricacao||'-'}</td></tr>`).join('');w.document.write(`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Estoque</title><style>body{font-family:Arial,sans-serif;padding:20px;}h2{color:#22C55E;}table{width:100%;border-collapse:collapse;}th,td{border:1px solid #ddd;padding:8px;font-size:12px;}th{background:#22C55E;color:#fff;}tr:nth-child(even){background:#f9f9f9;}</style></head><body><h2>📦 Relatório de Estoque</h2><p>${new Date().toLocaleDateString('pt-BR')}</p><table><thead><tr><th>Produto</th><th>Categoria</th><th>Qtd</th><th>Un</th><th>Mín</th><th>Custo</th><th>Validade</th><th>Fabricação</th></tr></thead><tbody>${linhas}</tbody></table></body></html>`);w.document.close();setTimeout(()=>w.print(),500);}
 function relCSV(){if(!todosProds.length)return toast('Sem produtos','warn');const rows=[['Nome','Categoria','Emoji','Qtd','Unidade','Mín','Custo','Validade','Fabricação'],...todosProds.map(p=>[p.nome,p.categoria||'',p.emoji||'',p.quantidade||0,p.unidade||'',p.estoque_minimo||0,p.preco_custo||0,p.data_validade||'',p.data_fabricacao||''])];const csv=rows.map(r=>r.map(c=>`"${String(c).replace(/"/g,'""')}"`).join(',')).join('\n');const a=document.createElement('a');a.href='data:text/csv;charset=utf-8,\uFEFF'+encodeURIComponent(csv);a.download='estoque.csv';a.click();toast('✅ CSV baixado!');}
-async function limparHist(){if(!confirm('Limpar todo o histórico?'))return;try{await sb(`ge_movimentacoes?restaurante_id=eq.${REST_ID}`,{method:'DELETE'});toast('✅ Histórico limpo!');}catch(e){toast('Erro','err');}}
+async function limparHist(){
+  const el=$('toast');
+  el.innerHTML='🗑️ Limpar todo o histórico? <span onclick="confirmarLimparHist()" style="text-decoration:underline;cursor:pointer;margin-left:8px;font-weight:900;background:rgba(255,255,255,0.2);padding:2px 8px;border-radius:6px;">✓ Sim, limpar</span> <span onclick="this.parentElement.className='';" style="cursor:pointer;margin-left:4px;font-weight:900;background:rgba(255,255,255,0.2);padding:2px 8px;border-radius:6px;">✗ Cancelar</span>';
+  el.className='show warn';
+  clearTimeout(el._t);el._t=setTimeout(()=>{el.className='';el.textContent='';},6000);
+}
+async function confirmarLimparHist(){
+  const el=$('toast');el.className='';el.textContent='';
+  try{await sb(`ge_movimentacoes?restaurante_id=eq.${REST_ID}`,{method:'DELETE'});toast('✅ Histórico limpo!');}catch(e){toast('Erro','err');}
+}
 
 // AJUDA
 function hi(ico,t,s){return`<div class="help-it"><div class="help-ic">${ico}</div><div><div class="help-nt">${t}</div><div class="help-ns">${s}</div></div></div>`;}
@@ -1226,7 +1265,7 @@ const TUTORIAIS={
     hi('🏷️','Categorias de Produtos','Crie as categorias do seu negócio (ex: Carnes, Bebidas, Limpeza). Toque no emoji para escolher o ícone — mais de 1.900 opções. Facilita busca e relatórios.'),
     hi('📏','Unidades de Medida','Além das padrão (kg, g, l, ml, cx...) adicione unidades do seu negócio: porção, bandeja, ampola, rolo, envelope...'),
     hi('📊','Relatórios completos','Envie o estoque completo por <strong>WhatsApp</strong> ou <strong>E-mail</strong>. Baixe em <strong>PDF</strong> (imprima pelo navegador) ou <strong>CSV</strong> para abrir no Excel. Inclui todos os produtos, quantidades, custos e valor total.'),
-    hi('🔔','Notificações Automáticas','O sistema pede permissão para enviar notificações ao seu celular. Quando ativado, você recebe alertas de:<br>• 🔴 Estoque crítico (zerado)<br>• ⚠️ Estoque baixo (abaixo do mínimo)<br>• 📅 Produtos vencidos ou vencendo em 3 dias<br>Funciona mesmo com o app fechado!'),
+    hi('🔔','Notificações Automáticas','O sistema pede permissão para enviar notificações ao seu celular. Quando ativado, você recebe alertas de:<br>• 🔴 Estoque crítico (zerado)<br>• ⚠️ Estoque baixo (abaixo do mínimo)<br>• 📅 Produtos vencidos ou vencendo em 3 dias<br><strong>Dica:</strong> as confirmações de ações importantes aparecem como mensagens coloridas no app — toque em ✓ Sim ou ✗ Não diretamente nelas.'),
     hi('💾','Backup Automático','A cada 30 dias o sistema lembra de fazer um backup em CSV do seu estoque. Guarde o arquivo no computador ou no Google Drive como segurança.'),
     hi('🗑️','Limpar Histórico','Remove todos os registros de movimentos antigos. Os produtos e quantidades são mantidos. Use no início de um novo período ou para limpar testes.'),
   ],
@@ -1334,13 +1373,13 @@ function verificarBackupAutomatico(){
   if(!ultimo||agora-parseInt(ultimo)>umMes){
     // Avisar que está na hora do backup
     setTimeout(()=>{
-      if(confirm('📦 Dica: Já faz 30 dias desde o último backup!\n\nDeseja baixar um CSV com todo o seu estoque agora?')){
-        relCSV();
-        localStorage.setItem(key,agora.toString());
-      }else{
-        localStorage.setItem(key,agora.toString());
-      }
-    },3000);
+      localStorage.setItem(key,agora.toString());
+      const el=$('toast');
+      el.innerHTML='💾 Dica: faça um backup do seu estoque! <span onclick="relCSV();this.parentElement.className=\'\';this.parentElement.textContent=\'\'" style="text-decoration:underline;cursor:pointer;margin-left:8px;font-weight:900;background:rgba(255,255,255,0.2);padding:2px 8px;border-radius:6px;">Baixar CSV</span>';
+      el.className='show info';
+      clearTimeout(el._t);
+      el._t=setTimeout(()=>{el.className='';el.textContent='';},8000);
+    },4000);
   }
 }
 
