@@ -982,7 +982,7 @@ function abrirProd(id){
         btn.textContent=p?(p.emoji||'📦'):'📦';
         btn.type='button';
         btn.style.cssText='width:46px;height:46px;flex-shrink:0;background:var(--s2);border:1.5px solid var(--b);border-radius:11px;font-size:21px;cursor:pointer;';
-        btn.onclick=()=>{emojiTarget='prod';const picker=$('emojiPicker');if(picker){picker.style.display='block';renderEmojiAba(0);}};
+        btn.onclick=()=>{const picker=$('emojiPickerProd');if(picker){renderEmojiAbaProd(0);picker.style.display=picker.style.display==='block'?'none':'block';}};
         wrap.appendChild(btn);
       }
     }
@@ -1336,7 +1336,8 @@ function abrirFunc(id){funcAtual=todosFuncs.find(f=>f.id===id)||null;const f=fun
   $('permEstornar').checked=f?.perm_estornar||false;
   abrirModal('ovFunc');}
 async function salvarFunc(){const nome=$('mfNome').value.trim();const pin=$('mfPin').value;if(!nome)return toast('Nome obrigatório','err');if(!funcAtual&&(!pin||pin.length!==4||isNaN(pin)))return toast('PIN deve ter 4 números','err');
-  // PIN pode ser igual ao do proprietário — o sistema distingue pelo contexto de loginconst perms=funcAtual?{perm_historico:$('permHist').checked,perm_insights:$('permInsights').checked,perm_produtos:$('permProdutos').checked,perm_valor_estoque:$('permValor').checked,perm_estornar:$('permEstornar').checked}:{};
+  // PIN pode ser igual ao do proprietário — o sistema distingue pelo contexto de login
+  const perms=funcAtual?{perm_historico:$('permHist').checked,perm_insights:$('permInsights').checked,perm_produtos:$('permProdutos').checked,perm_valor_estoque:$('permValor').checked,perm_estornar:$('permEstornar').checked}:{};
   const dados={restaurante_id:REST_ID,nome,...(pin?{pin}:{}),...perms};try{const id=$('mfId').value;if(id)await sb(`ge_funcionarios?id=eq.${id}`,{method:'PATCH',body:JSON.stringify(dados)});else await sb('ge_funcionarios',{method:'POST',body:JSON.stringify(dados)});toast(id?'✅ Funcionário atualizado!':'✅ Funcionário criado!');fM('ovFunc');await carregarFuncs();renderFuncs();}catch(e){toast('Erro: '+JSON.stringify(e),'err');}}
 async function excluirFunc(){if(!confirm('Remover funcionário?'))return;try{await sb(`ge_funcionarios?id=eq.${$('mfId').value}`,{method:'DELETE'});toast('Funcionário removido');fM('ovFunc');await carregarFuncs();renderFuncs();}catch(e){toast('Erro ao remover','err');}}
 
