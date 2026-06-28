@@ -828,40 +828,41 @@ function escolherTipo(sufx,val){const inp=sufx==='S'?$('sTipo'):$('cfgTipo');if(
 function toggleEmoji(){const el=$('emojiPicker');if(!el)return;if(el.style.display==='block'){el.style.display='none';return;}emojiTarget='cat';emojiTabSel=0;renderEmojiAba(0);el.style.display='block';}
 function renderEmojiAbaProd(idx){
   emojiTabSel=idx;
-  const tabs=$('emojiTabsProd');const grid=$('emojiGridProd');
+  var tabs=$('emojiTabsProd');var grid=$('emojiGridProd');
   if(!tabs||!grid)return;
-  let th='';
-  EMOJI_CATS.forEach(function(c,i){
-    th+='<button class="emoji-tab'+(i===idx?' on':'')+'" onclick="renderEmojiAbaProd('+i+')" title="'+c.nome+'">'+c.tab+'</button>';
-  });
+  var th='';
+  for(var i=0;i<EMOJI_CATS.length;i++){
+    th+='<button class="emoji-tab'+(i===idx?' on':'')+'" onclick="renderEmojiAbaProd('+i+')" title="'+EMOJI_CATS[i].nome+'">'+EMOJI_CATS[i].tab+'</button>';
+  }
   tabs.innerHTML=th;
-  let gh='';
-  EMOJI_CATS[idx].emojis.forEach(function(e){
-    gh+='<button class="emoji-o" onclick="selecionarEmojiProd(this.textContent)">'+e+'</button>';
-  });
+  var gh='';
+  for(var j=0;j<EMOJI_CATS[idx].emojis.length;j++){
+    gh+='<button class="emoji-o" onclick="selecionarEmojiProd(this)">'+EMOJI_CATS[idx].emojis[j]+'</button>';
+  }
   grid.innerHTML=gh;
 }
 function selecionarEmojiProd(e){
-  const mpE=$('mpEmojiBtn');
-  if(mpE){mpE.textContent=e;$('mpEmoji')&&($('mpEmoji').value=e);}
+  var emoji=typeof e==='string'?e:e.textContent;
+  var mpE=$('mpEmojiBtn');
+  if(mpE){mpE.textContent=emoji;$('mpEmoji')&&($('mpEmoji').value=emoji);}
   $('emojiPickerProd').style.display='none';
 }
 function renderEmojiAba(idx){
   emojiTabSel=idx;
-  const tabs=$('emojiTabs');const grid=$('emojiGrid');
+  var tabs=$('emojiTabs');var grid=$('emojiGrid');
   if(!tabs||!grid)return;
-  let th='';
-  EMOJI_CATS.forEach(function(c,i){
-    th+='<button class="emoji-tab'+(i===idx?' on':'')+'" onclick="renderEmojiAba('+i+')" title="'+c.nome+'">'+c.tab+'</button>';
-  });
+  var th='';
+  for(var i=0;i<EMOJI_CATS.length;i++){
+    th+='<button class="emoji-tab'+(i===idx?' on':'')+'" onclick="renderEmojiAba('+i+')" title="'+EMOJI_CATS[i].nome+'">'+EMOJI_CATS[i].tab+'</button>';
+  }
   tabs.innerHTML=th;
-  let gh='';
-  EMOJI_CATS[idx].emojis.forEach(function(e){
-    gh+='<button class="emoji-o" onclick="selecionarEmoji(this.textContent)">'+e+'</button>';
-  });
+  var gh='';
+  for(var j=0;j<EMOJI_CATS[idx].emojis.length;j++){
+    gh+='<button class="emoji-o" onclick="selecionarEmoji(this)">'+EMOJI_CATS[idx].emojis[j]+'</button>';
+  }
   grid.innerHTML=gh;
 }
-function selecionarEmoji(e){if(emojiTarget==='cat'){$('emjBtn')&&($('emjBtn').textContent=e);$('novaCatIco')&&($('novaCatIco').value=e);}else if(emojiTarget==='prod'){const mpE=$('mpEmojiBtn');if(mpE){mpE.textContent=e;$('mpEmoji')&&($('mpEmoji').value=e);}}$('emojiPicker').style.display='none';}
+function selecionarEmoji(e){var emoji=typeof e==='string'?e:e.textContent;if(emojiTarget==='cat'){$('emjBtn')&&($('emjBtn').textContent=emoji);$('novaCatIco')&&($('novaCatIco').value=emoji);}else if(emojiTarget==='prod'){var mpE=$('mpEmojiBtn');if(mpE){mpE.textContent=emoji;$('mpEmoji')&&($('mpEmoji').value=emoji);}}$('emojiPicker').style.display='none';}
 
 // STATUS VALIDADE
 function labelVal(p){const dtVal=p.data_validade,dtFab=p.data_fabricacao;if(!dtVal)return{ico:'⬜',cls:'',txt:'Sem validade'};if(dtFab&&new Date(dtFab+'T12:00:00')>new Date())return{ico:'⚠️',cls:'warn',txt:'Fab. futura'};const dias=diasParaVencer(dtVal);if(dias===null)return{ico:'⬜',cls:'',txt:''};if(dias<0)return{ico:'🔴',cls:'venc',txt:'VENCIDO'};if(dias===0)return{ico:'⚠️',cls:'warn',txt:'Vence HOJE'};if(dias<=7)return{ico:'⚠️',cls:'warn',txt:`Vence em ${dias}d`};if(dias<=30)return{ico:'⚠️',cls:'warn',txt:`${dias} dias`};return{ico:'✅',cls:'ok',txt:`${dias} dias`};}
