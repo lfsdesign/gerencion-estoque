@@ -550,7 +550,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--t);font-siz
       </div>
       <div class="fg">
         <label class="fl">Validade <span class="fl-hint">— opcional</span></label>
-        <input class="inp" type="text" id="mpVal" placeholder="DD/MM/AAAA" maxlength="10" oninput="mascaraData(this);atualizarStatusVal()">
+        <input class="inp" type="date" id="mpVal" oninput="atualizarStatusVal()" onchange="atualizarStatusVal()">
       </div>
     </div>
     <div class="fg" style="margin-top:4px;">
@@ -561,10 +561,6 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--t);font-siz
     </div>
     <div class="val-status-box" id="mpValStatus"></div>
     <div class="val-status-box" id="mpPrevBox" style="display:none;border-radius:9px;padding:9px 12px;font-size:11px;font-weight:600;margin-bottom:9px;line-height:1.5;"></div>
-    <div id="emojiPickerProd" class="emoji-pick" style="display:none;">
-      <div class="emoji-tabs" id="emojiTabsProd"></div>
-      <div class="emoji-content"><div class="emoji-g" id="emojiGridProd"></div></div>
-    </div>
     <div class="mb">
       <button class="mb-s" onclick="fM('ovProd')">Cancelar</button>
       <button class="mb-p" onclick="salvarProd()">Salvar Produto</button>
@@ -741,6 +737,18 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--t);font-siz
   </div>
 </div>
 
+<!-- EMOJI PICKER PRODUTO - FIXO -->
+<div id="emojiPickerProd" style="display:none;position:fixed;bottom:0;left:0;right:0;z-index:500;background:var(--s2);border-top:2px solid var(--gn3);border-radius:16px 16px 0 0;max-height:60vh;overflow:hidden;box-shadow:0 -4px 20px rgba(0,0,0,0.5);">
+  <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 14px 0;">
+    <span style="font-size:12px;font-weight:700;color:var(--gn);">Escolha um emoji</span>
+    <button onclick="document.getElementById('emojiPickerProd').style.display='none'" style="background:var(--rd2);border:1px solid var(--rd3);border-radius:8px;color:var(--rd);padding:4px 10px;font-size:12px;font-weight:700;cursor:pointer;font-family:Inter,sans-serif;">✕ Fechar</button>
+  </div>
+  <div class="emoji-tabs" id="emojiTabsProd" style="margin-top:6px;"></div>
+  <div class="emoji-content" style="max-height:calc(60vh - 80px);overflow-y:auto;padding:8px;">
+    <div class="emoji-g" id="emojiGridProd"></div>
+  </div>
+</div>
+
 <script>
 const SB_URL='https://vzsvdtlmxxbsqhpitfin.supabase.co';
 const SB_KEY='sb_publishable_rhwR4_UkK33FF3XX1c-oeA_lMKMCANN';
@@ -843,10 +851,7 @@ async function calcularPrevisao(prodId, qtdAtual, unidade){
   }catch(e){return null;}
 }
 
-function atualizarStatusVal(){const el=$('mpValStatus');if(!el)return;
-  const mpValEl=$('mpVal');const mpFabEl=$('mpFab');
-  const dtVal=mpValEl?(mpValEl.dataset.isoDate||mpValEl.value):'';
-  const dtFab=mpFabEl?(mpFabEl.dataset.isoDate||mpFabEl.value):'';if(!dtVal){el.style.display='none';return;}const s=labelVal({data_validade:dtVal,data_fabricacao:dtFab||null});el.textContent=s.ico+' '+s.txt;el.style.display='block';el.style.background=s.cls==='venc'?'var(--rd2)':s.cls==='warn'?'var(--am2)':'var(--gn2)';el.style.color=s.cls==='venc'?'var(--rd)':s.cls==='warn'?'var(--am)':'var(--gn)';el.style.border=`1px solid ${s.cls==='venc'?'var(--rd3)':s.cls==='warn'?'var(--am3)':'var(--gn3)'}`;}
+function atualizarStatusVal(){const el=$('mpValStatus');if(!el)return;const dtVal=$('mpVal')&&$('mpVal').value;const dtFab=$('mpFab')&&$('mpFab').value;if(!dtVal){el.style.display='none';return;}const s=labelVal({data_validade:dtVal,data_fabricacao:dtFab||null});el.textContent=s.ico+' '+s.txt;el.style.display='block';el.style.background=s.cls==='venc'?'var(--rd2)':s.cls==='warn'?'var(--am2)':'var(--gn2)';el.style.color=s.cls==='venc'?'var(--rd)':s.cls==='warn'?'var(--am)':'var(--gn)';el.style.border=`1px solid ${s.cls==='venc'?'var(--rd3)':s.cls==='warn'?'var(--am3)':'var(--gn3)'}`;}
 
 // SETUP
 async function criarEstabelecimento(){const nome=$('sNome').value.trim();const tipo=$('sTipo').value.trim();const dono=$('sDonoNome').value.trim();const pin=$('sPin').value;if(!nome||!tipo||!dono||!pin)return toast('Preencha todos os campos','err');if(pin.length!==4||isNaN(pin))return toast('PIN deve ter 4 números','err');try{const cod=Math.random().toString(36).substring(2,8).toUpperCase();const r=await sb('ge_restaurantes',{method:'POST',body:JSON.stringify({nome:nome,tipo_negocio:tipo,nome_proprietario:dono,pin_dono:pin,codigo_acesso:cod})});REST_ID=r[0].id;REST_NOME=nome;localStorage.setItem('ge_rest_id',REST_ID);localStorage.removeItem('ge_cod_pendente');FUNC_NOME=dono;FUNC_ROLE='proprietario';toast('✅ Estabelecimento criado!');setTimeout(()=>entrarApp(),1000);}catch(e){toast('Erro: '+JSON.stringify(e),'err');}}
@@ -959,11 +964,7 @@ function abrirProd(id){
   $('mpQty').value=p?(p.quantidade||0):0;
   $('mpMin').value=p?(p.estoque_minimo||0):0;
   $('mpCusto').value=p?(p.preco_custo||0):0;
-  // Mostrar datas no formato DD/MM/AAAA
-  const toDisplay=iso=>{if(!iso)return'';const [a,m,d]=iso.split('-');return`${d}/${m}/${a}`;};
-  const fabEl=$('mpFab');const valEl=$('mpVal');
-  if(fabEl){fabEl.value=p?toDisplay(p.data_fabricacao):'';fabEl.dataset.isoDate=p?(p.data_fabricacao||''):'';}
-  if(valEl){valEl.value=p?toDisplay(p.data_validade):'';valEl.dataset.isoDate=p?(p.data_validade||''):'';}
+  $('mpFab').value=p?(p.data_fabricacao||''):'';$('mpVal').value=p?(p.data_validade||''):'';
   const fornSel=$('mpFornec');
   if(fornSel){fornSel.innerHTML='<option value="">Sem fornecedor vinculado</option>'+todosFornecs.map(f=>`<option value="${f.id}" ${p&&p.fornecedor_id===f.id?'selected':''}>${f.nome}</option>`).join('');}
   // Botão emoji do produto
@@ -1017,7 +1018,7 @@ function abrirProd(id){
   }
   abrirModal('ovProd');
 }
-async function salvarProd(){const nome=$('mpNome').value.trim();if(!nome)return toast('Nome obrigatório','err');const dados={restaurante_id:REST_ID,nome,categoria:$('mpCat').value||null,emoji:($('mpEmoji')&&$('mpEmoji').value)||($('mpEmojiBtn')&&$('mpEmojiBtn').textContent)||'📦',unidade:$('mpUnit').value||'un',quantidade:parseFloat($('mpQty').value)||0,estoque_minimo:parseFloat($('mpMin').value)||0,preco_custo:parseFloat($('mpCusto').value)||0,data_fabricacao:($('mpFab').dataset.isoDate||$('mpFab').value)||null,data_validade:($('mpVal').dataset.isoDate||$('mpVal').value)||null,fornecedor_id:$('mpFornec').value||null,atualizado_por:FUNC_ID,atualizado_em:new Date().toISOString()};try{const id=$('mpId').value;if(id)await sb(`ge_produtos?id=eq.${id}`,{method:'PATCH',body:JSON.stringify(dados)});else await sb('ge_produtos',{method:'POST',body:JSON.stringify(dados)});toast(id?'✅ Produto atualizado!':'✅ Produto criado!');fM('ovProd');await carregarProds();renderProds();}catch(e){toast('Erro: '+JSON.stringify(e),'err');}}
+async function salvarProd(){const nome=$('mpNome').value.trim();if(!nome)return toast('Nome obrigatório','err');const dados={restaurante_id:REST_ID,nome,categoria:$('mpCat').value||null,emoji:($('mpEmoji')&&$('mpEmoji').value)||($('mpEmojiBtn')&&$('mpEmojiBtn').textContent)||'📦',unidade:$('mpUnit').value||'un',quantidade:parseFloat($('mpQty').value)||0,estoque_minimo:parseFloat($('mpMin').value)||0,preco_custo:parseFloat($('mpCusto').value)||0,data_fabricacao:$('mpFab').value||null,data_validade:$('mpVal').value||null,fornecedor_id:$('mpFornec').value||null,atualizado_por:FUNC_ID,atualizado_em:new Date().toISOString()};try{const id=$('mpId').value;if(id)await sb(`ge_produtos?id=eq.${id}`,{method:'PATCH',body:JSON.stringify(dados)});else await sb('ge_produtos',{method:'POST',body:JSON.stringify(dados)});toast(id?'✅ Produto atualizado!':'✅ Produto criado!');fM('ovProd');await carregarProds();renderProds();}catch(e){toast('Erro: '+JSON.stringify(e),'err');}}
 async function excluirProd(){if(!confirm('Excluir produto?'))return;try{await sb(`ge_produtos?id=eq.${$('mpId').value}`,{method:'DELETE'});toast('Produto removido');fM('ovProd');await carregarProds();renderProds();}catch(e){toast('Erro ao excluir','err');}}
 
 // MOVIMENTOS
