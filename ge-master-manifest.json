@@ -1,0 +1,25 @@
+{
+  "name": "GE Master — Painel de Controle",
+  "short_name": "GE Master",
+  "description": "Painel master Gerencion Estoque",
+  "start_url": "./ge-master.html",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0B1120",
+  "theme_color": "#8B5CF6",
+  "icons": [
+    {
+      "src": "ge-master-icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "ge-master-icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "lang": "pt-BR"
+}
