@@ -818,10 +818,10 @@ function pinDel(){if(pinDigitos.length>0){pinDigitos=pinDigitos.slice(0,-1);rend
 function renderPin(){for(let i=0;i<4;i++){const el=$('pd'+i);if(el)el.classList.toggle('filled',i<pinDigitos.length);}const err=$('pinErro');if(err)err.textContent='';}
 async function validarPin(){try{const rp=await sb(`ge_restaurantes?id=eq.${REST_ID}&pin_dono=eq.${pinDigitos}&select=id,nome,nome_proprietario`);if(rp.length){FUNC_ID=null;FUNC_NOME=rp[0].nome_proprietario||rp[0].nome;REST_NOME=rp[0].nome;FUNC_ROLE='proprietario';salvarSessao('PROP');await entrarApp();return;}const rf=await sb(`ge_funcionarios?restaurante_id=eq.${REST_ID}&select=*`);const rfF=rf.filter(f=>f.pin===pinDigitos);if(rfF&&rfF.length){FUNC_ID=rfF[0].id;FUNC_NOME=rfF[0].nome;FUNC_ROLE='funcionario';FUNC_PERMS={historico:rfF[0].perm_historico,insights:rfF[0].perm_insights,produtos:rfF[0].perm_produtos,valor:rfF[0].perm_valor_estoque,estornar:rfF[0].perm_estornar};salvarSessao(rfF[0].id);const rrest=await sb(`ge_restaurantes?id=eq.${REST_ID}&select=nome`);REST_NOME=rrest.length?rrest[0].nome:'';await entrarApp();return;}pinDigitos='';renderPin();const err=$('pinErro');if(err){err.textContent='PIN incorreto. Tente novamente.';setTimeout(()=>err.textContent='',2000);}}catch(e){toast('Erro: '+e.message,'err');pinDigitos='';renderPin();}}
 function trocarEst(){
-  const el=$('toast');
-  el.innerHTML='🔄 Trocar de estabelecimento? <span onclick="confirmarTrocarEst()" style="text-decoration:underline;cursor:pointer;margin-left:8px;font-weight:900;background:rgba(255,255,255,0.2);padding:2px 8px;border-radius:6px;">✓ Sim</span> <span onclick="this.parentElement.className='';" style="cursor:pointer;margin-left:4px;background:rgba(255,255,255,0.2);padding:2px 8px;border-radius:6px;">✗ Não</span>';
+  const el=document.getElementById('toast');
+  el.innerHTML='🔄 Trocar estabelecimento? <button onclick="confirmarTrocarEst()" style="margin-left:8px;padding:2px 10px;background:rgba(255,255,255,0.2);border:none;border-radius:6px;color:#fff;font-weight:900;cursor:pointer;">✓ Sim</button> <button onclick="fecharToast()" style="margin-left:4px;padding:2px 10px;background:rgba(255,255,255,0.2);border:none;border-radius:6px;color:#fff;cursor:pointer;">✗ Não</button>';
   el.className='show info';
-  clearTimeout(el._t);el._t=setTimeout(()=>{el.className='';el.textContent='';},5000);
+  clearTimeout(el._t);el._t=setTimeout(function(){el.className='';el.innerHTML='';},5000);
 }
 function confirmarTrocarEst(){REST_ID=null;FUNC_ID=null;FUNC_NOME=null;FUNC_ROLE=null;FUNC_PERMS={};localStorage.removeItem('ge_rest_id');limparSessao();mostrarTela('tela1Acesso');}
 
@@ -845,10 +845,10 @@ async function entrarApp(){mostrarTela('telaApp');$('topNome').textContent=REST_
   registrarSW();
 }
 function sair(){
-  const el=$('toast');
-  el.innerHTML='👋 Deseja sair? <span onclick="confirmarSair()" style="text-decoration:underline;cursor:pointer;margin-left:8px;font-weight:900;background:rgba(255,255,255,0.2);padding:2px 8px;border-radius:6px;">✓ Sair</span> <span onclick="this.parentElement.className='';" style="cursor:pointer;margin-left:4px;background:rgba(255,255,255,0.2);padding:2px 8px;border-radius:6px;">✗ Ficar</span>';
+  const el=document.getElementById('toast');
+  el.innerHTML='👋 Deseja sair? <button onclick="confirmarSair()" style="margin-left:8px;padding:2px 10px;background:rgba(255,255,255,0.2);border:none;border-radius:6px;color:#fff;font-weight:900;cursor:pointer;">✓ Sair</button> <button onclick="fecharToast()" style="margin-left:4px;padding:2px 10px;background:rgba(255,255,255,0.2);border:none;border-radius:6px;color:#fff;cursor:pointer;">✗ Ficar</button>';
   el.className='show info';
-  clearTimeout(el._t);el._t=setTimeout(()=>{el.className='';el.textContent='';},5000);
+  clearTimeout(el._t);el._t=setTimeout(function(){el.className='';el.innerHTML='';},5000);
 }
 function confirmarSair(){limparSessao();REST_ID=null;FUNC_ID=null;FUNC_NOME=null;FUNC_ROLE=null;FUNC_PERMS={};pinDigitos='';mostrarTela('tela1Acesso');}
 
@@ -960,7 +960,9 @@ function setSt(sub){
       ?'⚠️ Registrar como PERDA? (produto estragou ou foi desperdiçado)'
       :'📅 Registrar como VENCIDO? (produto passou da validade)';
     const el=$('toast');
-    el.innerHTML=`${msg} <span onclick="confirmarSt('${sub}')" style="text-decoration:underline;cursor:pointer;margin-left:8px;font-weight:900;background:rgba(255,255,255,0.2);padding:2px 8px;border-radius:6px;">✓ Sim</span> <span onclick="cancelarSt()" style="text-decoration:underline;cursor:pointer;margin-left:4px;font-weight:900;background:rgba(255,255,255,0.2);padding:2px 8px;border-radius:6px;">✗ Não</span>`;
+    const btnSim=`<span onclick="confirmarSt('${sub}')" style="text-decoration:underline;cursor:pointer;margin-left:8px;font-weight:900;background:rgba(255,255,255,0.2);padding:2px 8px;border-radius:6px;">✓ Sim</span>`;
+    const btnNao=`<span onclick="cancelarSt()" style="cursor:pointer;margin-left:4px;font-weight:900;background:rgba(255,255,255,0.2);padding:2px 8px;border-radius:6px;">✗ Não</span>`;
+    el.innerHTML=msg+' '+btnSim+' '+btnNao;
     el.className='show warn';
     clearTimeout(el._t);
     el._t=setTimeout(()=>{el.className='';el.textContent='';},6000);
@@ -1209,16 +1211,8 @@ function relWpp(){const raw=($('cfgWpp').value||'').replace(/\D/g,'');if(!raw)re
 function relEmail(){const email=$('cfgEmail')&&$('cfgEmail').value;if(!email)return toast('Digite um e-mail','warn');const linhas=todosProds.map(p=>`${p.emoji||'📦'} ${p.nome}: ${fmtN(p.quantidade||0)} ${p.unidade||'un'}`).join('%0A');const sub=encodeURIComponent('Relatório de Estoque - '+new Date().toLocaleDateString('pt-BR'));window.open(`mailto:${email}?subject=${sub}&body=${linhas}`,'_blank');}
 function relPDF(){if(!todosProds.length)return toast('Sem produtos','warn');const w=window.open('','_blank');const linhas=todosProds.map(p=>`<tr><td>${p.emoji||'📦'} ${p.nome}</td><td>${p.categoria||'-'}</td><td>${fmtN(p.quantidade||0)}</td><td>${p.unidade||'un'}</td><td>${fmtN(p.estoque_minimo||0)}</td><td>R$ ${fmtN(p.preco_custo||0)}</td><td>${p.data_validade||'-'}</td><td>${p.data_fabricacao||'-'}</td></tr>`).join('');w.document.write(`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Estoque</title><style>body{font-family:Arial,sans-serif;padding:20px;}h2{color:#22C55E;}table{width:100%;border-collapse:collapse;}th,td{border:1px solid #ddd;padding:8px;font-size:12px;}th{background:#22C55E;color:#fff;}tr:nth-child(even){background:#f9f9f9;}</style></head><body><h2>📦 Relatório de Estoque</h2><p>${new Date().toLocaleDateString('pt-BR')}</p><table><thead><tr><th>Produto</th><th>Categoria</th><th>Qtd</th><th>Un</th><th>Mín</th><th>Custo</th><th>Validade</th><th>Fabricação</th></tr></thead><tbody>${linhas}</tbody></table></body></html>`);w.document.close();setTimeout(()=>w.print(),500);}
 function relCSV(){if(!todosProds.length)return toast('Sem produtos','warn');const rows=[['Nome','Categoria','Emoji','Qtd','Unidade','Mín','Custo','Validade','Fabricação'],...todosProds.map(p=>[p.nome,p.categoria||'',p.emoji||'',p.quantidade||0,p.unidade||'',p.estoque_minimo||0,p.preco_custo||0,p.data_validade||'',p.data_fabricacao||''])];const csv=rows.map(r=>r.map(c=>`"${String(c).replace(/"/g,'""')}"`).join(',')).join('\n');const a=document.createElement('a');a.href='data:text/csv;charset=utf-8,\uFEFF'+encodeURIComponent(csv);a.download='estoque.csv';a.click();toast('✅ CSV baixado!');}
-async function limparHist(){
-  const el=$('toast');
-  el.innerHTML='🗑️ Limpar todo o histórico? <span onclick="confirmarLimparHist()" style="text-decoration:underline;cursor:pointer;margin-left:8px;font-weight:900;background:rgba(255,255,255,0.2);padding:2px 8px;border-radius:6px;">✓ Sim, limpar</span> <span onclick="this.parentElement.className='';" style="cursor:pointer;margin-left:4px;font-weight:900;background:rgba(255,255,255,0.2);padding:2px 8px;border-radius:6px;">✗ Cancelar</span>';
-  el.className='show warn';
-  clearTimeout(el._t);el._t=setTimeout(()=>{el.className='';el.textContent='';},6000);
-}
-async function confirmarLimparHist(){
-  const el=$('toast');el.className='';el.textContent='';
-  try{await sb(`ge_movimentacoes?restaurante_id=eq.${REST_ID}`,{method:'DELETE'});toast('✅ Histórico limpo!');}catch(e){toast('Erro','err');}
-}
+
+
 
 // AJUDA
 function hi(ico,t,s){return`<div class="help-it"><div class="help-ic">${ico}</div><div><div class="help-nt">${t}</div><div class="help-ns">${s}</div></div></div>`;}
@@ -1375,7 +1369,7 @@ function verificarBackupAutomatico(){
     setTimeout(()=>{
       localStorage.setItem(key,agora.toString());
       const el=$('toast');
-      el.innerHTML='💾 Dica: faça um backup do seu estoque! <span onclick="relCSV();this.parentElement.className=\'\';this.parentElement.textContent=\'\'" style="text-decoration:underline;cursor:pointer;margin-left:8px;font-weight:900;background:rgba(255,255,255,0.2);padding:2px 8px;border-radius:6px;">Baixar CSV</span>';
+      el.innerHTML=`💾 Dica: faça um backup do seu estoque! <span onclick="relCSV();fecharToast()" style="text-decoration:underline;cursor:pointer;margin-left:8px;font-weight:900;background:rgba(255,255,255,0.2);padding:2px 8px;border-radius:6px;">Baixar CSV</span>`;
       el.className='show info';
       clearTimeout(el._t);
       el._t=setTimeout(()=>{el.className='';el.textContent='';},8000);
