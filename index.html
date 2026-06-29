@@ -2080,6 +2080,15 @@ document.addEventListener('click',e=>{['tipoSugsS','tipoSugsC'].forEach(id=>{con
 
 // INIT
 document.addEventListener('DOMContentLoaded',async()=>{
+  // Se veio com ?novo= na URL, é link gerado pelo Master para novo cliente
+  const urlParams=new URLSearchParams(window.location.search);
+  const novoParam=urlParams.get('novo');
+  if(novoParam){
+    window.history.replaceState({},'',window.location.pathname);
+    mostrarTela('telaPlanos');
+    return;
+  }
+
   const codLink=capturarCodigoDaURL();
   // Se veio com ?cod= na URL, SEMPRE priorizar esse código — ignorar localStorage
   if(codLink){
