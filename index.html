@@ -1353,6 +1353,32 @@ function verificarAvisaTrial(){
     },3000);
   }
 }
+async function limparHist(){
+  if(FUNC_ROLE!=='proprietario')return toast('Apenas o proprietário pode limpar o histórico','warn');
+  const el=$('toast');
+  el.innerHTML='🗑️ Limpar <strong>todo o histórico</strong>? Os produtos não são afetados. <button id="btnConfLimpar" style="margin-left:8px;padding:2px 10px;background:rgba(255,255,255,0.2);border:none;border-radius:6px;color:#fff;font-weight:900;cursor:pointer;font-family:Inter,sans-serif;">✓ Sim</button> <button onclick="fecharToast()" style="margin-left:4px;padding:2px 10px;background:rgba(255,255,255,0.2);border:none;border-radius:6px;color:#fff;cursor:pointer;font-family:Inter,sans-serif;">✗ Não</button>';
+  el.className='show warn';
+  el.style.pointerEvents='all';
+  clearTimeout(el._t);
+  el._t=setTimeout(function(){el.className='';el.innerHTML='';el.style.pointerEvents='';},6000);
+  setTimeout(function(){
+    var btn=document.getElementById('btnConfLimpar');
+    if(btn)btn.onclick=function(){confirmarLimparHist();};
+  },50);
+}
+async function confirmarLimparHist(){
+  fecharToast();
+  try{
+    await fetch(SB_URL+'/rest/v1/ge_movimentacoes?restaurante_id=eq.'+REST_ID,{
+      method:'DELETE',
+      headers:{'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY,'Content-Type':'application/json','Prefer':'return=representation'}
+    });
+    toast('✅ Histórico limpo com sucesso!');
+    const el=$('histList');
+    if(el)el.innerHTML='<div style="padding:40px;text-align:center;color:var(--t3)">Nenhum movimento encontrado</div>';
+    renderDash();
+  }catch(e){toast('Erro ao limpar histórico: '+e.message,'err');}
+}
 function fecharToast(){const el=$('toast');el.className='';el.innerHTML='';clearTimeout(el._t);}
 function confirmarSair(){limparSessao();REST_ID=null;FUNC_ID=null;FUNC_NOME=null;FUNC_ROLE=null;FUNC_PERMS={};pinDigitos='';mostrarTela('tela1Acesso');}
 
