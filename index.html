@@ -9,7 +9,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Gerencion Estoque">
 <title>GE Estoque TESTE</title>
-<link rel="manifest" href="ge-manifest-teste.json">
+<link rel="manifest" href="ge-manifest.json">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
@@ -2459,6 +2459,38 @@ async function apagarRecebimento(){
   }catch(e){toast('Erro ao apagar','err');}
 }
 // ============================================================
+
+
+// SESSÃO SUPABASE — salvar e buscar por device_id (cookie)
+function getDeviceId(){
+  const match=document.cookie.match(/ge_device=([^;]+)/);
+  if(match)return match[1];
+  const id=(crypto.randomUUID?crypto.randomUUID():'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g,c=>{const r=Math.random()*16|0;return(c=='x'?r:(r&0x3|0x8)).toString(16);}));
+  document.cookie='ge_device='+id+';max-age=31536000;path=/;SameSite=Strict';
+  return id;
+}
+const DEVICE_ID=getDeviceId();
+
+async function salvarSessaoSupabase(restId){
+  try{
+    await fetch(SB_URL+'/rest/v1/ge_sessoes?device_id=eq.'+DEVICE_ID,{method:'DELETE',headers:{'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY,'Prefer':'return=minimal'}});
+    await fetch(SB_URL+'/rest/v1/ge_sessoes',{method:'POST',headers:{'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY,'Content-Type':'application/json','Prefer':'return=minimal'},body:JSON.stringify({device_id:DEVICE_ID,restaurante_id:restId})});
+  }catch(e){}
+}
+
+async function buscarSessaoSupabase(){
+  try{
+    const r=await fetch(SB_URL+'/rest/v1/ge_sessoes?device_id=eq.'+DEVICE_ID+'&select=restaurante_id',{headers:{'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY}});
+    const d=await r.json();
+    return d&&d.length?d[0].restaurante_id:null;
+  }catch(e){return null;}
+}
+
+async function limparSessaoSupabase(){
+  try{
+    await fetch(SB_URL+'/rest/v1/ge_sessoes?device_id=eq.'+DEVICE_ID,{method:'DELETE',headers:{'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY,'Prefer':'return=minimal'}});
+  }catch(e){}
+}
 
 // INIT
 document.addEventListener('DOMContentLoaded',async()=>{
