@@ -657,6 +657,52 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--t);font-siz
   </div>
 </div>
 
+<!-- TELA DE BLOQUEIO (trial encerrado / não pago) -->
+<div id="telaBloqueio" class="tela">
+  <div style="min-height:100vh;background:var(--bg);padding:26px 18px 40px;display:flex;flex-direction:column;align-items:center;">
+    <div style="width:66px;height:66px;border-radius:18px;background:var(--am2);display:flex;align-items:center;justify-content:center;font-size:34px;margin-bottom:14px;">🔒</div>
+    <div style="font-size:20px;font-weight:900;color:var(--t);text-align:center;line-height:1.3;">Seu período gratuito<br>chegou ao fim!</div>
+    <div id="bloqNome" style="font-size:12px;color:var(--t3);margin-top:6px;text-align:center;"></div>
+
+    <!-- COPY CAMPEÃ -->
+    <div style="width:100%;max-width:440px;background:linear-gradient(135deg,rgba(245,158,11,0.12),rgba(11,17,32,0.5));border:1.5px solid var(--am3);border-radius:16px;padding:18px 16px;margin-top:18px;">
+      <div style="font-size:14px;font-weight:800;color:var(--am);margin-bottom:8px;">Nesses 30 dias, o seu estoque virou controle de verdade. 🚀</div>
+      <div style="font-size:13px;color:var(--t2);line-height:1.75;">
+        Você organizou seus produtos, acompanhou o valor investido, evitou perdas e teve tudo na palma da mão. <strong style="color:var(--t);">Não pare agora.</strong> Ative seu plano e continue exatamente de onde parou — seus dados estão salvos e esperando por você.
+      </div>
+    </div>
+
+    <div style="font-size:13px;font-weight:800;color:var(--t);margin:20px 0 4px;text-align:center;">Escolha seu plano e volte a crescer 👇</div>
+
+    <!-- CARDS DE PLANO (resumo) -->
+    <div style="width:100%;max-width:440px;display:flex;flex-direction:column;gap:10px;margin-top:8px;">
+      <div style="background:var(--s1);border:1.5px solid var(--gn3);border-radius:14px;padding:14px 16px;display:flex;align-items:center;justify-content:space-between;">
+        <div><div style="font-size:13px;font-weight:800;color:var(--t);">📦 Básico</div><div style="font-size:11px;color:var(--t2);margin-top:2px;">50 produtos · 2 funcionários</div></div>
+        <div style="text-align:right;"><div style="font-size:20px;font-weight:900;color:var(--gn);line-height:1;">R$97</div><div style="font-size:9px;color:var(--t3);">/mês</div></div>
+      </div>
+      <div style="background:linear-gradient(135deg,rgba(59,130,246,0.15),rgba(11,17,32,0.9));border:2px solid var(--bl3);border-radius:14px;padding:14px 16px;display:flex;align-items:center;justify-content:space-between;position:relative;">
+        <div style="position:absolute;top:-10px;left:16px;background:var(--bl);color:#fff;font-size:9px;font-weight:800;padding:2px 10px;border-radius:20px;letter-spacing:.5px;">⭐ MAIS POPULAR</div>
+        <div><div style="font-size:13px;font-weight:800;color:var(--t);">⭐ Profissional</div><div style="font-size:11px;color:var(--t2);margin-top:2px;">150 produtos · relatórios PDF/CSV</div></div>
+        <div style="text-align:right;"><div style="font-size:20px;font-weight:900;color:var(--bl);line-height:1;">R$147</div><div style="font-size:9px;color:var(--t3);">/mês</div></div>
+      </div>
+      <div style="background:linear-gradient(135deg,rgba(245,158,11,0.12),rgba(11,17,32,0.9));border:1.5px solid var(--am3);border-radius:14px;padding:14px 16px;display:flex;align-items:center;justify-content:space-between;">
+        <div><div style="font-size:13px;font-weight:800;color:var(--t);">🏆 Empresarial</div><div style="font-size:11px;color:var(--t2);margin-top:2px;">Tudo ilimitado · Recebimento de NF</div></div>
+        <div style="text-align:right;"><div style="font-size:20px;font-weight:900;color:var(--am);line-height:1;">R$197</div><div style="font-size:9px;color:var(--t3);">/mês</div></div>
+      </div>
+    </div>
+
+    <!-- CTA WHATSAPP -->
+    <a id="bloqWpp" href="#" target="_blank" style="width:100%;max-width:440px;display:block;text-decoration:none;background:var(--gn);border-radius:14px;padding:16px;text-align:center;margin-top:20px;box-shadow:0 4px 20px rgba(34,197,94,0.3);">
+      <div style="font-size:15px;font-weight:900;color:#0B1120;">💬 Ativar meu plano pelo WhatsApp</div>
+      <div style="font-size:11px;color:rgba(11,17,32,0.75);margin-top:2px;">Liberação rápida · fale direto com o suporte</div>
+    </a>
+
+    <div style="font-size:11px;color:var(--t3);margin-top:16px;text-align:center;line-height:1.6;">Seus dados continuam salvos e seguros. 🔒<br>Assim que ativar, tudo volta na hora.</div>
+
+    <button onclick="sairBloqueio()" style="margin-top:20px;background:none;border:none;color:var(--t3);font-size:12px;text-decoration:underline;cursor:pointer;font-family:Inter,sans-serif;">Sair</button>
+  </div>
+</div>
+
 <!-- MODAL ACEITE PROMOCIONAL -->
 <div class="overlay" id="ovAceitePromo">
   <div class="modal" onclick="event.stopPropagation()">
@@ -1116,7 +1162,7 @@ const diasParaVencer=dt=>{
 };
 
 // TELAS
-const TELAS=['tela1Acesso','telaPlanos','telaSetup','telaCodigoFunc','telaLogin','telaApp'];
+const TELAS=['tela1Acesso','telaPlanos','telaSetup','telaCodigoFunc','telaLogin','telaApp','telaBloqueio'];
 function mostrarTela(id){TELAS.forEach(t=>{const el=$(t);if(!el)return;if(t===id)el.classList.add('on');else el.classList.remove('on');});}
 
 // MODAIS — abre/fecha com classe .on
@@ -1250,7 +1296,7 @@ async function validarPin(){try{
     if(r.ativo===false){
       pinDigitos='';renderPin();
       $('pinErro').textContent='';
-      toast('⛔ Sistema inativo. Entre em contato com o suporte.','err',6000);
+      mostrarBloqueio();
       return;
     }
     if(r.validade_ate){
@@ -1258,7 +1304,7 @@ async function validarPin(){try{
       const val=new Date(r.validade_ate+'T00:00:00');
       if(val<hoje){
         pinDigitos='';renderPin();
-        toast('⚠️ Licença vencida. Renove para continuar.','warn',6000);
+        mostrarBloqueio();
         return;
       }
     }
@@ -1369,6 +1415,27 @@ function verificarTrialAtivo(){
   const hoje=new Date();hoje.setHours(0,0,0,0);
   const val=new Date(VALIDADE_ATE+'T00:00:00');
   return val>=hoje;
+}
+// Retorna true se a validade já passou (trial/licença vencida)
+function trialVencido(){
+  if(!VALIDADE_ATE)return false;
+  const hoje=new Date();hoje.setHours(0,0,0,0);
+  const val=new Date(VALIDADE_ATE+'T00:00:00');
+  return val<hoje;
+}
+// Mostra a tela de bloqueio com a copy e o link do WhatsApp pré-preenchido
+function mostrarBloqueio(){
+  const nomeEl=$('bloqNome');
+  if(nomeEl)nomeEl.textContent=REST_NOME?('Estabelecimento: '+REST_NOME):'';
+  const msg=encodeURIComponent('Olá! Sou '+(REST_NOME||'cliente')+' do Gerencion Estoque. Meu período gratuito acabou e quero ativar meu plano para continuar. Pode me ajudar?');
+  const wpp=$('bloqWpp');
+  if(wpp)wpp.href='https://wa.me/5521972163470?text='+msg;
+  mostrarTela('telaBloqueio');
+}
+function sairBloqueio(){
+  limparSessao();
+  try{if(REST_ID){localStorage.removeItem('ge_sess_uid_'+REST_ID);localStorage.removeItem('ge_sess_ts_'+REST_ID);}}catch(e){}
+  location.reload();
 }
 function diasRestantesTrial(){
   if(!VALIDADE_ATE)return 0;
@@ -2633,8 +2700,8 @@ document.addEventListener('DOMContentLoaded',async()=>{
     const sessUid=verificarSessao();
     if(sessUid){
       try{
-        if(sessUid==='PROP'){const r=await sb(`ge_restaurantes?id=eq.${REST_ID}&select=nome,nome_proprietario,plano,validade_ate`);if(r.length){FUNC_NOME=r[0].nome_proprietario||r[0].nome;REST_NOME=r[0].nome;FUNC_ROLE='proprietario';if(r[0].plano)PLANO_ATUAL=r[0].plano;if(r[0].validade_ate)VALIDADE_ATE=r[0].validade_ate;await entrarApp();return;}}
-        else{const r=await sb(`ge_funcionarios?id=eq.${sessUid}&restaurante_id=eq.${REST_ID}&select=*`);if(r.length){FUNC_ID=r[0].id;FUNC_NOME=r[0].nome;FUNC_PERMS={historico:r[0].perm_historico,insights:r[0].perm_insights,produtos:r[0].perm_produtos,valor:r[0].perm_valor_estoque,estornar:r[0].perm_estornar,movimento:r[0].perm_movimento!==false,conferente:r[0].perm_conferente};const rr=await sb(`ge_restaurantes?id=eq.${REST_ID}&select=nome,plano,validade_ate`);REST_NOME=rr.length?rr[0].nome:'';if(rr.length&&rr[0].plano)PLANO_ATUAL=rr[0].plano;if(rr.length&&rr[0].validade_ate)VALIDADE_ATE=rr[0].validade_ate;FUNC_ROLE='funcionario';await entrarApp();return;}}
+        if(sessUid==='PROP'){const r=await sb(`ge_restaurantes?id=eq.${REST_ID}&select=nome,nome_proprietario,plano,validade_ate,ativo`);if(r.length){FUNC_NOME=r[0].nome_proprietario||r[0].nome;REST_NOME=r[0].nome;FUNC_ROLE='proprietario';if(r[0].plano)PLANO_ATUAL=r[0].plano;if(r[0].validade_ate)VALIDADE_ATE=r[0].validade_ate;if(r[0].ativo===false||trialVencido()){mostrarBloqueio();return;}await entrarApp();return;}}
+        else{const r=await sb(`ge_funcionarios?id=eq.${sessUid}&restaurante_id=eq.${REST_ID}&select=*`);if(r.length){FUNC_ID=r[0].id;FUNC_NOME=r[0].nome;FUNC_PERMS={historico:r[0].perm_historico,insights:r[0].perm_insights,produtos:r[0].perm_produtos,valor:r[0].perm_valor_estoque,estornar:r[0].perm_estornar,movimento:r[0].perm_movimento!==false,conferente:r[0].perm_conferente};const rr=await sb(`ge_restaurantes?id=eq.${REST_ID}&select=nome,plano,validade_ate,ativo`);REST_NOME=rr.length?rr[0].nome:'';if(rr.length&&rr[0].plano)PLANO_ATUAL=rr[0].plano;if(rr.length&&rr[0].validade_ate)VALIDADE_ATE=rr[0].validade_ate;FUNC_ROLE='funcionario';if((rr.length&&rr[0].ativo===false)||trialVencido()){mostrarBloqueio();return;}await entrarApp();return;}}
       }catch(e){limparSessao();}
     }
     try{
