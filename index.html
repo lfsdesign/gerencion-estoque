@@ -1518,6 +1518,35 @@ async function excluirProd(){if(!confirm('Excluir produto?'))return;try{await sb
 // MOVIMENTOS
 function abrirMov(tipo){if(FUNC_ROLE!=='proprietario'&&!FUNC_PERMS.movimento)return toast('Sem permissão para registrar movimentos','warn');movQty=1;subtipoSaida='normal';$('mmTit').textContent=tipo==='entrada'?'📥 Registrar Entrada':'📤 Registrar Saída';$('mmSub').textContent=tipo==='entrada'?'Compra, recebimento ou ajuste':'Consumo, venda, perda ou vencimento';$('mmTipo').value=tipo;$('mmStWrap').style.display=tipo==='saida'?'block':'none';$('mmEstBox').style.display='none';movQty=1;const qv=$('qpV');if(qv)qv.value=1;$('mmObs').value='';const sel=$('mmProd');sel.innerHTML='<option value="">Selecione um produto...</option>'+todosProds.map(p=>`<option value="${p.id}">${p.emoji||'📦'} ${p.nome} (${fmtN(p.quantidade||0)} ${p.unidade||'un'})</option>`).join('');['N','P','V','A'].forEach(l=>{const b=$('tb'+l);if(b)b.classList.remove('on');});$('tbN')&&$('tbN').classList.add('on');const tbAjuste=$('tbA');if(tbAjuste)tbAjuste.style.display=FUNC_ROLE==='proprietario'?'':'none';abrirModal('ovMov');}
 function setSt(sub){
+  // Tratamento especial para ajuste
+  if(sub==='ajuste'){
+    subtipoSaida='ajuste';
+    ['N','P','V','A'].forEach(l=>{const b=$('tb'+l);if(b)b.classList.remove('on');});
+    const btnA=$('tbA');if(btnA)btnA.classList.add('on');
+    // Mudar label e placeholder
+    const labelQty=$('labelQty');
+    if(labelQty)labelQty.textContent='Nova quantidade em estoque';
+    const inputQty=$('qpV');
+    if(inputQty)inputQty.placeholder='Ex: 47';
+    // Preencher com quantidade atual
+    const pid=$('mmProd').value;
+    const p=todosProds.find(x=>x.id===pid);
+    if(p&&inputQty){inputQty.value=p.quantidade||0;movQty=p.quantidade||0;}
+    // Aviso
+    const conf=document.getElementById('stConf');
+    if(conf){
+      conf.style.display='block';
+      conf.innerHTML='<div style="font-size:11px;color:var(--am);background:var(--am2);border-radius:8px;padding:8px 12px;margin-top:6px;">⚠️ O ajuste define a quantidade <strong>diretamente</strong>. Use após inventário físico. O registro ficará salvo com seu nome.</div>';
+    }
+    const mmConf=$('mmConf');
+    if(mmConf){mmConf.disabled=false;mmConf.style.opacity='1';}
+    return;
+  }
+  // Resetar label para outros tipos
+  const labelQty=$('labelQty');
+  if(labelQty)labelQty.textContent='Quantidade';
+  const inputQty=$('qpV');
+  if(inputQty){inputQty.placeholder='0';inputQty.value=1;movQty=1;}
   if(sub==='perda'||sub==='vencimento'){
     const msg=sub==='perda'
       ?'⚠️ Este produto estragou ou foi desperdiçado?'
