@@ -2214,7 +2214,7 @@ function removerLogo(){
 // SERVICE WORKER — notificações push
 function registrarSW(){
   if(!('serviceWorker' in navigator)||!('Notification' in window))return;
-  navigator.serviceWorker.register('./ge-sw.js').catch(()=>{});
+  navigator.serviceWorker.getRegistrations().then(regs=>{regs.forEach(r=>r.unregister());});
 }
 
 // Solicitar permissão de notificação
