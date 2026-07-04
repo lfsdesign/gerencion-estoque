@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR">f
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
@@ -1517,7 +1517,7 @@ async function excluirProd(){if(!confirm('Excluir produto?'))return;try{await sb
 
 // MOVIMENTOS
 function abrirMov(tipo){if(FUNC_ROLE!=='proprietario'&&!FUNC_PERMS.movimento)return toast('Sem permissão para registrar movimentos','warn');movQty=1;subtipoSaida='normal';$('mmTit').textContent=tipo==='entrada'?'📥 Registrar Entrada':'📤 Registrar Saída';$('mmSub').textContent=tipo==='entrada'?'Compra, recebimento ou ajuste':'Consumo, venda, perda ou vencimento';$('mmTipo').value=tipo;$('mmStWrap').style.display=tipo==='saida'?'block':'none';$('mmEstBox').style.display='none';movQty=1;const qv=$('qpV');if(qv)qv.value=1;$('mmObs').value='';const sel=$('mmProd');sel.innerHTML='<option value="">Selecione um produto...</option>'+todosProds.map(p=>`<option value="${p.id}">${p.emoji||'📦'} ${p.nome} (${fmtN(p.quantidade||0)} ${p.unidade||'un'})</option>`).join('');['N','P','V','A'].forEach(l=>{const b=$('tb'+l);if(b)b.classList.remove('on');});$('tbN')&&$('tbN').classList.add('on');abrirModal('ovMov');}
-function setSt(sub){
+
   if(sub==='perda'||sub==='vencimento'){
     const msg=sub==='perda'
       ?'⚠️ Este produto estragou ou foi desperdiçado?'
