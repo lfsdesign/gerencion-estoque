@@ -2213,8 +2213,19 @@ function removerLogo(){
 
 // SERVICE WORKER — notificações push
 function registrarSW(){
-  if(!('serviceWorker' in navigator)||!('Notification' in window))return;
-  navigator.serviceWorker.getRegistrations().then(regs=>{regs.forEach(r=>r.unregister());});
+  // SW desabilitado — sempre servir da rede
+}
+// Desregistrar SW imediatamente ao carregar
+if('serviceWorker' in navigator){
+  navigator.serviceWorker.getRegistrations().then(function(regs){
+    regs.forEach(function(r){r.unregister();});
+    if(regs.length>0){
+      // Limpar todos os caches do SW
+      caches.keys().then(function(keys){
+        keys.forEach(function(k){caches.delete(k);});
+      });
+    }
+  });
 }
 
 // Solicitar permissão de notificação
