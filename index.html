@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-BR">f
+<html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
@@ -125,7 +125,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--t);font-siz
 .h-c{background:var(--s1);border:1px solid var(--b);border-radius:11px;padding:11px 13px;margin-bottom:7px;display:flex;align-items:flex-start;gap:9px;}
 .h-ico{width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;}
 .h-ico.entrada{background:var(--gn2);}
-.h-ico.saida{background:var(--rd2);}
+.h-ico.saida{background:var(--rd2);}.h-ico.ajuste{background:var(--bl2);color:var(--bl);}.h-q.ajuste{color:var(--bl);}
 .h-ico.perda{background:var(--am2);}
 .h-inf{flex:1;min-width:0;}
 .h-n{font-size:12px;font-weight:700;color:var(--t);}
@@ -793,7 +793,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--t);font-siz
         <button class="tipo-b on" id="tbN" onclick="setSt('normal')">📤 Consumo normal</button>
         <button class="tipo-b p" id="tbP" onclick="setSt('perda')">⚠️ Perda / Desperdício</button>
         <button class="tipo-b p" id="tbV" onclick="setSt('vencimento')">📅 Produto vencido</button>
-        <button class="tipo-b" id="tbA" onclick="setSt('ajuste')">🔧 Ajuste de estoque</button>
+        <button class="tipo-b" id="tbA" onclick="FUNC_ROLE==='proprietario'?setSt('ajuste'):toast('Apenas o proprietário pode fazer ajuste','warn')">🔧 Ajuste de estoque</button>
       </div>
       <div id="stConf" style="display:none;"></div>
     </div>
@@ -803,7 +803,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--t);font-siz
       <span id="mmPrevEl" style="margin-left:10px;font-size:10px;"></span>
     </div>
     <div class="fg">
-      <label class="fl">Quantidade</label>
+      <label class="fl" id="labelQty">Quantidade</label>
       <div class="qty-p">
         <button class="qp-b" onclick="ajQ(-1)">−</button>
         <input class="qp-v" id="qpV" type="number" value="1" min="0" step="1" inputmode="numeric" style="border:none;outline:none;background:transparent;width:100%;text-align:center;font-size:23px;font-weight:800;color:var(--t);font-family:Inter,sans-serif;" oninput="movQty=Math.max(0,parseFloat(this.value)||0);updPrev();" onfocus="this.select()">
@@ -1516,8 +1516,8 @@ async function salvarProd(){const nome=$('mpNome').value.trim();if(!nome)return 
 async function excluirProd(){if(!confirm('Excluir produto?'))return;try{await sb(`ge_produtos?id=eq.${$('mpId').value}`,{method:'DELETE'});toast('Produto removido');fM('ovProd');await carregarProds();renderProds();}catch(e){toast('Erro ao excluir','err');}}
 
 // MOVIMENTOS
-function abrirMov(tipo){if(FUNC_ROLE!=='proprietario'&&!FUNC_PERMS.movimento)return toast('Sem permissão para registrar movimentos','warn');movQty=1;subtipoSaida='normal';$('mmTit').textContent=tipo==='entrada'?'📥 Registrar Entrada':'📤 Registrar Saída';$('mmSub').textContent=tipo==='entrada'?'Compra, recebimento ou ajuste':'Consumo, venda, perda ou vencimento';$('mmTipo').value=tipo;$('mmStWrap').style.display=tipo==='saida'?'block':'none';$('mmEstBox').style.display='none';movQty=1;const qv=$('qpV');if(qv)qv.value=1;$('mmObs').value='';const sel=$('mmProd');sel.innerHTML='<option value="">Selecione um produto...</option>'+todosProds.map(p=>`<option value="${p.id}">${p.emoji||'📦'} ${p.nome} (${fmtN(p.quantidade||0)} ${p.unidade||'un'})</option>`).join('');['N','P','V','A'].forEach(l=>{const b=$('tb'+l);if(b)b.classList.remove('on');});$('tbN')&&$('tbN').classList.add('on');abrirModal('ovMov');}
-
+function abrirMov(tipo){if(FUNC_ROLE!=='proprietario'&&!FUNC_PERMS.movimento)return toast('Sem permissão para registrar movimentos','warn');movQty=1;subtipoSaida='normal';$('mmTit').textContent=tipo==='entrada'?'📥 Registrar Entrada':'📤 Registrar Saída';$('mmSub').textContent=tipo==='entrada'?'Compra, recebimento ou ajuste':'Consumo, venda, perda ou vencimento';$('mmTipo').value=tipo;$('mmStWrap').style.display=tipo==='saida'?'block':'none';$('mmEstBox').style.display='none';movQty=1;const qv=$('qpV');if(qv)qv.value=1;$('mmObs').value='';const sel=$('mmProd');sel.innerHTML='<option value="">Selecione um produto...</option>'+todosProds.map(p=>`<option value="${p.id}">${p.emoji||'📦'} ${p.nome} (${fmtN(p.quantidade||0)} ${p.unidade||'un'})</option>`).join('');['N','P','V','A'].forEach(l=>{const b=$('tb'+l);if(b)b.classList.remove('on');});$('tbN')&&$('tbN').classList.add('on');const tbAjuste=$('tbA');if(tbAjuste)tbAjuste.style.display=FUNC_ROLE==='proprietario'?'':'none';abrirModal('ovMov');}
+function setSt(sub){
   if(sub==='perda'||sub==='vencimento'){
     const msg=sub==='perda'
       ?'⚠️ Este produto estragou ou foi desperdiçado?'
@@ -1583,7 +1583,7 @@ async function renderMovsRecentes(){const el=$('dMovs');if(!el)return;try{const 
 async function renderHist(){const busca=($('shist')&&$('shist').value||'').toLowerCase();const el=$('histList');if(!el)return;el.innerHTML='<div style="padding:20px;text-align:center;color:var(--t3)">Carregando...</div>';try{let url=`ge_movimentacoes?restaurante_id=eq.${REST_ID}&select=*&order=created_at.desc&limit=100`;
   if(histFiltro==='vencimento')url+=`&subtipo=eq.vencimento`;
   else if(histFiltro==='perda')url+=`&subtipo=eq.perda`;
-  else if(histFiltro)url+=`&tipo=eq.${histFiltro}`;let movs=await sb(url);if(busca)movs=movs.filter(m=>{const prod=todosProds.find(p=>p.id===m.produto_id);return(prod&&prod.nome.toLowerCase().includes(busca))||(m.funcionario_nome||'').toLowerCase().includes(busca)||(m.observacao||'').toLowerCase().includes(busca);});if(!movs.length){el.innerHTML='<div style="padding:40px;text-align:center;color:var(--t3)">Nenhum movimento encontrado</div>';return;}el.innerHTML=movs.map(m=>{const dt=new Date(m.created_at).toLocaleString('pt-BR',{day:'2-digit',month:'2-digit',year:'2-digit',hour:'2-digit',minute:'2-digit'});const prod=todosProds.find(p=>p.id===m.produto_id);const ico=m.tipo==='entrada'?'📥':m.subtipo==='perda'?'⚠️':m.subtipo==='vencimento'?'📅':'📤';const cor=m.tipo==='entrada'?'var(--gn)':'var(--rd)';return`<div class="h-c"><div class="h-ico ${m.tipo==='entrada'?'entrada':m.subtipo==='perda'?'perda':'saida'}">${ico}</div><div class="h-inf"><div class="h-n">${prod?prod.nome:'Produto'}</div><div class="h-d">${m.funcionario_nome||''} ${m.subtipo?'· '+m.subtipo:''} ${m.observacao?'· '+m.observacao:''}</div><div class="h-d">${dt}</div></div><div class="h-r"><div class="h-q ${m.tipo==='entrada'?'entrada':m.subtipo==='perda'?'perda':'saida'}">${m.tipo==='entrada'?'+':'-'}${fmtN(m.quantidade)}</div></div></div>`;}).join('');}catch(e){el.innerHTML='<div style="padding:20px;text-align:center;color:var(--t3)">Sem movimentos registrados</div>';}}
+  else if(histFiltro)url+=`&tipo=eq.${histFiltro}`;let movs=await sb(url);if(busca)movs=movs.filter(m=>{const prod=todosProds.find(p=>p.id===m.produto_id);return(prod&&prod.nome.toLowerCase().includes(busca))||(m.funcionario_nome||'').toLowerCase().includes(busca)||(m.observacao||'').toLowerCase().includes(busca);});if(!movs.length){el.innerHTML='<div style="padding:40px;text-align:center;color:var(--t3)">Nenhum movimento encontrado</div>';return;}el.innerHTML=movs.map(m=>{const dt=new Date(m.created_at).toLocaleString('pt-BR',{day:'2-digit',month:'2-digit',year:'2-digit',hour:'2-digit',minute:'2-digit'});const prod=todosProds.find(p=>p.id===m.produto_id);const ico=m.tipo==='ajuste'||m.subtipo==='ajuste'?'🔧':m.tipo==='entrada'?'📥':m.subtipo==='perda'?'⚠️':m.subtipo==='vencimento'?'📅':'📤';const cor=m.tipo==='ajuste'||m.subtipo==='ajuste'?'var(--bl)':m.tipo==='entrada'?'var(--gn)':'var(--rd)';const isAj=m.tipo==='ajuste'||m.subtipo==='ajuste';const qtyStr=isAj?`${fmtN(m.quantidade_anterior||0)} → ${fmtN(m.quantidade_nova||0)}`:`${m.tipo==='entrada'?'+':'-'}${fmtN(m.quantidade)}`;const tipoClass=isAj?'ajuste':m.tipo==='entrada'?'entrada':m.subtipo==='perda'?'perda':'saida';return`<div class="h-c"><div class="h-ico ${tipoClass}">${ico}</div><div class="h-inf"><div class="h-n">${prod?prod.nome:'Produto'}</div><div class="h-d">${m.funcionario_nome||''} ${m.subtipo&&!isAj?'· '+m.subtipo:''} ${m.observacao?'· '+m.observacao:''}</div><div class="h-d">${dt}</div></div><div class="h-r"><div class="h-q ${tipoClass}">${qtyStr}</div></div></div>`;}).join('');}catch(e){el.innerHTML='<div style="padding:20px;text-align:center;color:var(--t3)">Sem movimentos registrados</div>';}}
 function setHF(f,btn){histFiltro=f;document.querySelectorAll('#pg-hist .cat').forEach(b=>b.classList.remove('on'));btn&&btn.classList.add('on');renderHist();}
 
 // INSIGHTS
