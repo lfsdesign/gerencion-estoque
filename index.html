@@ -181,15 +181,26 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--t);font-siz
 /* HELP OVERLAY */
 .help-ov{position:fixed;inset:0;background:rgba(0,0,0,.82);z-index:300;display:none;align-items:flex-end;justify-content:center;}
 .help-ov.on{display:flex;}
-.help-m{background:var(--s1);border-radius:22px 22px 0 0;padding:18px 17px 26px;width:100%;max-width:600px;max-height:88vh;overflow-y:auto;}
-.help-h{width:38px;height:4px;background:var(--b2);border-radius:20px;margin:0 auto 13px;}
-.help-ti{font-size:16px;font-weight:800;color:var(--gn);margin-bottom:13px;}
-.help-it{display:flex;gap:11px;margin-bottom:13px;padding-bottom:13px;border-bottom:1px solid var(--b);}
-.help-it:last-child{border-bottom:none;}
-.help-ic{font-size:21px;flex-shrink:0;margin-top:2px;}
-.help-nt{font-size:13px;font-weight:700;color:var(--t);margin-bottom:3px;}
-.help-ns{font-size:12px;color:var(--t2);line-height:1.7;}
+.help-m{background:var(--s1);border-radius:22px 22px 0 0;padding:16px 17px 20px;width:100%;max-width:600px;max-height:85vh;max-height:85dvh;display:flex;flex-direction:column;}
+.help-h{width:38px;height:4px;background:var(--b2);border-radius:20px;margin:0 auto 12px;flex-shrink:0;}
+.help-ti{font-size:16px;font-weight:800;color:var(--gn);margin-bottom:12px;flex-shrink:0;}
+/* PAGINAÇÃO DO TUTORIAL */
+.help-dots{display:flex;gap:6px;justify-content:center;flex-wrap:wrap;margin-bottom:14px;flex-shrink:0;}
+.help-dot{width:7px;height:7px;border-radius:50%;background:var(--b2);transition:all .25s;cursor:pointer;}
+.help-dot.on{background:var(--gn);width:20px;border-radius:20px;}
+.help-body{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;min-height:120px;}
+.help-it{display:flex;gap:11px;margin-bottom:0;padding-bottom:4px;border-bottom:none;animation:helpFade .25s ease;}
+.help-ic{font-size:34px;flex-shrink:0;margin-top:2px;}
+.help-nt{font-size:15px;font-weight:800;color:var(--t);margin-bottom:6px;}
+.help-ns{font-size:13px;color:var(--t2);line-height:1.75;}
 .help-ns strong{color:var(--am);}
+@keyframes helpFade{from{opacity:0;transform:translateX(8px);}to{opacity:1;transform:translateX(0);}}
+.help-nav{display:flex;align-items:center;gap:10px;margin-top:14px;flex-shrink:0;}
+.help-count{font-size:12px;font-weight:700;color:var(--t3);min-width:44px;text-align:center;}
+.help-nb{flex:1;padding:13px;border:none;border-radius:12px;font-weight:800;font-size:14px;cursor:pointer;font-family:Inter,sans-serif;transition:opacity .2s;}
+.help-nb-prev{background:var(--s3);color:var(--t2);border:1px solid var(--b2);}
+.help-nb-next{background:var(--gn);color:#0B1120;}
+.help-nb:disabled{opacity:.35;cursor:default;}
 #helpBtn{position:fixed;left:14px;bottom:90px;width:36px;height:36px;border-radius:50%;background:var(--s2);border:1px solid var(--b2);color:var(--t2);font-size:15px;font-weight:700;cursor:pointer;display:none;align-items:center;justify-content:center;z-index:99;}
 #fab{position:fixed;right:14px;bottom:88px;width:50px;height:50px;border-radius:50%;background:linear-gradient(135deg,var(--gn),#16A34A);border:none;color:#0B1120;font-size:25px;cursor:pointer;box-shadow:0 4px 18px rgba(34,197,94,.4);display:none;align-items:center;justify-content:center;z-index:98;}
 #fab:active{transform:scale(.94);}
@@ -945,12 +956,17 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--t);font-siz
 </div>
 
 <!-- MODAL AJUDA -->
-<div class="help-ov" id="ovHelp">
+<div class="help-ov" id="ovHelp" onclick="fM('ovHelp')">
   <div class="help-m" onclick="event.stopPropagation()">
     <div class="help-h"></div>
     <div class="help-ti" id="helpTi">❓ Como usar</div>
-    <div id="helpCnt"></div>
-    <button onclick="fM('ovHelp')" style="width:100%;padding:13px;background:var(--gn);border:none;border-radius:12px;color:#0B1120;font-weight:800;font-size:14px;cursor:pointer;font-family:Inter,sans-serif;margin-top:13px;">Entendi! ✅</button>
+    <div class="help-dots" id="helpDots"></div>
+    <div class="help-body" id="helpCnt"></div>
+    <div class="help-nav">
+      <button class="help-nb help-nb-prev" id="helpPrev" onclick="helpNav(-1)">← Anterior</button>
+      <div class="help-count" id="helpCount">1 / 1</div>
+      <button class="help-nb help-nb-next" id="helpNext" onclick="helpNav(1)">Próximo →</button>
+    </div>
   </div>
 </div>
 
@@ -2155,6 +2171,10 @@ config:[
     hi('🗑️','Limpar Histórico','Remove todos os registros de movimentos antigos. Os produtos e quantidades são mantidos. Use no início de um novo período ou para limpar testes.'),
   ],
 };
+// Estado da navegação do tutorial
+let HELP_ITENS=[];
+let HELP_IDX=0;
+
 function abrirAjuda(){
   const pg=pgAtual||'dash';
   const titulos={dash:'🏠 Início',produtos:'📦 Produtos',hist:'📋 Histórico',insights:'📊 Relatório',config:'⚙️ Configurações',receb:'📋 Recebimentos NF'};
@@ -2164,7 +2184,7 @@ function abrirAjuda(){
   if(FUNC_ROLE==='funcionario'){
     if(pg==='dash'){
       // Funcionário sempre vê entrada/saída, filtra o resto
-      itens=TUTORIAIS['dash'].filter((_,i)=>i<=4); // itens básicos
+      itens=TUTORIAIS['dash'].filter((_,i)=>i<=5); // itens básicos + ajuste
       if(!FUNC_PERMS.valor)itens=itens.filter(i=>!i.includes('Valor do Estoque'));
     }
     if(pg==='produtos'&&!FUNC_PERMS.produtos){
@@ -2177,8 +2197,47 @@ function abrirAjuda(){
       itens=[hi('📊','Insights','Você não tem acesso aos insights. Solicite permissão ao proprietário.')];
     }
   }
-  $('helpCnt').innerHTML=itens.join('');
+  HELP_ITENS=itens;
+  HELP_IDX=0;
+  // Monta as bolinhas de progresso
+  $('helpDots').innerHTML=itens.map((_,i)=>`<div class="help-dot${i===0?' on':''}" onclick="helpGoto(${i})"></div>`).join('');
+  helpRender();
   abrirModal('ovHelp');
+}
+
+function helpRender(){
+  const total=HELP_ITENS.length;
+  if(!total)return;
+  // Mostra só o card atual
+  $('helpCnt').innerHTML=HELP_ITENS[HELP_IDX];
+  $('helpCnt').scrollTop=0;
+  // Atualiza bolinhas
+  document.querySelectorAll('#helpDots .help-dot').forEach((d,i)=>d.classList.toggle('on',i===HELP_IDX));
+  // Atualiza contador
+  $('helpCount').textContent=(HELP_IDX+1)+' / '+total;
+  // Botão Anterior: desabilitado no primeiro
+  const prev=$('helpPrev');
+  prev.disabled=HELP_IDX===0;
+  // Botão Próximo: no último vira "Entendi ✅" e fecha
+  const next=$('helpNext');
+  if(HELP_IDX===total-1){next.textContent='Entendi ✅';}
+  else{next.textContent='Próximo →';}
+}
+
+function helpNav(dir){
+  const total=HELP_ITENS.length;
+  // Se está no último e clicou em "Entendi", fecha
+  if(dir===1&&HELP_IDX===total-1){fM('ovHelp');return;}
+  const novo=HELP_IDX+dir;
+  if(novo<0||novo>=total)return;
+  HELP_IDX=novo;
+  helpRender();
+}
+
+function helpGoto(i){
+  if(i<0||i>=HELP_ITENS.length)return;
+  HELP_IDX=i;
+  helpRender();
 }
 
 // LOGO
