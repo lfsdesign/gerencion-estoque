@@ -1522,21 +1522,17 @@ function setSt(sub){
     subtipoSaida='ajuste';
     ['N','P','V','A'].forEach(l=>{const b=$('tb'+l);if(b)b.classList.remove('on');});
     const btnA=$('tbA');if(btnA)btnA.classList.add('on');
-    const labelQty=$('labelQty');
-    if(labelQty)labelQty.textContent='Nova quantidade em estoque';
-    const inputQty=$('qpV');
-    if(inputQty)inputQty.placeholder='Ex: 47';
-    const pid=$('mmProd').value;
-    const p=todosProds.find(x=>x.id===pid);
+    const labelQty=$('labelQty');if(labelQty)labelQty.textContent='Nova quantidade em estoque';
+    const inputQty=$('qpV');if(inputQty)inputQty.placeholder='Ex: 47';
+    const pid=$('mmProd').value;const p=todosProds.find(x=>x.id===pid);
     if(p&&inputQty){inputQty.value=p.quantidade||0;movQty=p.quantidade||0;}
     const conf=document.getElementById('stConf');
     if(conf){conf.style.display='block';conf.innerHTML='<div style="font-size:11px;color:var(--am);background:var(--am2);border-radius:8px;padding:8px 12px;margin-top:6px;">⚠️ O ajuste define a quantidade <strong>diretamente</strong>. Use após inventário físico. O registro ficará salvo com seu nome.</div>';}
     const mmConf=$('mmConf');if(mmConf){mmConf.disabled=false;mmConf.style.opacity='1';}
-    updPrev();
-    return;
+    updPrev();return;
   }
-  const labelQty=$('labelQty');if(labelQty)labelQty.textContent='Quantidade';
-  const inputQty=$('qpV');if(inputQty){inputQty.placeholder='0';inputQty.value=1;movQty=1;}
+  const lq=$('labelQty');if(lq)lq.textContent='Quantidade';
+  const iq=$('qpV');if(iq){iq.placeholder='0';iq.value=1;movQty=1;}
   if(sub==='perda'||sub==='vencimento'){
     const msg=sub==='perda'
       ?'⚠️ Este produto estragou ou foi desperdiçado?'
