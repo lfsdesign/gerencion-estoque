@@ -1014,7 +1014,7 @@ const EMOJI_CATS=[{tab:'🍽️',nome:'Alimentos',emojis:['🍖','🥩','🍗','
 // LIMITES POR PLANO
 const PLANOS={
   basico:{produtos:50,funcionarios:3,fornecedores:5,relatorios:false,lista:true,insights:true,nf:false,label:'📦 Básico',preco:'R$ 97/mês'},
-  profissional:{produtos:150,funcionarios:8,fornecedores:10,relatorios:true,lista:true,insights:true,nf:true,label:'⭐ Profissional',preco:'R$ 147/mês'},
+  profissional:{produtos:150,funcionarios:8,fornecedores:10,relatorios:true,lista:true,insights:true,nf:false,label:'⭐ Profissional',preco:'R$ 147/mês'},
   empresarial:{produtos:99999,funcionarios:99999,fornecedores:99999,relatorios:true,lista:true,insights:true,nf:true,label:'🏆 Empresarial',preco:'R$ 197/mês'}
 };
 function getLimite(){return PLANOS[PLANO_ATUAL]||PLANOS.basico;}
@@ -1024,80 +1024,74 @@ function verificarLimite(tipo){
   if(tipo==='produto'&&todosProds.length>=lim.produtos&&!trial){mostrarUpgrade('produtos',lim.produtos);return false;}
   if(tipo==='funcionario'&&todosFuncs.length>=lim.funcionarios&&!trial){mostrarUpgrade('funcionários',lim.funcionarios);return false;}
   if(tipo==='fornecedor'&&todosFornecs.length>=lim.fornecedores&&!trial){mostrarUpgrade('fornecedores',lim.fornecedores);return false;}
-  if(tipo==='relatorio'&&!lim.relatorios&&!trial){mostrarUpgrade('Relatórios PDF/CSV',0);return false;}
-  if(tipo==='lista'&&!lim.lista&&!trial){mostrarUpgrade('lista de compras',0);return false;}
-  if(tipo==='nf'&&!lim.nf&&!trial){mostrarUpgrade('Recebimento de NF',0);return false;}
+  if(tipo==='relatorio'&&!lim.relatorios&&!trial){mostrarUpgrade('Relatórios PDF/CSV',0,'profissional');return false;}
+  if(tipo==='lista'&&!lim.lista&&!trial){mostrarUpgrade('Lista de Compras',0,'profissional');return false;}
+  if(tipo==='nf'&&!lim.nf&&!trial){mostrarUpgrade('Recebimento de NF',0,'empresarial');return false;}
   return true;
 }
-function mostrarUpgrade(recurso,limite){
+function mostrarUpgrade(recurso,limite,planoAlvo){
   abrirModal('ovUpgrade');
   const lim=getLimite();
-  const proximo=PLANO_ATUAL==='basico'?PLANOS.profissional:PLANOS.empresarial;
-  const proximoNome=PLANO_ATUAL==='basico'?'Profissional':'Empresarial';
+  // Plano que desbloqueia o recurso. Se não informado, usa o próximo lógico.
+  if(!planoAlvo)planoAlvo=PLANO_ATUAL==='basico'?'profissional':'empresarial';
+  const ehRecurso=(limite===0); // limite 0 = recurso premium; >0 = limite de quantidade
+  const fmtLim=n=>n>=99999?'♾️':n;
+  const ck='<span style="color:var(--gn);font-weight:800;">✅</span>';
+  const cx='<span style="color:var(--t3);">❌</span>';
+  // Cor de destaque conforme o plano-alvo
+  const cor=planoAlvo==='empresarial'?'var(--am)':planoAlvo==='profissional'?'var(--bl)':'var(--gn)';
+  const alvoLabel=PLANOS[planoAlvo].label;
+  // Colunas: qual está destacada
+  const hi3=planoAlvo==='empresarial';
+  const hi2=planoAlvo==='profissional';
+  // Monta uma linha da tabela; destaca a célula do plano-alvo e a linha inteira se for o recurso pedido
+  const bgAlvo='background:'+(hi2?'rgba(59,130,246,0.07)':hi3?'rgba(245,158,11,0.07)':'transparent')+';';
+  const linha=(nome,vB,vP,vE,destaque)=>
+    '<tr style="border-bottom:1px solid var(--b);'+(destaque?'background:'+(hi3?'rgba(245,158,11,0.10)':'rgba(59,130,246,0.10)')+';':'')+'">'+
+      '<td style="padding:9px 10px;color:var(--t'+(destaque?'':'2')+');font-weight:'+(destaque?'800':'400')+';">'+(destaque?'⭐ ':'')+nome+'</td>'+
+      '<td style="padding:9px 8px;text-align:center;font-weight:700;">'+vB+'</td>'+
+      '<td style="padding:9px 8px;text-align:center;font-weight:700;color:var(--bl);'+(hi2?'background:rgba(59,130,246,0.07);':'')+'">'+vP+'</td>'+
+      '<td style="padding:9px 8px;text-align:center;font-weight:700;color:var(--am);'+(hi3?'background:rgba(245,158,11,0.07);':'')+'">'+vE+'</td>'+
+    '</tr>';
+  const B=PLANOS.basico,P=PLANOS.profissional,E=PLANOS.empresarial;
+  // Mensagem WhatsApp pré-pronta
+  const msg=encodeURIComponent('Olá! Uso o Gerencion Estoque e quero fazer upgrade para o plano '+alvoLabel.replace(/[^\wÀ-ÿ ]/g,'').trim()+' (R$ '+(planoAlvo==='empresarial'?'197':planoAlvo==='profissional'?'147':'97')+'/mês). Pode me ajudar?');
   const el=$('upgradeConteudo');
   if(el)el.innerHTML=
+    // CABEÇALHO
     '<div style="text-align:center;margin-bottom:16px;">'+
-      '<div style="font-size:40px;margin-bottom:8px;">🚀</div>'+
-      '<div style="font-size:15px;font-weight:800;color:var(--t);margin-bottom:6px;">Limite do plano atingido!</div>'+
-      '<div style="font-size:12px;color:var(--t2);line-height:1.7;">Você atingiu o limite de '+(limite>0?'<strong>'+limite+' '+recurso+'</strong>':' <strong>'+recurso+'</strong>')+' do plano <strong>'+lim.label+'</strong>.<br>Faça upgrade e continue crescendo!</div>'+
+      '<div style="width:60px;height:60px;margin:0 auto 10px;border-radius:16px;background:'+(hi3?'rgba(245,158,11,0.12)':'rgba(59,130,246,0.12)')+';display:flex;align-items:center;justify-content:center;font-size:30px;">'+(ehRecurso?(recurso.includes('NF')?'📋':'✨'):'🚀')+'</div>'+
+      (ehRecurso
+        ? '<div style="font-size:16px;font-weight:800;color:var(--t);margin-bottom:6px;">'+recurso+'</div>'+
+          '<div style="font-size:12px;color:var(--t2);line-height:1.7;">Este recurso faz parte do plano <strong style="color:'+cor+';">'+alvoLabel+'</strong>.<br>Faça upgrade e desbloqueie agora mesmo!</div>'
+        : '<div style="font-size:16px;font-weight:800;color:var(--t);margin-bottom:6px;">Limite do plano atingido!</div>'+
+          '<div style="font-size:12px;color:var(--t2);line-height:1.7;">Você atingiu o limite de <strong>'+limite+' '+recurso+'</strong> do plano <strong>'+lim.label+'</strong>.<br>Faça upgrade e continue crescendo!</div>'
+      )+
     '</div>'+
-    '<div style="background:var(--s2);border-radius:13px;overflow:hidden;margin-bottom:14px;">'+
+    // TABELA COMPARATIVA
+    '<div style="background:var(--s2);border-radius:13px;overflow:hidden;margin-bottom:14px;border:1px solid var(--b);">'+
       '<div style="padding:10px 14px;background:var(--pu2);border-bottom:1px solid var(--b);font-size:11px;font-weight:700;color:var(--pu);">📊 Comparativo de Planos</div>'+
       '<table style="width:100%;border-collapse:collapse;font-size:11px;">'+
         '<tr style="border-bottom:1px solid var(--b);">'+
-          '<td style="padding:8px 10px;color:var(--t2);">Recurso</td>'+
-          '<td style="padding:8px 10px;text-align:center;color:var(--t2);">📦 Básico<br><span style="color:var(--gn);font-weight:800;">R$97/mês</span></td>'+
-          '<td style="padding:8px 6px;text-align:center;color:var(--bl);background:rgba(59,130,246,0.08);border-radius:8px;">⭐ Prof.<br><span style="color:var(--bl);font-weight:800;">R$147/mês</span><br><span style="font-size:9px;background:var(--bl);color:#fff;padding:1px 5px;border-radius:4px;font-weight:700;">RECOMENDADO</span></td>'+
-          '<td style="padding:8px 10px;text-align:center;color:var(--am);">🏆 Emp.<br><span style="color:var(--am);font-weight:800;">R$197/mês</span></td>'+
+          '<td style="padding:9px 10px;color:var(--t2);">Recurso</td>'+
+          '<td style="padding:9px 6px;text-align:center;color:var(--t2);">📦 Básico<br><span style="color:var(--gn);font-weight:800;">R$97</span></td>'+
+          '<td style="padding:9px 6px;text-align:center;'+(hi2?'background:rgba(59,130,246,0.10);':'')+'">⭐ <span style="color:var(--bl);">Prof.</span><br><span style="color:var(--bl);font-weight:800;">R$147</span>'+(hi2?'<br><span style="font-size:9px;background:var(--bl);color:#fff;padding:1px 6px;border-radius:4px;font-weight:700;">INDICADO</span>':'')+'</td>'+
+          '<td style="padding:9px 6px;text-align:center;'+(hi3?'background:rgba(245,158,11,0.10);':'')+'">🏆 <span style="color:var(--am);">Emp.</span><br><span style="color:var(--am);font-weight:800;">R$197</span>'+(hi3?'<br><span style="font-size:9px;background:var(--am);color:#0B1120;padding:1px 6px;border-radius:4px;font-weight:700;">INDICADO</span>':'')+'</td>'+
         '</tr>'+
-        '<tr style="border-bottom:1px solid var(--b);">'+
-          '<td style="padding:8px 10px;color:var(--t2);">Produtos</td>'+
-          '<td style="padding:8px 10px;text-align:center;font-weight:700;">50</td>'+
-          '<td style="padding:8px 10px;text-align:center;font-weight:700;color:var(--bl);background:rgba(59,130,246,0.05);">150</td>'+
-          '<td style="padding:8px 10px;text-align:center;font-weight:700;color:var(--am);">♾️</td>'+
-        '</tr>'+
-        '<tr style="border-bottom:1px solid var(--b);">'+
-          '<td style="padding:8px 10px;color:var(--t2);">Funcionários</td>'+
-          '<td style="padding:8px 10px;text-align:center;font-weight:700;">3</td>'+
-          '<td style="padding:8px 10px;text-align:center;font-weight:700;color:var(--bl);background:rgba(59,130,246,0.05);">8</td>'+
-          '<td style="padding:8px 10px;text-align:center;font-weight:700;color:var(--am);">♾️</td>'+
-        '</tr>'+
-        '<tr style="border-bottom:1px solid var(--b);">'+
-          '<td style="padding:8px 10px;color:var(--t2);">Fornecedores</td>'+
-          '<td style="padding:8px 10px;text-align:center;font-weight:700;">5</td>'+
-          '<td style="padding:8px 10px;text-align:center;font-weight:700;color:var(--bl);background:rgba(59,130,246,0.05);">10</td>'+
-          '<td style="padding:8px 10px;text-align:center;font-weight:700;color:var(--am);">♾️</td>'+
-        '</tr>'+
-        '<tr style="border-bottom:1px solid var(--b);">'+
-          '<td style="padding:8px 10px;color:var(--t2);">Relatório</td>'+
-          '<td style="padding:8px 10px;text-align:center;">✅</td>'+
-          '<td style="padding:8px 10px;text-align:center;color:var(--bl);background:rgba(59,130,246,0.05);">✅</td>'+
-          '<td style="padding:8px 10px;text-align:center;color:var(--am);">✅</td>'+
-        '</tr>'+
-        '<tr style="border-bottom:1px solid var(--b);">'+
-          '<td style="padding:8px 10px;color:var(--t2);">Lista de Compras</td>'+
-          '<td style="padding:8px 10px;text-align:center;">✅</td>'+
-          '<td style="padding:8px 10px;text-align:center;color:var(--bl);background:rgba(59,130,246,0.05);">✅</td>'+
-          '<td style="padding:8px 10px;text-align:center;color:var(--am);">✅</td>'+
-        '</tr>'+
-        '<tr style="border-bottom:1px solid var(--b);">'+
-          '<td style="padding:8px 10px;color:var(--t2);">PDF/CSV</td>'+
-          '<td style="padding:8px 10px;text-align:center;">❌</td>'+
-          '<td style="padding:8px 10px;text-align:center;color:var(--bl);background:rgba(59,130,246,0.05);">✅</td>'+
-          '<td style="padding:8px 10px;text-align:center;color:var(--am);">✅</td>'+
-        '</tr>'+
-        '<tr>'+
-          '<td style="padding:8px 10px;color:var(--t2);">Recebimento NF</td>'+
-          '<td style="padding:8px 10px;text-align:center;">❌</td>'+
-          '<td style="padding:8px 10px;text-align:center;color:var(--bl);background:rgba(59,130,246,0.05);">✅</td>'+
-          '<td style="padding:8px 10px;text-align:center;color:var(--am);">✅</td>'+
-        '</tr>'+
+        linha('Produtos',fmtLim(B.produtos),fmtLim(P.produtos),fmtLim(E.produtos),false)+
+        linha('Funcionários',fmtLim(B.funcionarios),fmtLim(P.funcionarios),fmtLim(E.funcionarios),false)+
+        linha('Fornecedores',fmtLim(B.fornecedores),fmtLim(P.fornecedores),fmtLim(E.fornecedores),false)+
+        linha('Insights',B.insights?ck:cx,P.insights?ck:cx,E.insights?ck:cx,false)+
+        linha('Lista de Compras',B.lista?ck:cx,P.lista?ck:cx,E.lista?ck:cx,false)+
+        linha('Relatórios PDF/CSV',B.relatorios?ck:cx,P.relatorios?ck:cx,E.relatorios?ck:cx,recurso.includes('Relat'))+
+        linha('Recebimento NF',B.nf?ck:cx,P.nf?ck:cx,E.nf?ck:cx,recurso.includes('NF'))+
       '</table>'+
     '</div>'+
-    '<div style="background:var(--pu2);border:1.5px solid var(--pu3);border-radius:12px;padding:12px 14px;text-align:center;">'+
-      '<div style="font-size:12px;font-weight:700;color:var(--pu);margin-bottom:4px;">💬 Quer fazer upgrade?</div>'+
-      '<div style="font-size:11px;color:var(--t2);">Entre em contato com o suporte pelo WhatsApp para upgrade imediato!</div>'+
-    '</div>';
+    // CTA WHATSAPP
+    '<a href="https://wa.me/5521972163470?text='+msg+'" target="_blank" style="display:block;text-decoration:none;background:var(--gn);border-radius:12px;padding:14px;text-align:center;margin-bottom:8px;">'+
+      '<div style="font-size:14px;font-weight:800;color:#0B1120;">💬 Fazer upgrade pelo WhatsApp</div>'+
+      '<div style="font-size:11px;color:rgba(11,17,32,0.75);margin-top:2px;">Resposta rápida do suporte para liberar seu plano</div>'+
+    '</a>';
 }
 
 // Estado
