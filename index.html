@@ -71,8 +71,8 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--t);font-siz
 .top-right{display:flex;align-items:center;gap:7px;}
 #alertBadge{background:var(--rd);color:#fff;border-radius:20px;padding:3px 8px;font-size:11px;font-weight:700;display:none;}
 .top-sair{padding:5px 10px;background:var(--rd2);border:1px solid var(--rd3);border-radius:8px;color:var(--rd);font-size:11px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;}
-#nav{background:var(--s1);border-top:1px solid var(--b);position:fixed;bottom:0;left:0;right:0;display:grid;grid-template-columns:repeat(6,1fr);z-index:100;padding-bottom:env(safe-area-inset-bottom);}
-.nav-btn{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:6px 1px;gap:2px;border:none;background:none;color:var(--t3);cursor:pointer;font-family:'Inter',sans-serif;font-size:8px;font-weight:600;border-top:2px solid transparent;transition:all .15s;touch-action:manipulation;min-height:48px;}
+#nav{background:var(--s1);border-top:1px solid var(--b);position:fixed;bottom:0;left:0;right:0;display:grid;grid-template-columns:repeat(7,1fr);z-index:100;padding-bottom:env(safe-area-inset-bottom);}
+.nav-btn{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:6px 0;gap:2px;border:none;background:none;color:var(--t3);cursor:pointer;font-family:'Inter',sans-serif;font-size:7.5px;font-weight:600;border-top:2px solid transparent;transition:all .15s;touch-action:manipulation;min-height:48px;white-space:nowrap;overflow:hidden;}
 .nav-btn.on{color:var(--gn);border-top-color:var(--gn);}
 .nav-btn span{font-size:17px;line-height:1;}
 #main{padding:14px 14px 88px;max-width:600px;margin:0 auto;}
@@ -236,6 +236,33 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--t);font-siz
 .link-url{font-size:11px;color:var(--bl);word-break:break-all;font-weight:600;margin:5px 0 8px;}
 /* Status validade */
 .val-status-box{font-size:11px;padding:8px 11px;border-radius:9px;margin-bottom:9px;font-weight:600;display:none;}.calc-key{background:var(--s3);border:1px solid var(--b);border-radius:8px;padding:10px;font-size:15px;font-weight:700;color:var(--t);cursor:pointer;font-family:Inter,sans-serif;touch-action:manipulation;}
+/* ===== MÓDULO ETIQUETA (prefixo etq/.etq- para não colidir) ===== */
+.etq-fmt-btn{flex:1;padding:11px;background:var(--s2);border:1.5px solid var(--b);border-radius:11px;color:var(--t2);font-weight:700;font-size:13px;cursor:pointer;font-family:'Inter',sans-serif;transition:all .15s;}
+.etq-fmt-btn.on{background:var(--gn);border-color:var(--gn);color:#0B1120;}
+.etq-aviso-folha{font-size:11px;line-height:1.5;padding:9px 12px;border-radius:9px;margin:8px 0;}
+.etq-aviso-folha.ok{background:rgba(34,197,94,0.12);border:1px solid rgba(34,197,94,0.4);color:var(--t);}
+.etq-aviso-folha.warn{background:rgba(234,179,8,0.12);border:1px solid rgba(234,179,8,0.45);color:var(--t);}
+.etq-label{background:#fff;color:#000;font-family:'Inter',sans-serif;box-sizing:border-box;}
+.etq-label.fmt-termica{width:60mm;height:60mm;padding:2.5mm 3mm;overflow:hidden;display:flex;flex-direction:column;}
+.etq-label.fmt-termica .etq-l-rest{font-size:7.5pt;font-weight:900;text-align:center;border-bottom:1.2px solid #000;padding-bottom:0.8mm;margin-bottom:1.2mm;text-transform:uppercase;line-height:1.05;}
+.etq-label.fmt-termica .etq-l-prod{font-size:11pt;font-weight:900;line-height:1.05;margin-bottom:1.2mm;}
+.etq-label.fmt-termica .etq-l-line{font-size:7.5pt;line-height:1.45;display:flex;justify-content:space-between;gap:2mm;}
+.etq-label.fmt-termica .etq-l-line b{font-weight:700;}
+.etq-label.fmt-termica .etq-l-datas{margin-top:1.2mm;padding-top:1.2mm;border-top:1.2px solid #000;}
+.etq-label.fmt-termica .etq-l-datas .etq-l-line{font-size:8pt;line-height:1.5;}
+.etq-label.fmt-termica .etq-l-val{font-size:10pt;font-weight:900;}
+.etq-label.fmt-termica .etq-l-resp{margin-top:1.2mm;padding-top:1mm;border-top:1px dotted #666;font-size:7pt;}
+.etq-label.fmt-termica .etq-l-marca{margin-top:auto;padding-top:1mm;text-align:center;font-size:5.5pt;color:#555;letter-spacing:0.2px;}
+.etq-label.fmt-a4{width:63.5mm;height:46.6mm;padding:2mm 2.5mm;overflow:hidden;display:flex;flex-direction:column;box-sizing:border-box;}
+.etq-label.fmt-a4 .etq-l-rest{font-size:6.5pt;font-weight:900;text-align:center;border-bottom:1px solid #000;padding-bottom:0.6mm;margin-bottom:0.8mm;text-transform:uppercase;line-height:1.05;}
+.etq-label.fmt-a4 .etq-l-prod{font-size:9pt;font-weight:900;line-height:1.05;margin-bottom:0.8mm;}
+.etq-label.fmt-a4 .etq-l-line{font-size:6pt;line-height:1.35;display:flex;justify-content:space-between;gap:1.5mm;}
+.etq-label.fmt-a4 .etq-l-line b{font-weight:700;}
+.etq-label.fmt-a4 .etq-l-datas{margin-top:0.8mm;padding-top:0.8mm;border-top:1px solid #000;}
+.etq-label.fmt-a4 .etq-l-datas .etq-l-line{font-size:6.5pt;line-height:1.4;}
+.etq-label.fmt-a4 .etq-l-val{font-size:8pt;font-weight:900;}
+.etq-label.fmt-a4 .etq-l-resp{margin-top:0.6mm;padding-top:0.5mm;border-top:1px dotted #666;font-size:5.5pt;}
+.etq-label.fmt-a4 .etq-l-marca{margin-top:auto;padding-top:0.5mm;text-align:center;font-size:4.5pt;color:#555;letter-spacing:0.2px;}
 </style>
 </head>
 <body>
@@ -280,12 +307,14 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--t);font-siz
       </div>
       <div style="display:flex;flex-direction:column;gap:6px;margin-bottom:14px;">
         <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--t2);"><span style="color:var(--gn);font-weight:700;">✅</span> Até 50 produtos cadastrados</div>
-        <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--t2);"><span style="color:var(--gn);font-weight:700;">✅</span> Até 2 funcionários</div>
+        <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--t2);"><span style="color:var(--gn);font-weight:700;">✅</span> Até 3 funcionários</div>
         <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--t2);"><span style="color:var(--gn);font-weight:700;">✅</span> Até 5 fornecedores</div>
         <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--t2);"><span style="color:var(--gn);font-weight:700;">✅</span> Alertas de estoque e validade</div>
         <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--t2);"><span style="color:var(--gn);font-weight:700;">✅</span> Gráficos e insights</div>
-        <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--t3);"><span style="color:var(--t3);">❌</span> Relatórios PDF/CSV</div>
+        <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--t2);"><span style="color:var(--gn);font-weight:700;">✅</span> Relatórios PDF/CSV (Estoque + Movimentação)</div>
         <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--t3);"><span style="color:var(--t3);">❌</span> Lista de compras por fornecedor</div>
+        <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--t3);"><span style="color:var(--t3);">❌</span> Recebimento de Notas Fiscais</div>
+        <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--t3);"><span style="color:var(--t3);">❌</span> Impressão de Etiquetas</div>
       </div>
       <button onclick="abrirAceitePromo('basico')" style="width:100%;padding:13px;background:var(--s2);border:1.5px solid var(--b2);border-radius:13px;color:var(--t2);font-weight:800;font-size:14px;cursor:pointer;font-family:Inter,sans-serif;">Começar com Básico</button>
     </div>
@@ -305,13 +334,15 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--t);font-siz
       </div>
       <div style="display:flex;flex-direction:column;gap:6px;margin-bottom:14px;">
         <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--t2);"><span style="color:var(--gn);font-weight:700;">✅</span> Até 150 produtos cadastrados</div>
-        <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--t2);"><span style="color:var(--gn);font-weight:700;">✅</span> Até 8 funcionários</div>
+        <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--t2);"><span style="color:var(--gn);font-weight:700;">✅</span> Até 7 funcionários</div>
         <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--t2);"><span style="color:var(--gn);font-weight:700;">✅</span> Até 10 fornecedores</div>
         <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--t2);"><span style="color:var(--gn);font-weight:700;">✅</span> Alertas de estoque e validade</div>
         <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--t2);"><span style="color:var(--gn);font-weight:700;">✅</span> Gráficos e insights completos</div>
         <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--t2);"><span style="color:var(--gn);font-weight:700;">✅</span> Relatórios PDF e CSV</div>
         <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--t2);"><span style="color:var(--gn);font-weight:700;">✅</span> Lista de compras por fornecedor</div>
+        <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--t2);"><span style="color:var(--gn);font-weight:700;">✅</span> Recebimento de Notas Fiscais</div>
         <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--t2);"><span style="color:var(--gn);font-weight:700;">✅</span> Suporte prioritário</div>
+        <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--t3);"><span style="color:var(--t3);">❌</span> Impressão de Etiquetas</div>
       </div>
       <button onclick="abrirAceitePromo('profissional')" style="width:100%;padding:13px;background:var(--bl);border:none;border-radius:13px;color:#fff;font-weight:800;font-size:14px;cursor:pointer;font-family:Inter,sans-serif;box-shadow:0 4px 14px rgba(59,130,246,.4);">Começar com Profissional ⭐</button>
     </div>
@@ -333,6 +364,8 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--t);font-siz
         <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--t2);"><span style="color:var(--gn);font-weight:700;">✅</span> Funcionários <strong style="color:var(--am);">ilimitados</strong></div>
         <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--t2);"><span style="color:var(--gn);font-weight:700;">✅</span> Fornecedores <strong style="color:var(--am);">ilimitados</strong></div>
         <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--t2);"><span style="color:var(--gn);font-weight:700;">✅</span> Tudo do Profissional incluído</div>
+        <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--t2);"><span style="color:var(--gn);font-weight:700;">✅</span> Recebimento de Notas Fiscais</div>
+        <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--t2);"><span style="color:var(--am);font-weight:700;">🏷️</span> <strong style="color:var(--am);">Impressão de Etiquetas (exclusivo!)</strong></div>
         <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--t2);"><span style="color:var(--gn);font-weight:700;">✅</span> Suporte VIP via WhatsApp</div>
         <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--t2);"><span style="color:var(--gn);font-weight:700;">✅</span> Atualizações antecipadas</div>
       </div>
@@ -608,8 +641,8 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--t);font-siz
         </div>
       </div>
       <div class="cfg-c">
-        <div class="cfg-t">📊 Enviar Relatório</div>
-        <div class="cfg-s">Envie um resumo completo do estoque por WhatsApp ou baixe em CSV.</div>
+        <div class="cfg-t">📦 Relatório de Estoque</div>
+        <div class="cfg-s">A foto do seu estoque agora: produtos, quantidades, situação e valor total. Envie ou baixe.</div>
         <label class="fl" style="margin-bottom:6px;">WhatsApp</label>
         <div class="wpp-input-wrap" style="margin-bottom:9px;">
           <span class="wpp-ddi">🇧🇷 +55</span>
@@ -623,6 +656,18 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--t);font-siz
           <button class="btn-c b-bl" onclick="relEmail()" style="margin-bottom:0;">✉️ E-mail</button>
           <button class="btn-c b-pu" onclick="relPDF()" style="margin-bottom:0;">📄 Baixar PDF</button>
           <button class="btn-c b-am" onclick="relCSV()" style="margin-bottom:0;">📥 CSV/Excel</button>
+        </div>
+      </div>
+      <div class="cfg-c">
+        <div class="cfg-t">📈 Relatório de Movimentações</div>
+        <div class="cfg-s">O histórico de entradas, saídas e ajustes. Guarde o fechamento de cada mês para seu controle e contador.</div>
+        <label class="fl" style="margin-bottom:6px;">Período</label>
+        <select class="inp" id="relMovMes" style="margin-bottom:11px;"></select>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:7px;">
+          <button class="btn-c b-gn" onclick="relMovWpp($('relMovMes').value)" style="margin-bottom:0;">📲 WhatsApp</button>
+          <button class="btn-c b-bl" onclick="relMovEmail($('relMovMes').value)" style="margin-bottom:0;">✉️ E-mail</button>
+          <button class="btn-c b-pu" onclick="relMovPDF($('relMovMes').value)" style="margin-bottom:0;">📄 Baixar PDF</button>
+          <button class="btn-c b-am" onclick="relMovCSV($('relMovMes').value)" style="margin-bottom:0;">📥 CSV/Excel</button>
         </div>
       </div>
       <div class="cfg-c">
@@ -644,6 +689,93 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--t);font-siz
       </div>
     </div>
 
+    <div id="pg-etq" class="pg">
+      <div style="padding:14px 14px 90px;">
+        <div style="font-size:13px;font-weight:800;color:var(--t1);margin-bottom:4px;">🏷️ Etiquetas</div>
+        <div style="font-size:11px;color:var(--t2);margin-bottom:14px;">Imprima etiquetas de validade e identificação para seus produtos. Campos em branco não aparecem na etiqueta.</div>
+
+        <div class="fg">
+          <label class="fl">🍲 Produto <span class="fl-hint">(obrigatório)</span></label>
+          <input class="inp" id="etqProd" placeholder="Ex: Molho de tomate caseiro" oninput="etqAtualizar()">
+        </div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+          <div class="fg">
+            <label class="fl">🏷️ Lote</label>
+            <input class="inp" id="etqLote" placeholder="Ex: 2026-A" style="text-transform:uppercase;" oninput="etqAtualizar()">
+          </div>
+          <div class="fg">
+            <label class="fl">⚖️ Peso / Qtd</label>
+            <input class="inp" id="etqPeso" placeholder="Ex: 2,5 kg" oninput="etqAtualizar()">
+          </div>
+        </div>
+
+        <div class="fg">
+          <label class="fl">❄️ Conservação</label>
+          <select class="inp" id="etqCons" onchange="etqAtualizar()">
+            <option value="">— não informar —</option>
+            <option value="Refrigerado">Refrigerado</option>
+            <option value="Congelado">Congelado</option>
+            <option value="Ambiente">Temperatura ambiente</option>
+            <option value="Ambiente arejado">Ambiente arejado</option>
+          </select>
+        </div>
+
+        <div class="fg">
+          <label class="fl">🏢 Fornecedor / Marca</label>
+          <input class="inp" id="etqForn" placeholder="Ex: Fornecedor XYZ" list="dlFornecedores" autocomplete="off" oninput="etqAtualizar()">
+          <datalist id="dlFornecedores"></datalist>
+        </div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+          <div class="fg">
+            <label class="fl" id="etqLabelManip">📅 Manipulado em</label>
+            <input class="inp" type="text" id="etqManip" inputmode="numeric" maxlength="10" placeholder="dd/mm/aaaa" oninput="etqMascaraData(this);etqAtualizar()" autocomplete="off">
+          </div>
+          <div class="fg">
+            <label class="fl">⏰ Validade</label>
+            <input class="inp" type="text" id="etqVal" inputmode="numeric" maxlength="10" placeholder="dd/mm/aaaa" oninput="etqMascaraData(this);etqAtualizar()" autocomplete="off">
+          </div>
+        </div>
+
+        <div class="fg">
+          <label class="fl">📝 Observação</label>
+          <input class="inp" id="etqObs" placeholder="Ex: abrir com cuidado" oninput="etqAtualizar()">
+        </div>
+
+        <div style="font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--t2);margin:14px 0 8px;">Pré-visualização</div>
+
+        <div style="display:flex;gap:8px;margin-bottom:8px;">
+          <button id="etqBtnTermica" class="etq-fmt-btn on" onclick="etqSetFormato('termica')">🏷️ BOPP 60×60 (recomendado)</button>
+          <button id="etqBtnA4" class="etq-fmt-btn" onclick="etqTentarA4()">📄 A4 papel</button>
+        </div>
+        <div id="etqRecomenda" style="background:var(--s1);border:1px solid var(--b);border-radius:10px;padding:9px 12px;margin-bottom:14px;font-size:11px;color:var(--t2);line-height:1.5;"></div>
+
+        <div style="background:#fff;border-radius:14px;padding:16px;display:flex;align-items:center;justify-content:center;min-height:180px;">
+          <div id="etqPrintArea">
+            <div class="etq-label fmt-termica" id="etqLabel"></div>
+          </div>
+        </div>
+
+        <button class="btn-p" style="margin-top:14px;" onclick="etqImprimir()">🖨️ Imprimir 1 etiqueta</button>
+
+        <div style="margin-top:10px;padding-top:14px;border-top:1px solid var(--b);">
+          <div style="font-size:11px;color:var(--t2);margin-bottom:8px;line-height:1.6;">📄 <b>Várias na mesma folha?</b> Preencha e adicione uma a uma (ótimo para peças do mesmo produto com pesos diferentes).</div>
+          <button class="btn-o" style="margin-top:0;" onclick="etqAddFila()">➕ Adicionar à folha</button>
+
+          <div id="etqFilaBox" style="display:none;margin-top:12px;background:var(--s1);border:1px solid var(--b);border-radius:13px;padding:13px;">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+              <span style="font-size:12px;font-weight:800;color:var(--t);">🏷️ Na folha: <span id="etqFilaCont">0</span></span>
+              <button onclick="etqLimparFila()" style="background:var(--rd2);border:none;border-radius:8px;color:var(--rd);font-size:11px;font-weight:700;padding:6px 11px;cursor:pointer;font-family:Inter,sans-serif;">🗑️ Limpar</button>
+            </div>
+            <div id="etqFilaLista"></div>
+            <div id="etqAvisoFolha" class="etq-aviso-folha" style="display:none;"></div>
+            <button class="btn-p" style="margin-top:6px;" onclick="etqImprimirFila()">🖨️ Imprimir folha completa</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
   <button id="helpBtn" onclick="abrirAjuda()">?</button>
   <button id="fab" onclick="abrirProd()">+</button>
   <button id="fabReceb" onclick="abrirNovoRecebimento()" style="display:none;position:fixed;bottom:70px;right:16px;width:54px;height:54px;border-radius:50%;background:var(--bl);border:none;color:#fff;font-size:26px;cursor:pointer;box-shadow:0 4px 16px rgba(26,115,232,.4);z-index:100;font-family:Inter,sans-serif;align-items:center;justify-content:center;">+</button>
@@ -653,6 +785,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--t);font-siz
     <button class="nav-btn" onclick="irPg('hist',this)"><span>📋</span>Histórico</button>
     <button class="nav-btn" onclick="irPg('insights',this)"><span>📊</span>Relatório</button>
     <button class="nav-btn" id="navReceb" onclick="irPg('receb',this)"><span>📋</span>NF</button>
+    <button class="nav-btn" id="navEtq" onclick="irPg('etq',this)"><span>🏷️</span>Etiqueta</button>
     <button class="nav-btn" id="navCfg" onclick="irPg('config',this)"><span>⚙️</span>Config</button>
   </div>
 </div>
@@ -812,11 +945,11 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--t);font-siz
     <div class="g2">
       <div class="fg">
         <label class="fl">Fabricação <span class="fl-hint">— opcional</span></label>
-        <input class="inp" id="mpFab" placeholder="DD/MM/AAAA ou use o calendário" oninput="mascaraDataCampo(this);atualizarStatusVal()" style="cursor:text;" onfocus="if(this.getAttribute('data-modo')!=='texto')this.setAttribute('data-modo','texto')">
+        <input class="inp" id="mpFab" placeholder="DD/MM/AAAA" autocomplete="off" oninput="mascaraDataCampo(this);atualizarStatusVal()" style="cursor:text;" onfocus="if(this.getAttribute('data-modo')!=='texto')this.setAttribute('data-modo','texto')">
       </div>
       <div class="fg">
         <label class="fl">Validade <span class="fl-hint">— opcional</span></label>
-        <input class="inp" id="mpVal" placeholder="DD/MM/AAAA ou use o calendário" oninput="mascaraDataCampo(this);atualizarStatusVal()">
+        <input class="inp" id="mpVal" placeholder="DD/MM/AAAA" autocomplete="off" oninput="mascaraDataCampo(this);atualizarStatusVal()">
       </div>
     </div>
     <div class="fg" style="margin-top:4px;">
@@ -876,6 +1009,39 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--t);font-siz
 </div>
 
 <!-- MODAL FUNCIONÁRIO -->
+<div class="overlay" id="ovEtqA4">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="mh"></div>
+    <div style="background:var(--rd2);border:1.5px solid var(--rd3);border-radius:12px;padding:14px;margin-bottom:14px;">
+      <div style="font-size:15px;font-weight:900;color:var(--rd);text-align:center;margin-bottom:8px;">⚠️ ATENÇÃO — FORMATO A4 (PAPEL COMUM)</div>
+      <div style="font-size:12px;color:var(--t);line-height:1.7;">
+        A etiqueta em <b>papel A4 comum</b> serve para <b>produtos de prateleira e estoque seco</b> (grãos, enlatados, embalados que ficam em temperatura ambiente).<br><br>
+        <b style="color:var(--rd);">NÃO use A4 em geladeira ou freezer.</b> Papel encharca, descola e fica ilegível no frio e na umidade. Para <b>refrigerados e congelados</b>, use o formato <b>🏷️ BOPP 60×60</b> em impressora térmica.<br><br>
+        <span style="color:var(--t2);font-size:11px;">O uso do formato A4 em ambiente refrigerado ou congelado é de inteira responsabilidade do usuário, não cabendo reclamação sobre perda de aderência ou legibilidade da etiqueta.</span>
+      </div>
+    </div>
+    <div style="font-size:13px;font-weight:700;color:var(--t);text-align:center;margin-bottom:14px;">Tem certeza que quer usar o formato A4?</div>
+    <div class="mb">
+      <button class="mb-s" onclick="fM('ovEtqA4')">Cancelar</button>
+      <button class="mb-p" style="background:var(--rd);" onclick="etqConfirmarA4()">Sim, usar A4</button>
+    </div>
+  </div>
+</div>
+
+<div class="overlay" id="ovEtqPin">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="mh"></div>
+    <div class="mt">🏷️ Confirmar impressão</div>
+    <div class="ms">Digite seu PIN para assinar esta etiqueta. O nome de quem digitar o PIN será o responsável impresso.</div>
+    <div class="fg"><label class="fl">Seu PIN de 4 dígitos</label><input class="inp" id="etqPinInput" type="password" maxlength="4" inputmode="numeric" placeholder="••••" style="letter-spacing:8px;font-size:22px;text-align:center;" onkeydown="if(event.key==='Enter')etqConfirmarPin()"></div>
+    <div id="etqPinErro" style="font-size:12px;color:var(--rd);text-align:center;min-height:16px;margin-bottom:6px;"></div>
+    <div class="mb">
+      <button class="mb-s" onclick="fM('ovEtqPin')">Cancelar</button>
+      <button class="mb-p" onclick="etqConfirmarPin()">Imprimir</button>
+    </div>
+  </div>
+</div>
+
 <div class="overlay" id="ovFunc">
   <div class="modal" onclick="event.stopPropagation()">
     <div class="mh"></div>
@@ -917,6 +1083,10 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--t);font-siz
         <label style="display:flex;align-items:center;justify-content:space-between;background:var(--s2);border:1px solid var(--b);border-radius:10px;padding:10px 13px;cursor:pointer;">
           <span style="font-size:13px;color:var(--t);">📋 Módulo Conferente (NF)</span>
           <input type="checkbox" id="permConferente" style="width:18px;height:18px;accent-color:var(--gn);cursor:pointer;">
+        </label>
+        <label style="display:flex;align-items:center;justify-content:space-between;background:var(--s2);border:1px solid var(--b);border-radius:10px;padding:10px 13px;cursor:pointer;">
+          <span style="font-size:13px;color:var(--t);">🏷️ Imprimir Etiquetas</span>
+          <input type="checkbox" id="permEtiquetas" style="width:18px;height:18px;accent-color:var(--gn);cursor:pointer;">
         </label>
       </div>
     </div>
@@ -1059,9 +1229,9 @@ const EMOJI_CATS=[{tab:'🍽️',nome:'Alimentos',emojis:['🍖','🥩','🍗','
 
 // LIMITES POR PLANO
 const PLANOS={
-  basico:{produtos:50,funcionarios:3,fornecedores:5,relatorios:false,lista:true,insights:true,nf:false,label:'📦 Básico',preco:'R$ 97/mês'},
-  profissional:{produtos:150,funcionarios:8,fornecedores:10,relatorios:true,lista:true,insights:true,nf:false,label:'⭐ Profissional',preco:'R$ 147/mês'},
-  empresarial:{produtos:99999,funcionarios:99999,fornecedores:99999,relatorios:true,lista:true,insights:true,nf:true,label:'🏆 Empresarial',preco:'R$ 197/mês'}
+  basico:{produtos:50,funcionarios:3,fornecedores:5,relatorios:true,lista:false,insights:true,nf:false,etiquetas:false,label:'📦 Básico',preco:'R$ 97/mês'},
+  profissional:{produtos:150,funcionarios:7,fornecedores:10,relatorios:true,lista:true,insights:true,nf:true,etiquetas:false,label:'⭐ Profissional',preco:'R$ 147/mês'},
+  empresarial:{produtos:99999,funcionarios:99999,fornecedores:99999,relatorios:true,lista:true,insights:true,nf:true,etiquetas:true,label:'🏆 Empresarial',preco:'R$ 197/mês'}
 };
 function getLimite(){return PLANOS[PLANO_ATUAL]||PLANOS.basico;}
 function verificarLimite(tipo){
@@ -1072,8 +1242,57 @@ function verificarLimite(tipo){
   if(tipo==='fornecedor'&&todosFornecs.length>=lim.fornecedores&&!trial){mostrarUpgrade('fornecedores',lim.fornecedores);return false;}
   if(tipo==='relatorio'&&!lim.relatorios&&!trial){mostrarUpgrade('Relatórios PDF/CSV',0,'profissional');return false;}
   if(tipo==='lista'&&!lim.lista&&!trial){mostrarUpgrade('Lista de Compras',0,'profissional');return false;}
-  if(tipo==='nf'&&!lim.nf&&!trial){mostrarUpgrade('Recebimento de NF',0,'empresarial');return false;}
+  if(tipo==='nf'&&!lim.nf&&!trial){mostrarUpgrade('Recebimento de NF',0,'profissional');return false;}
+  if(tipo==='etiquetas'&&!lim.etiquetas&&!trial){mostrarUpgrade('Impressão de Etiquetas',0,'empresarial');return false;}
   return true;
+}
+// Monta um mockup visual + benefícios persuasivos para o card de venda, conforme o recurso
+function montarMockupVenda(recurso,cor,alvoLabel,planoAlvo){
+  const preco=planoAlvo==='empresarial'?'R$ 197/mês':planoAlvo==='profissional'?'R$ 147/mês':'R$ 97/mês';
+  if(recurso.includes('Etiqueta')){
+    // mini-preview de uma etiqueta desenhada com CSS
+    const etiqueta='<div style="width:130px;margin:0 auto;background:#fff;border-radius:8px;padding:8px 9px;box-shadow:0 6px 20px rgba(0,0,0,0.25);transform:rotate(-2deg);">'+
+      '<div style="font-size:7px;font-weight:900;text-align:center;color:#000;border-bottom:1.5px solid #000;padding-bottom:3px;margin-bottom:4px;text-transform:uppercase;">SEU RESTAURANTE</div>'+
+      '<div style="font-size:11px;font-weight:900;color:#000;line-height:1;margin-bottom:4px;">Mussarela</div>'+
+      '<div style="font-size:7px;color:#000;display:flex;justify-content:space-between;"><b>Lote:</b><span>2026-A</span></div>'+
+      '<div style="font-size:7px;color:#000;display:flex;justify-content:space-between;"><b>Peso:</b><span>2,5 kg</span></div>'+
+      '<div style="font-size:8px;color:#000;font-weight:900;display:flex;justify-content:space-between;border-top:1px solid #000;margin-top:3px;padding-top:3px;"><b>Val.:</b><span>18/07/2026</span></div>'+
+      '<div style="font-size:6px;color:#555;text-align:center;margin-top:3px;">gerencion.com.br</div>'+
+    '</div>';
+    return '<div style="background:linear-gradient(135deg,rgba(245,158,11,0.14),rgba(11,17,32,0.5));border:1px solid var(--am3);border-radius:14px;padding:18px 14px;margin-bottom:14px;text-align:center;">'+
+      etiqueta+
+      '<div style="font-size:14px;font-weight:900;color:var(--t);margin-top:14px;">Etiquetas profissionais em segundos! 🏷️</div>'+
+      '<div style="text-align:left;margin-top:12px;font-size:12px;color:var(--t2);line-height:1.9;">'+
+        '✅ Controle de <b>validade e manipulação</b> como as grandes cozinhas<br>'+
+        '✅ Impressão <b>térmica (BOPP 60×60)</b> que aguenta congelado<br>'+
+        '✅ Ou <b>folha A4</b> para prateleira e estoque seco<br>'+
+        '✅ <b>Rastreabilidade</b>: quem etiquetou fica registrado (PIN)<br>'+
+        '✅ Fila para <b>várias peças de uma vez</b>'+
+      '</div>'+
+      '<div style="margin-top:14px;font-size:13px;font-weight:800;color:var(--am);">🚀 Libere agora no plano '+alvoLabel+' · '+preco+'</div>'+
+    '</div>';
+  }
+  if(recurso.includes('NF')){
+    // mini-preview de um recebimento de nota
+    const nota='<div style="width:150px;margin:0 auto;background:#fff;border-radius:8px;padding:10px;box-shadow:0 6px 20px rgba(0,0,0,0.25);transform:rotate(1.5deg);text-align:left;">'+
+      '<div style="font-size:8px;font-weight:900;color:#16A34A;margin-bottom:5px;">📋 RECEBIMENTO NF</div>'+
+      '<div style="font-size:7px;color:#333;line-height:1.6;"><b>Fornecedor:</b> Nutrimax<br><b>NF nº:</b> 001234<br><b>Valor:</b> R$ 1.850,00<br><b>Volumes:</b> 12 caixas</div>'+
+      '<div style="font-size:6.5px;color:#16A34A;font-weight:800;margin-top:5px;border-top:1px solid #ddd;padding-top:4px;">✅ Assinado por Leandro · 📷 Foto anexada</div>'+
+    '</div>';
+    return '<div style="background:linear-gradient(135deg,rgba(59,130,246,0.14),rgba(11,17,32,0.5));border:1px solid var(--bl3);border-radius:14px;padding:18px 14px;margin-bottom:14px;text-align:center;">'+
+      nota+
+      '<div style="font-size:14px;font-weight:900;color:var(--t);margin-top:14px;">Confira e registre toda mercadoria que chega! 📋</div>'+
+      '<div style="text-align:left;margin-top:12px;font-size:12px;color:var(--t2);line-height:1.9;">'+
+        '✅ Registre <b>fornecedor, NF, valor e volumes</b><br>'+
+        '✅ <b>Foto da nota</b> guardada na nuvem<br>'+
+        '✅ <b>Assinatura por PIN</b> do conferente<br>'+
+        '✅ Evite <b>divergências e perdas</b> no recebimento<br>'+
+        '✅ Histórico completo para <b>consulta e conferência</b>'+
+      '</div>'+
+      '<div style="margin-top:14px;font-size:13px;font-weight:800;color:var(--bl);">🚀 Libere agora no plano '+alvoLabel+' · '+preco+'</div>'+
+    '</div>';
+  }
+  return '';
 }
 function mostrarUpgrade(recurso,limite,planoAlvo){
   abrirModal('ovUpgrade');
@@ -1114,6 +1333,8 @@ function mostrarUpgrade(recurso,limite,planoAlvo){
           '<div style="font-size:12px;color:var(--t2);line-height:1.7;">Você atingiu o limite de <strong>'+limite+' '+recurso+'</strong> do plano <strong>'+lim.label+'</strong>.<br>Faça upgrade e continue crescendo!</div>'
       )+
     '</div>'+
+    // MOCKUP VISUAL PERSUASIVO (específico do recurso)
+    (ehRecurso?montarMockupVenda(recurso,cor,alvoLabel,planoAlvo):'')+
     // TABELA COMPARATIVA
     '<div style="background:var(--s2);border-radius:13px;overflow:hidden;margin-bottom:14px;border:1px solid var(--b);">'+
       '<div style="padding:10px 14px;background:var(--pu2);border-bottom:1px solid var(--b);font-size:11px;font-weight:700;color:var(--pu);">📊 Comparativo de Planos</div>'+
@@ -1131,6 +1352,7 @@ function mostrarUpgrade(recurso,limite,planoAlvo){
         linha('Lista de Compras',B.lista?ck:cx,P.lista?ck:cx,E.lista?ck:cx,false)+
         linha('Relatórios PDF/CSV',B.relatorios?ck:cx,P.relatorios?ck:cx,E.relatorios?ck:cx,recurso.includes('Relat'))+
         linha('Recebimento NF',B.nf?ck:cx,P.nf?ck:cx,E.nf?ck:cx,recurso.includes('NF'))+
+        linha('Impressão de Etiquetas',B.etiquetas?ck:cx,P.etiquetas?ck:cx,E.etiquetas?ck:cx,recurso.includes('Etiqueta'))+
       '</table>'+
     '</div>'+
     // CTA WHATSAPP
@@ -1190,8 +1412,16 @@ function mascaraDataCampo(el){
   // Converter para ISO quando completo
   if(v.length===8){
     const d=v.slice(0,2),m=v.slice(2,4),a=v.slice(4,8);
-    el.dataset.isoDate=a+'-'+m+'-'+d;
-  }else{el.dataset.isoDate='';}
+    // valida se a data existe de verdade (rejeita 31/02, 32/13, etc)
+    const dt=new Date(+a,+m-1,+d);
+    if(dt.getFullYear()===+a&&dt.getMonth()===+m-1&&dt.getDate()===+d&&+m>=1&&+m<=12){
+      el.dataset.isoDate=a+'-'+m+'-'+d;
+      el.dataset.dataInvalida='';
+    }else{
+      el.dataset.isoDate='';
+      el.dataset.dataInvalida='1';
+    }
+  }else{el.dataset.isoDate='';el.dataset.dataInvalida='';}
 }
 function mascaraData(el){
   let v=el.value.replace(/\D/g,'');
@@ -1309,7 +1539,7 @@ async function validarPin(){try{
       }
     }
   }
-  const rp=await sb(`ge_restaurantes?id=eq.${REST_ID}&pin_dono=eq.${pinDigitos}&select=id,nome,nome_proprietario`);if(rp.length){FUNC_ID=null;FUNC_NOME=rp[0].nome_proprietario||rp[0].nome;REST_NOME=rp[0].nome;FUNC_ROLE='proprietario';salvarSessao('PROP');salvarSessaoSupabase(REST_ID);await entrarApp();return;}const rf=await sb(`ge_funcionarios?restaurante_id=eq.${REST_ID}&select=*`);const rfF=rf.filter(f=>f.pin===pinDigitos);if(rfF&&rfF.length){FUNC_ID=rfF[0].id;FUNC_NOME=rfF[0].nome;FUNC_ROLE='funcionario';FUNC_PERMS={historico:rfF[0].perm_historico,insights:rfF[0].perm_insights,produtos:rfF[0].perm_produtos,valor:rfF[0].perm_valor_estoque,estornar:rfF[0].perm_estornar,movimento:rfF[0].perm_movimento!==false,conferente:rfF[0].perm_conferente};salvarSessao(rfF[0].id,true);const rrest=await sb(`ge_restaurantes?id=eq.${REST_ID}&select=nome`);REST_NOME=rrest.length?rrest[0].nome:'';await entrarApp();return;}pinDigitos='';renderPin();const err=$('pinErro');if(err){err.textContent='PIN incorreto. Tente novamente.';setTimeout(()=>err.textContent='',2000);}}catch(e){toast('Erro: '+e.message,'err');pinDigitos='';renderPin();}}
+  const rp=await sb(`ge_restaurantes?id=eq.${REST_ID}&pin_dono=eq.${pinDigitos}&select=id,nome,nome_proprietario`);if(rp.length){FUNC_ID=null;FUNC_NOME=rp[0].nome_proprietario||rp[0].nome;REST_NOME=rp[0].nome;FUNC_ROLE='proprietario';salvarSessao('PROP');salvarSessaoSupabase(REST_ID);await entrarApp();return;}const rf=await sb(`ge_funcionarios?restaurante_id=eq.${REST_ID}&select=*`);const rfF=rf.filter(f=>f.pin===pinDigitos);if(rfF&&rfF.length){FUNC_ID=rfF[0].id;FUNC_NOME=rfF[0].nome;FUNC_ROLE='funcionario';FUNC_PERMS={historico:rfF[0].perm_historico,insights:rfF[0].perm_insights,produtos:rfF[0].perm_produtos,valor:rfF[0].perm_valor_estoque,estornar:rfF[0].perm_estornar,movimento:rfF[0].perm_movimento!==false,conferente:rfF[0].perm_conferente,etiquetas:rfF[0].perm_etiquetas};salvarSessao(rfF[0].id,true);const rrest=await sb(`ge_restaurantes?id=eq.${REST_ID}&select=nome`);REST_NOME=rrest.length?rrest[0].nome:'';await entrarApp();return;}pinDigitos='';renderPin();const err=$('pinErro');if(err){err.textContent='PIN incorreto. Tente novamente.';setTimeout(()=>err.textContent='',2000);}}catch(e){toast('Erro: '+e.message,'err');pinDigitos='';renderPin();}}
 function trocarEst(){
   const el=document.getElementById('toast');
   el.innerHTML='🔄 Trocar estabelecimento? <button onclick="confirmarTrocarEst()" style="margin-left:8px;padding:2px 10px;background:rgba(255,255,255,0.2);border:none;border-radius:6px;color:#fff;font-weight:900;cursor:pointer;font-family:Inter,sans-serif;">✓ Sim</button> <button onclick="fecharToast()" style="margin-left:4px;padding:2px 10px;background:rgba(255,255,255,0.2);border:none;border-radius:6px;color:#fff;cursor:pointer;font-family:Inter,sans-serif;">✗ Não</button>';
@@ -1340,7 +1570,7 @@ async function entrarApp(){mostrarTela('telaApp');$('topNome').textContent=REST_
     }catch(e){}
   }
   const ico=$('topIco');if(ico){if(logoSalva)ico.innerHTML='<img src="'+logoSalva+'" style="width:34px;height:34px;object-fit:cover;border-radius:8px;">';else ico.textContent='GE';}
-  const navCfg=$('navCfg');if(navCfg)navCfg.style.display=FUNC_ROLE==='proprietario'?'flex':'none';const navReceb=$('navReceb');if(navReceb)navReceb.style.display=(FUNC_ROLE==='proprietario'||FUNC_PERMS.conferente)?'flex':'none';await Promise.all([carregarProds(),carregarFuncs(),carregarCats(),carregarUnits(),carregarFornecs()]);document.querySelectorAll('.pg').forEach(p=>p.classList.remove('on'));$('pg-dash')&&$('pg-dash').classList.add('on');document.querySelectorAll('.nav-btn').forEach((b,i)=>{if(i===0)b.classList.add('on');else b.classList.remove('on');});renderDash();
+  const navCfg=$('navCfg');if(navCfg)navCfg.style.display=FUNC_ROLE==='proprietario'?'flex':'none';const navReceb=$('navReceb');if(navReceb)navReceb.style.display=(FUNC_ROLE==='proprietario'||FUNC_PERMS.conferente)?'flex':'none';const navEtq=$('navEtq');if(navEtq){const podeEtqPerm=(FUNC_ROLE==='proprietario'||FUNC_PERMS.etiquetas);navEtq.style.display=podeEtqPerm?'flex':'none';}await Promise.all([carregarProds(),carregarFuncs(),carregarCats(),carregarUnits(),carregarFornecs()]);document.querySelectorAll('.pg').forEach(p=>p.classList.remove('on'));$('pg-dash')&&$('pg-dash').classList.add('on');document.querySelectorAll('.nav-btn').forEach((b,i)=>{if(i===0)b.classList.add('on');else b.classList.remove('on');});renderDash();
   // Solicitar permissão de notificação e verificar alertas
   solicitarPermissaoNotificacao().then(()=>setTimeout(verificarENotificar,2000));
   // Verificar backup automático
@@ -1399,7 +1629,9 @@ function abrirAceitePromo(plano){
     '👥 Até '+p.funcionarios+' funcionários<br>'+
     '🚚 Até '+p.fornecedores+' fornecedores<br>'+
     (p.relatorios?'✅ Relatórios PDF/CSV':'❌ Sem relatórios PDF/CSV')+'<br>'+
-    (p.lista?'✅ Lista de compras por fornecedor com envio pelo WhatsApp':'❌ Lista de compras por fornecedor não disponível');
+    (p.lista?'✅ Lista de compras por fornecedor':'❌ Sem lista de compras por fornecedor')+'<br>'+
+    (p.nf?'✅ Recebimento de Notas Fiscais':'❌ Sem recebimento de Notas Fiscais')+'<br>'+
+    (p.etiquetas?'✅ Impressão de Etiquetas':'❌ Sem impressão de Etiquetas');
   if(label)label.innerHTML='Li e <strong>entendi</strong> que após 30 dias experimentando o plano Empresarial, meu plano será ajustado automaticamente para <strong>'+p.label+'</strong> ('+p.preco+').';
   $('chkAceitePromo').checked=false;
   abrirModal('ovAceitePromo');
@@ -1492,8 +1724,252 @@ function confirmarSair(){limparSessao();limparSessaoSupabase();REST_ID=null;FUNC
 
 // PÁGINAS
 let pgAtual='dash';
-function irPg(pg,btn){pgAtual=pg;document.querySelectorAll('.pg').forEach(p=>p.classList.remove('on'));const el=$('pg-'+pg);if(el)el.classList.add('on');document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('on'));if(btn)btn.classList.add('on');const fab=$('fab');if(fab)fab.style.display=(pg==='produtos'&&(FUNC_ROLE==='proprietario'||FUNC_PERMS.produtos))?'flex':'none';const fabR=$('fabReceb');if(fabR)fabR.style.display=pg==='receb'?'flex':'none';const hb=$('helpBtn');if(hb)hb.style.display=['dash','produtos','hist','insights','config','receb'].includes(pg)?'flex':'none';if(pg==='dash')renderDash();if(pg==='produtos'){renderProds();}if(pg==='hist'){if(FUNC_ROLE!=='proprietario'&&!FUNC_PERMS.historico){toast('Sem permissão para ver o histórico','warn');irPg('dash',document.querySelector('#nav .nav-btn'));return;}renderHist();}
-  if(pg==='insights'){if(FUNC_ROLE!=='proprietario'&&!FUNC_PERMS.insights){toast('Sem permissão para ver insights','warn');irPg('dash',document.querySelector('#nav .nav-btn'));return;}renderInsights();}if(pg==='config'){if(FUNC_ROLE==='proprietario'){carregarConfig();atualizarBadgePlano();}else toast('Acesso restrito','warn');}if(pg==='receb'){if(FUNC_ROLE!=='proprietario'&&!FUNC_PERMS.conferente){toast('Sem permissão para acessar Recebimentos','warn');irPg('dash',document.querySelector('#nav .nav-btn'));return;}if(!verificarLimite('nf'))return;carregarRecebimentos();}}
+function irPg(pg,btn){pgAtual=pg;document.querySelectorAll('.pg').forEach(p=>p.classList.remove('on'));const el=$('pg-'+pg);if(el)el.classList.add('on');document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('on'));if(btn)btn.classList.add('on');const fab=$('fab');if(fab)fab.style.display=(pg==='produtos'&&(FUNC_ROLE==='proprietario'||FUNC_PERMS.produtos))?'flex':'none';const fabR=$('fabReceb');if(fabR)fabR.style.display=pg==='receb'?'flex':'none';const hb=$('helpBtn');if(hb)hb.style.display=['dash','produtos','hist','insights','config','receb','etq'].includes(pg)?'flex':'none';if(pg==='dash')renderDash();if(pg==='produtos'){renderProds();}if(pg==='hist'){if(FUNC_ROLE!=='proprietario'&&!FUNC_PERMS.historico){toast('Sem permissão para ver o histórico','warn');irPg('dash',document.querySelector('#nav .nav-btn'));return;}renderHist();}
+  if(pg==='insights'){if(FUNC_ROLE!=='proprietario'&&!FUNC_PERMS.insights){toast('Sem permissão para ver insights','warn');irPg('dash',document.querySelector('#nav .nav-btn'));return;}renderInsights();}if(pg==='config'){if(FUNC_ROLE==='proprietario'){carregarConfig();atualizarBadgePlano();}else toast('Acesso restrito','warn');}if(pg==='receb'){if(FUNC_ROLE!=='proprietario'&&!FUNC_PERMS.conferente){toast('Sem permissão para acessar Recebimentos','warn');irPg('dash',document.querySelector('#nav .nav-btn'));return;}if(!verificarLimite('nf'))return;carregarRecebimentos();}if(pg==='etq'){if(FUNC_ROLE!=='proprietario'&&!FUNC_PERMS.etiquetas){toast('Sem permissão para acessar Etiquetas','warn');irPg('dash',document.querySelector('#nav .nav-btn'));return;}if(!verificarLimite('etiquetas'))return;etqIniciar();}}
+
+/* ===== MÓDULO ETIQUETA (funções prefixadas etq para não colidir) ===== */
+let etqFormato='termica';
+let etqFila=[]; // fila de etiquetas para impressão em folha
+function etqDataHoje(){const h=new Date();return String(h.getDate()).padStart(2,'0')+'/'+String(h.getMonth()+1).padStart(2,'0')+'/'+h.getFullYear();}
+function etqEscape(t){return String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+/* Máscara: vai formatando dd/mm/aaaa enquanto digita (só números) */
+function etqMascaraData(el){
+  let v=el.value.replace(/\D/g,'').slice(0,8);
+  if(v.length>=5)v=v.slice(0,2)+'/'+v.slice(2,4)+'/'+v.slice(4);
+  else if(v.length>=3)v=v.slice(0,2)+'/'+v.slice(2);
+  el.value=v;
+}
+/* Valida se a data dd/mm/aaaa existe de verdade. Vazio é considerado válido (opcional). */
+function etqDataValida(s){
+  if(!s)return true;
+  const m=s.match(/^(\d{2})\/(\d{2})\/(\d{4})$/);
+  if(!m)return false;
+  const d=+m[1],mo=+m[2],a=+m[3];
+  if(mo<1||mo>12||d<1||d>31||a<2000||a>2100)return false;
+  const dt=new Date(a,mo-1,d);
+  return dt.getDate()===d&&dt.getMonth()===mo-1&&dt.getFullYear()===a;
+}
+function etqLinha(rot,val){if(!val)return '';return '<div class="etq-l-line"><b>'+rot+':</b><span>'+etqEscape(val)+'</span></div>';}
+function etqSetFormato(f){etqFormato=f;const bt=$('etqBtnTermica'),ba=$('etqBtnA4');if(bt)bt.classList.toggle('on',f==='termica');if(ba)ba.classList.toggle('on',f==='a4');const lm=$('etqLabelManip');if(lm)lm.textContent=(f==='a4')?'📅 Fabricado em':'📅 Manipulado em';const rc=$('etqRecomenda');if(rc){rc.innerHTML=(f==='a4')?'📄 <b>Modelo ideal:</b> folha adesiva <b>Colacril CA4361</b> (ou Pimaco A4361) — 63,5×46,6mm, 18 por folha. Impressora comum (jato/laser). <b>Só para prateleira/estoque seco.</b>':'🏷️ <b>Modelo ideal:</b> etiqueta <b>BOPP 60×60mm</b> em rolo, impressora térmica (ex: Zebra ZD220). Resiste a <b>geladeira e freezer</b>.';}etqAtualizar();etqRenderFila();}
+/* A4 exige confirmação (modal educativo) por não resistir a congelado/refrigerado */
+function etqTentarA4(){abrirModal('ovEtqA4');}
+function etqConfirmarA4(){fM('ovEtqA4');etqSetFormato('a4');}
+function etqIniciar(){const m=$('etqManip');if(m&&!m.value)m.value=etqDataHoje();etqSetFormato('termica');etqAtualizar();etqRenderFila();}
+/* Lê os campos do formulário e devolve um objeto com os dados da etiqueta */
+function etqLerCampos(){
+  return {
+    prod:$('etqProd')?.value.trim()||'',
+    lote:($('etqLote')?.value.trim()||'').toUpperCase(),
+    peso:$('etqPeso')?.value.trim()||'',
+    cons:$('etqCons')?.value.trim()||'',
+    forn:$('etqForn')?.value.trim()||'',
+    manip:$('etqManip')?.value.trim()||'',
+    val:$('etqVal')?.value.trim()||'',
+    obs:$('etqObs')?.value.trim()||''
+  };
+}
+/* Monta o HTML interno de UMA etiqueta a partir de um objeto de dados + responsável */
+function etqMontarHTML(d,resp){
+  const rest=REST_NOME||'';
+  let html='';
+  if(rest)html+='<div class="etq-l-rest">'+etqEscape(rest)+'</div>';
+  if(d.prod)html+='<div class="etq-l-prod">'+etqEscape(d.prod)+'</div>';
+  html+=etqLinha('Lote',d.lote);
+  html+=etqLinha('Peso',d.peso);
+  html+=etqLinha('Conserv.',d.cons);
+  html+=etqLinha('Fornec.',d.forn);
+  let datas='';
+  const rotData=(etqFormato==='a4')?'Fabr.:':'Manip.:';
+  if(d.manip)datas+='<div class="etq-l-line"><b>'+rotData+'</b><span>'+etqEscape(d.manip)+'</span></div>';
+  if(d.val)datas+='<div class="etq-l-line etq-l-val"><b>Validade:</b><span>'+etqEscape(d.val)+'</span></div>';
+  if(datas)html+='<div class="etq-l-datas">'+datas+'</div>';
+  html+=etqLinha('Obs',d.obs);
+  if(resp)html+='<div class="etq-l-resp">Responsável: '+etqEscape(resp)+'</div>';
+  if(html)html+='<div class="etq-l-marca">Gerado por Gerencion Estoque · gerencion.com.br</div>';
+  return html;
+}
+function etqAtualizar(){
+  const d=etqLerCampos();
+  const resp=etqRespImpressao||FUNC_NOME||'';
+  let html=etqMontarHTML(d,resp);
+  if(!html)html='<div style="color:#999;font-size:9pt;text-align:center;padding:20px;">Preencha o produto<br>para ver a etiqueta</div>';
+  const label=$('etqLabel');if(label){label.className='etq-label fmt-'+etqFormato;label.innerHTML=html;}
+}
+/* Valida as datas preenchidas no formulário. Retorna true se ok. */
+function etqValidarDatas(){
+  const m=$('etqManip')?.value.trim()||'';
+  const v=$('etqVal')?.value.trim()||'';
+  if(!etqDataValida(m)){toast('Data de manipulação inválida (use dd/mm/aaaa)','warn');return false;}
+  if(!etqDataValida(v)){toast('Data de validade inválida (use dd/mm/aaaa)','warn');return false;}
+  return true;
+}
+/* ---- FILA DE ETIQUETAS ---- */
+function etqAddFila(){
+  const prod=$('etqProd')?.value.trim()||'';
+  if(!prod){toast('Preencha o produto antes de adicionar','warn');return;}
+  if(!etqValidarDatas())return;
+  etqFila.push(etqLerCampos());
+  toast('✅ Etiqueta adicionada ('+etqFila.length+' na folha)','info');
+  // limpa só o peso (o campo que mais muda entre peças), mantém o resto pra agilizar
+  const p=$('etqPeso');if(p)p.value='';
+  etqAtualizar();etqRenderFila();
+}
+function etqRemoverFila(i){etqFila.splice(i,1);etqRenderFila();}
+function etqLimparFila(){etqFila=[];etqRenderFila();toast('Folha esvaziada','info');}
+function etqRenderFila(){
+  const box=$('etqFilaBox');const cont=$('etqFilaCont');
+  if(!box||!cont)return;
+  if(!etqFila.length){box.style.display='none';return;}
+  box.style.display='block';
+  cont.textContent=etqFila.length;
+  // Aviso inteligente de aproveitamento de folha (SÓ na A4 / CA4361, que vem em folha fechada de 18)
+  const aviso=$('etqAvisoFolha');
+  if(aviso){
+    if(etqFormato==='a4'){
+      const n=etqFila.length, porFolha=18;
+      const folhas=Math.ceil(n/porFolha);
+      const sobra=(folhas*porFolha)-n;
+      let msg='',cor='';
+      if(sobra===0){
+        cor='ok';msg='✅ <b>'+n+' etiquetas = '+folhas+' folha'+(folhas>1?'s':'')+' completa'+(folhas>1?'s':'')+'</b>, sem desperdício!';
+      }else{
+        const faltam=sobra;
+        cor='warn';msg='📄 <b>'+n+' etiquetas = '+folhas+' folha'+(folhas>1?'s':'')+'</b> (sobram '+sobra+' adesivo'+(sobra>1?'s':'')+' na última). Adicione mais <b>'+faltam+'</b> para completar e aproveitar a folha.';
+      }
+      aviso.style.display='block';
+      aviso.className='etq-aviso-folha '+cor;
+      aviso.innerHTML=msg;
+    }else{
+      aviso.style.display='none';
+    }
+  }
+  const lista=$('etqFilaLista');
+  if(lista){
+    lista.innerHTML=etqFila.map((d,i)=>'<div style="display:flex;justify-content:space-between;align-items:center;background:var(--s2);border:1px solid var(--b);border-radius:9px;padding:8px 11px;margin-bottom:6px;"><span style="font-size:12px;color:var(--t);">'+(i+1)+'. '+etqEscape(d.prod)+(d.peso?' · '+etqEscape(d.peso):'')+'</span><button onclick="etqRemoverFila('+i+')" style="background:var(--rd2);border:none;border-radius:7px;color:var(--rd);font-size:11px;font-weight:700;padding:5px 9px;cursor:pointer;">Remover</button></div>').join('');
+  }
+}
+/* ---- IMPRESSÃO ---- */
+// modo: 'individual' (só o formulário atual) ou 'fila' (todas da fila)
+let etqModoImpressao='individual';
+function etqImprimir(){
+  const prod=$('etqProd')?.value.trim()||'';
+  if(!prod){toast('Preencha o nome do produto antes de imprimir','warn');return;}
+  if(!etqValidarDatas())return;
+  etqModoImpressao='individual';
+  etqAbrirPin();
+}
+function etqImprimirFila(){
+  if(!etqFila.length){toast('Nenhuma etiqueta na folha','warn');return;}
+  etqModoImpressao='fila';
+  etqAbrirPin();
+}
+/* Pede o PIN de quem vai assumir a etiqueta. Sem PIN válido + permissão, não imprime. */
+function etqAbrirPin(){etqPinDigitos='';const inp=$('etqPinInput');if(inp)inp.value='';const err=$('etqPinErro');if(err)err.textContent='';abrirModal('ovEtqPin');setTimeout(()=>{const i=$('etqPinInput');if(i)i.focus();},100);}
+async function etqConfirmarPin(){
+  const pin=($('etqPinInput')?.value||'').trim();
+  const err=$('etqPinErro');
+  if(pin.length<4){if(err)err.textContent='Digite o PIN (4 dígitos).';return;}
+  let nomeResp=null, temPerm=false;
+  try{
+    const rp=await sb(`ge_restaurantes?id=eq.${REST_ID}&pin_dono=eq.${pin}&select=nome,nome_proprietario`);
+    if(rp.length){nomeResp=rp[0].nome_proprietario||rp[0].nome;temPerm=true;}
+  }catch(e){}
+  if(!nomeResp){
+    try{
+      const rf=await sb(`ge_funcionarios?restaurante_id=eq.${REST_ID}&select=nome,pin,perm_etiquetas`);
+      const f=rf.filter(x=>x.pin===pin);
+      if(f.length){nomeResp=f[0].nome;temPerm=!!f[0].perm_etiquetas;}
+    }catch(e){}
+  }
+  if(!nomeResp){if(err)err.textContent='PIN não encontrado.';return;}
+  if(!temPerm){if(err)err.textContent='Este PIN não tem permissão para etiquetar.';return;}
+  etqRespImpressao=nomeResp;
+  fM('ovEtqPin');
+  etqExecutarImpressao();
+}
+let etqRespImpressao=null, etqPinDigitos='';
+function etqCssImpressao(){
+  return `
+    *{margin:0;padding:0;box-sizing:border-box;}
+    @page{margin:4mm;size:auto;}
+    body{font-family:'Inter',Arial,sans-serif;background:#fff;}
+    .etq-label{background:#fff;color:#000;box-sizing:border-box;}
+    .etq-label.fmt-termica{width:60mm;height:60mm;padding:2.5mm 3mm;overflow:hidden;display:flex;flex-direction:column;}
+    .etq-label.fmt-termica .etq-l-rest{font-size:7.5pt;font-weight:900;text-align:center;border-bottom:1.2px solid #000;padding-bottom:0.8mm;margin-bottom:1.2mm;text-transform:uppercase;line-height:1.05;}
+    .etq-label.fmt-termica .etq-l-prod{font-size:11pt;font-weight:900;line-height:1.05;margin-bottom:1.2mm;}
+    .etq-label.fmt-termica .etq-l-line{font-size:7.5pt;line-height:1.45;display:flex;justify-content:space-between;gap:2mm;}
+    .etq-label.fmt-termica .etq-l-line b{font-weight:700;}
+    .etq-label.fmt-termica .etq-l-datas{margin-top:1.2mm;padding-top:1.2mm;border-top:1.2px solid #000;}
+    .etq-label.fmt-termica .etq-l-datas .etq-l-line{font-size:8pt;line-height:1.5;}
+    .etq-label.fmt-termica .etq-l-val{font-size:10pt;font-weight:900;}
+    .etq-label.fmt-termica .etq-l-resp{margin-top:1.2mm;padding-top:1mm;border-top:1px dotted #666;font-size:7pt;}
+    .etq-label.fmt-termica .etq-l-marca{margin-top:auto;padding-top:1mm;text-align:center;font-size:5.5pt;color:#555;letter-spacing:0.2px;}
+    .etq-label.fmt-a4{width:63.5mm;height:46.6mm;padding:2mm 2.5mm;overflow:hidden;display:flex;flex-direction:column;box-sizing:border-box;}
+    .etq-label.fmt-a4 .etq-l-rest{font-size:6.5pt;font-weight:900;text-align:center;border-bottom:1px solid #000;padding-bottom:0.6mm;margin-bottom:0.8mm;text-transform:uppercase;line-height:1.05;}
+    .etq-label.fmt-a4 .etq-l-prod{font-size:9pt;font-weight:900;line-height:1.05;margin-bottom:0.8mm;}
+    .etq-label.fmt-a4 .etq-l-line{font-size:6pt;line-height:1.35;display:flex;justify-content:space-between;gap:1.5mm;}
+    .etq-label.fmt-a4 .etq-l-line b{font-weight:700;}
+    .etq-label.fmt-a4 .etq-l-datas{margin-top:0.8mm;padding-top:0.8mm;border-top:1px solid #000;}
+    .etq-label.fmt-a4 .etq-l-datas .etq-l-line{font-size:6.5pt;line-height:1.4;}
+    .etq-label.fmt-a4 .etq-l-val{font-size:8pt;font-weight:900;}
+    .etq-label.fmt-a4 .etq-l-resp{margin-top:0.6mm;padding-top:0.5mm;border-top:1px dotted #666;font-size:5.5pt;}
+    .etq-label.fmt-a4 .etq-l-marca{margin-top:auto;padding-top:0.5mm;text-align:center;font-size:4.5pt;color:#555;letter-spacing:0.2px;}
+    /* grade A4: 2 colunas de etiquetas por folha */
+    /* GABARITO CA4361: 3 col x 6 lin = 18/folha, etiquetas 63,5x46,6mm coladas */
+    .etq-grade-a4{width:210mm;padding:8.7mm 0 0 9.75mm;box-sizing:border-box;}
+    .etq-grade-a4-inner{display:grid;grid-template-columns:repeat(3,63.5mm);grid-auto-rows:46.6mm;column-gap:0;row-gap:0;}
+    .etq-grade-a4-inner .etq-label.fmt-a4{border:none;}
+    /* térmica: uma embaixo da outra, cada uma numa "página" pro sensor separar */
+    /* sequência térmica: cada etiqueta num bloco 60x60 separado por borda de corte */
+    .etq-seq{display:flex;flex-direction:column;align-items:center;gap:0;}
+    .etq-seq .etq-label{width:60mm;height:60mm;overflow:hidden;border-bottom:1px dashed #999;page-break-inside:avoid;break-inside:avoid;}
+    .etq-seq .etq-label:last-child{border-bottom:none;}
+    @media print{
+      .etq-seq .etq-label{page-break-after:always;break-after:page;border-bottom:none;}
+      .etq-seq .etq-label:last-child{page-break-after:auto;break-after:auto;}
+    }
+  `;
+}
+function etqExecutarImpressao(){
+  const resp=etqRespImpressao||FUNC_NOME||'';
+  // monta a lista de etiquetas a imprimir
+  let itens=[];
+  if(etqModoImpressao==='fila'){itens=etqFila.slice();}
+  else{itens=[etqLerCampos()];}
+  if(!itens.length){toast('Nada para imprimir','warn');return;}
+  // monta o corpo conforme formato
+  let corpo='';
+  if(etqFormato==='a4'){
+    // grade livre: várias por folha
+    corpo='<div class="etq-grade-a4"><div class="etq-grade-a4-inner">'+itens.map(d=>'<div class="etq-label fmt-a4">'+etqMontarHTML(d,resp)+'</div>').join('')+'</div></div>';
+  }else{
+    // térmica: sequência, cada uma "quebra" pro sensor
+    corpo='<div class="etq-seq">'+itens.map(d=>'<div class="etq-label fmt-termica">'+etqMontarHTML(d,resp)+'</div>').join('')+'</div>';
+  }
+  const ehA4=(etqFormato==='a4');
+  const pageMargin=ehA4?'0':'4mm';
+  const holderPad=ehA4?'0':'16px';
+  const html='<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Etiqueta</title>'+
+    '<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">'+
+    '<style>'+etqCssImpressao()+
+    '.etq-toolbar{padding:14px;text-align:center;background:#f4f4f5;border-bottom:1px solid #ddd;position:sticky;top:0;}'+
+    '.etq-toolbar button{font-family:Arial,sans-serif;font-size:15px;font-weight:700;border:none;border-radius:10px;padding:12px 20px;margin:0 5px;cursor:pointer;}'+
+    '.etq-btn-print{background:#22C55E;color:#fff;}.etq-btn-close{background:#e4e4e7;color:#333;}'+
+    '.etq-holder{padding:'+holderPad+';}'+
+    '@media print{.etq-toolbar{display:none !important;}.etq-holder{padding:0 !important;}@page{margin:'+pageMargin+';size:auto;}}'+
+    '</style></head><body>'+
+    '<div class="etq-toolbar">'+
+      '<button class="etq-btn-print" onclick="window.print()">🖨️ Imprimir</button>'+
+      '<button class="etq-btn-close" onclick="window.close()">Fechar</button>'+
+    '</div>'+
+    '<div class="etq-holder">'+corpo+'</div>'+
+    '</body></html>';
+  const w=window.open('','_blank');
+  if(!w){toast('Libere pop-ups para imprimir a etiqueta','warn');etqRespImpressao=null;etqAtualizar();return;}
+  w.document.open();w.document.write(html);w.document.close();
+  setTimeout(()=>{etqRespImpressao=null;etqAtualizar();},600);
+}
+function etqAbrirComProduto(nomeProd){irPg('etq',$('navEtq'));if(pgAtual!=='etq')return;const p=$('etqProd');if(p){p.value=nomeProd||'';etqAtualizar();}}
 
 // PRODUTOS
 async function carregarProds(){try{todosProds=await sb(`ge_produtos?restaurante_id=eq.${REST_ID}&select=*&order=nome.asc`);}catch(e){todosProds=[];toast('Erro ao carregar produtos','err');}}
@@ -1589,7 +2065,7 @@ function abrirProd(id){const cb=$('calcBox');if(cb)cb.style.display='none';
   }
   abrirModal('ovProd');
 }
-async function salvarProd(){const nome=$('mpNome').value.trim();if(!nome)return toast('Nome obrigatório','err');const dados={restaurante_id:REST_ID,nome,categoria:$('mpCat').value||null,emoji:($('mpEmoji')&&$('mpEmoji').value)||($('mpEmojiBtn')&&$('mpEmojiBtn').textContent)||'📦',unidade:$('mpUnit').value||'un',quantidade:parseFloat($('mpQty').value)||0,estoque_minimo:parseFloat($('mpMin').value)||0,preco_custo:parseFloat($('mpCusto').value)||0,data_fabricacao:($('mpFab').dataset.isoDate||($('mpFab').value&&$('mpFab').value.match(/^\d{4}-/)?$('mpFab').value:null))||null,data_validade:($('mpVal').dataset.isoDate||($('mpVal').value&&$('mpVal').value.match(/^\d{4}-/)?$('mpVal').value:null))||null,fornecedor_id:$('mpFornec').value||null,atualizado_por:FUNC_ID,atualizado_em:new Date().toISOString()};try{const id=$('mpId').value;if(id)await sb(`ge_produtos?id=eq.${id}`,{method:'PATCH',body:JSON.stringify(dados)});else await sb('ge_produtos',{method:'POST',body:JSON.stringify(dados)});toast(id?'✅ Produto atualizado!':'✅ Produto criado!');fM('ovProd');await carregarProds();renderProds();}catch(e){toast('Erro: '+JSON.stringify(e),'err');}}
+async function salvarProd(){const nome=$('mpNome').value.trim();if(!nome)return toast('Nome obrigatório','err');if($('mpFab')&&$('mpFab').dataset.dataInvalida==='1')return toast('Data de fabricação inválida (confira dia/mês)','err');if($('mpVal')&&$('mpVal').dataset.dataInvalida==='1')return toast('Data de validade inválida (confira dia/mês)','err');const dados={restaurante_id:REST_ID,nome,categoria:$('mpCat').value||null,emoji:($('mpEmoji')&&$('mpEmoji').value)||($('mpEmojiBtn')&&$('mpEmojiBtn').textContent)||'📦',unidade:$('mpUnit').value||'un',quantidade:parseFloat($('mpQty').value)||0,estoque_minimo:parseFloat($('mpMin').value)||0,preco_custo:parseFloat($('mpCusto').value)||0,data_fabricacao:($('mpFab').dataset.isoDate||($('mpFab').value&&$('mpFab').value.match(/^\d{4}-/)?$('mpFab').value:null))||null,data_validade:($('mpVal').dataset.isoDate||($('mpVal').value&&$('mpVal').value.match(/^\d{4}-/)?$('mpVal').value:null))||null,fornecedor_id:$('mpFornec').value||null,atualizado_por:FUNC_ID,atualizado_em:new Date().toISOString()};try{const id=$('mpId').value;if(id)await sb(`ge_produtos?id=eq.${id}`,{method:'PATCH',body:JSON.stringify(dados)});else await sb('ge_produtos',{method:'POST',body:JSON.stringify(dados)});toast(id?'✅ Produto atualizado!':'✅ Produto criado!');fM('ovProd');await carregarProds();renderProds();}catch(e){toast('Erro: '+JSON.stringify(e),'err');}}
 async function excluirProd(){if(!confirm('Excluir produto?'))return;try{await sb(`ge_produtos?id=eq.${$('mpId').value}`,{method:'DELETE'});toast('Produto removido');fM('ovProd');await carregarProds();renderProds();}catch(e){toast('Erro ao excluir','err');}}
 
 // MOVIMENTOS
@@ -1919,7 +2395,7 @@ async function verificarPinConf(){
   }catch(e){toast('Erro','err');}
 }
 
-function liberarTudo(){['permHist','permInsights','permProdutos','permValor','permEstornar','permMovimento','permConferente'].forEach(id=>{const el=$(id);if(el)el.checked=true;});}
+function liberarTudo(){['permHist','permInsights','permProdutos','permValor','permEstornar','permMovimento','permConferente','permEtiquetas'].forEach(id=>{const el=$(id);if(el)el.checked=true;});}
 async function carregarFuncs(){try{todosFuncs=await sb(`ge_funcionarios?restaurante_id=eq.${REST_ID}&select=*&order=nome.asc`);}catch(e){todosFuncs=[];}}
 function renderFuncs(){const el=$('listaFuncs');if(!el)return;if(!todosFuncs.length){el.innerHTML='<div style="padding:14px;text-align:center;color:var(--t3);font-size:12px;">Nenhum funcionário cadastrado</div>';return;}el.innerHTML=todosFuncs.map(f=>`<div class="f-c" onclick="abrirFunc('${f.id}')"><div style="font-size:22px;width:36px;height:36px;border-radius:50%;background:var(--gn2);display:flex;align-items:center;justify-content:center;">${f.nome[0]||'?'}</div><div class="f-inf"><div class="f-n">${f.nome}</div><div class="f-s">Funcionário(a) · PIN: ••••</div></div><div style="color:var(--t3);">›</div></div>`).join('');}
 function abrirNovoFunc(){if(!verificarLimite('funcionario'))return;funcAtual=null;$('mfTit').textContent='Novo Funcionário';$('mfId').value='';$('mfNome').value='';$('mfPin').value='';$('mfExc').style.display='none';$('mfPerms').style.display='none';abrirModal('ovFunc');}
@@ -1933,10 +2409,11 @@ function abrirFunc(id){funcAtual=todosFuncs.find(f=>f.id===id)||null;const f=fun
   $('permEstornar').checked=f?.perm_estornar||false;
   $('permMovimento').checked=f?.perm_movimento!==false;
   $('permConferente').checked=f?.perm_conferente||false;
+  $('permEtiquetas').checked=f?.perm_etiquetas||false;
   abrirModal('ovFunc');}
 async function salvarFunc(){const nome=$('mfNome').value.trim();const pin=$('mfPin').value;if(!nome)return toast('Nome obrigatório','err');if(!funcAtual&&(!pin||pin.length!==4||isNaN(pin)))return toast('PIN deve ter 4 números','err');
   // PIN pode ser igual ao do proprietário — o sistema distingue pelo contexto de login
-  const perms=funcAtual?{perm_historico:$('permHist').checked,perm_insights:$('permInsights').checked,perm_produtos:$('permProdutos').checked,perm_valor_estoque:$('permValor').checked,perm_estornar:$('permEstornar').checked,perm_movimento:$('permMovimento').checked,perm_conferente:$('permConferente').checked}:{};
+  const perms=funcAtual?{perm_historico:$('permHist').checked,perm_insights:$('permInsights').checked,perm_produtos:$('permProdutos').checked,perm_valor_estoque:$('permValor').checked,perm_estornar:$('permEstornar').checked,perm_movimento:$('permMovimento').checked,perm_conferente:$('permConferente').checked,perm_etiquetas:$('permEtiquetas').checked}:{};
   const dados={restaurante_id:REST_ID,nome,...(pin?{pin}:{}),...perms};try{const id=$('mfId').value;if(id)await sb(`ge_funcionarios?id=eq.${id}`,{method:'PATCH',body:JSON.stringify(dados)});else await sb('ge_funcionarios',{method:'POST',body:JSON.stringify(dados)});toast(id?'✅ Funcionário atualizado!':'✅ Funcionário criado!');fM('ovFunc');await carregarFuncs();renderFuncs();}catch(e){toast('Erro: '+JSON.stringify(e),'err');}}
 async function excluirFunc(){if(!confirm('Remover funcionário?'))return;try{await sb(`ge_funcionarios?id=eq.${$('mfId').value}`,{method:'DELETE'});toast('Funcionário removido');fM('ovFunc');await carregarFuncs();renderFuncs();}catch(e){toast('Erro ao remover','err');}}
 
@@ -1981,12 +2458,19 @@ async function addUnit(){const nome=$('novaUnit').value.trim().toLowerCase();if(
 async function excluirUnit(id){try{await sb(`ge_unidades?id=eq.${id}`,{method:'DELETE'});await carregarUnits();renderUnits();}catch(e){toast('Erro','err');}}
 
 // CONFIGURAÇÕES
-async function carregarConfig(){try{const r=await sb(`ge_restaurantes?id=eq.${REST_ID}&select=*`);const rest=r[0];if(!rest)return;$('cfgNome')&&($('cfgNome').value=rest.nome||'');$('cfgTipo')&&($('cfgTipo').value=rest.tipo_negocio||'');const wpp=(rest.whatsapp||'').replace(/^55/,'');const wEl=$('cfgWpp');if(wEl){wEl.value=wpp;maskWpp(wEl);}const cod=rest.codigo_acesso||'------';const link=`${window.location.origin}${window.location.pathname}?cod=${cod}`;$('linkFuncEl')&&($('linkFuncEl').textContent=link);$('codVal')&&($('codVal').textContent=cod);renderFuncs();renderFornecs();renderCats();renderUnits();}catch(e){toast('Erro ao carregar config','err');}}
+async function carregarConfig(){try{const r=await sb(`ge_restaurantes?id=eq.${REST_ID}&select=*`);const rest=r[0];if(!rest)return;$('cfgNome')&&($('cfgNome').value=rest.nome||'');$('cfgTipo')&&($('cfgTipo').value=rest.tipo_negocio||'');const wpp=(rest.whatsapp||'').replace(/^55/,'');const wEl=$('cfgWpp');if(wEl){wEl.value=wpp;maskWpp(wEl);}const cod=rest.codigo_acesso||'------';const link=`${window.location.origin}${window.location.pathname}?cod=${cod}`;$('linkFuncEl')&&($('linkFuncEl').textContent=link);$('codVal')&&($('codVal').textContent=cod);renderFuncs();renderFornecs();renderCats();renderUnits();popularMesesRel();}catch(e){toast('Erro ao carregar config','err');}}
+function popularMesesRel(){const sel=$('relMovMes');if(!sel)return;const meses=['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];const hoje=new Date();let html='';for(let i=0;i<12;i++){const d=new Date(hoje.getFullYear(),hoje.getMonth()-i,1);const val=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0');const rot=meses[d.getMonth()]+'/'+d.getFullYear()+(i===0?' (mês atual)':'');html+='<option value="'+val+'">'+rot+'</option>';}html+='<option value="tudo">📚 Todo o histórico</option>';sel.innerHTML=html;}
 async function salvarIdent(){const nome=$('cfgNome').value.trim();const tipo=$('cfgTipo').value.trim();if(!nome)return toast('Nome obrigatório','err');const wppRaw=($('cfgWpp').value||'').replace(/\D/g,'');try{await sb(`ge_restaurantes?id=eq.${REST_ID}`,{method:'PATCH',body:JSON.stringify({nome:nome,tipo_negocio:tipo,whatsapp:wppRaw?'55'+wppRaw:null})});REST_NOME=nome;toast('✅ Dados salvos!');$('topNome').textContent=nome;}catch(e){toast('Erro ao salvar','err');}}
 
 // LISTA DE COMPRAS
 // ===== FORNECEDORES =====
-async function carregarFornecs(){try{todosFornecs=await sb(`ge_fornecedores?restaurante_id=eq.${REST_ID}&select=*&order=nome.asc`);}catch(e){todosFornecs=[];}}
+async function carregarFornecs(){try{todosFornecs=await sb(`ge_fornecedores?restaurante_id=eq.${REST_ID}&select=*&order=nome.asc`);}catch(e){todosFornecs=[];}popularDatalistFornecs();}
+// Preenche as sugestões espertas (fornecedores cadastrados) nos campos de etiqueta e recebimento
+function popularDatalistFornecs(){
+  const ops=(todosFornecs||[]).filter(f=>f&&f.nome).map(f=>'<option value="'+String(f.nome).replace(/"/g,'&quot;')+'"></option>').join('');
+  const d1=$('dlFornecedores');if(d1)d1.innerHTML=ops;
+  const d2=$('dlFornecedoresReceb');if(d2)d2.innerHTML=ops;
+}
 function renderFornecs(){
   const el=$('listaFornec');if(!el)return;
   if(!todosFornecs.length){el.innerHTML='<div style="padding:14px;text-align:center;color:var(--t3);font-size:12px;">Nenhum fornecedor cadastrado</div>';return;}
@@ -2088,78 +2572,32 @@ function confirmarEnvioLista(){
 }
 
 // RELATÓRIOS
-function relWpp(){if(!verificarLimite('relatorio'))return;const raw=($('cfgWpp').value||'').replace(/\D/g,'');if(!raw)return toast('Configure o WhatsApp','warn');const linhas=todosProds.map(p=>`${p.emoji||'📦'} ${p.nome}: ${fmtN(p.quantidade||0)} ${p.unidade||'un'}`).join('\n');const msg=encodeURIComponent(`📦 *Relatório de Estoque*\n${new Date().toLocaleDateString('pt-BR')}\n\n${linhas}`);window.open(`https://wa.me/55${raw}?text=${msg}`,'_blank');}
-function relEmail(){if(!verificarLimite('relatorio'))return;const email=$('cfgEmail')&&$('cfgEmail').value;if(!email)return toast('Digite um e-mail','warn');const linhas=todosProds.map(p=>`${p.emoji||'📦'} ${p.nome}: ${fmtN(p.quantidade||0)} ${p.unidade||'un'}`).join('%0A');const sub=encodeURIComponent('Relatório de Estoque - '+new Date().toLocaleDateString('pt-BR'));window.open(`mailto:${email}?subject=${sub}&body=${linhas}`,'_blank');}
-function relPDF(){if(!verificarLimite('relatorio'))return;if(!todosProds.length)return toast('Sem produtos','warn');const w=window.open('','_blank');const linhas=todosProds.map(p=>`<tr><td>${p.emoji||'📦'} ${p.nome}</td><td>${p.categoria||'-'}</td><td>${fmtN(p.quantidade||0)}</td><td>${p.unidade||'un'}</td><td>${fmtN(p.estoque_minimo||0)}</td><td>R$ ${fmtN(p.preco_custo||0)}</td><td>${p.data_validade||'-'}</td><td>${p.data_fabricacao||'-'}</td></tr>`).join('');w.document.write(`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Estoque</title><style>body{font-family:Arial,sans-serif;padding:20px;}h2{color:#22C55E;}table{width:100%;border-collapse:collapse;}th,td{border:1px solid #ddd;padding:8px;font-size:12px;}th{background:#22C55E;color:#fff;}tr:nth-child(even){background:#f9f9f9;}</style></head><body><h2>📦 Relatório de Estoque</h2><p style="font-size:11px;color:#999;">Gerencion Estoque v1.0 — Todos os direitos reservados ©</p><p>${new Date().toLocaleDateString('pt-BR')}</p><table><thead><tr><th>Produto</th><th>Categoria</th><th>Qtd</th><th>Un</th><th>Mín</th><th>Custo</th><th>Validade</th><th>Fabricação</th></tr></thead><tbody>${linhas}</tbody></table>
-<!-- Modal Sair -->
-<div class="overlay" id="ovSair">
-  <div class="modal" style="max-width:300px;text-align:center;">
-    <div style="font-size:32px;margin-bottom:8px;">👋</div>
-    <div style="font-size:16px;font-weight:800;margin-bottom:6px;">Deseja sair?</div>
-    <div style="font-size:13px;color:var(--t2);margin-bottom:20px;">Você precisará do PIN para entrar novamente.</div>
-    <div style="display:flex;gap:10px;">
-      <button onclick="fM('ovSair')" style="flex:1;padding:13px;background:var(--c2);border:1px solid var(--brd);border-radius:13px;color:var(--t1);font-weight:700;font-size:14px;cursor:pointer;font-family:Inter,sans-serif;">✗ Ficar</button>
-      <button onclick="confirmarSair()" style="flex:1;padding:13px;background:var(--rd);border:none;border-radius:13px;color:#fff;font-weight:800;font-size:14px;cursor:pointer;font-family:Inter,sans-serif;">✓ Sair</button>
-    </div>
-  </div>
-</div>
+function relAbrirLink(url){var a=document.createElement('a');a.href=url;a.target='_blank';a.rel='noopener';a.style.display='none';document.body.appendChild(a);a.click();setTimeout(function(){if(a.parentNode)document.body.removeChild(a);},600);}
+function relWpp(){if(!verificarLimite('relatorio'))return;const raw=($('cfgWpp').value||'').replace(/\D/g,'');if(!raw)return toast('Configure o WhatsApp','warn');let valorTotal=0;const linhas=todosProds.map(p=>{const qtd=p.quantidade||0;valorTotal+=qtd*(p.preco_custo||0);const alerta=qtd<=(p.estoque_minimo||0)?' \u26a0\ufe0f':'';return (p.emoji||'\ud83d\udce6')+' '+p.nome+': '+fmtN(qtd)+' '+(p.unidade||'un')+alerta;}).join('\n');const msg=encodeURIComponent('\ud83d\udce6 *Relat\u00f3rio de Estoque*\n'+new Date().toLocaleDateString('pt-BR')+'\n\n'+linhas+'\n\n\ud83d\udcb0 *Valor total em estoque: R$ '+fmtN(valorTotal)+'*\n\u26a0\ufe0f = abaixo do m\u00ednimo');relAbrirLink('https://wa.me/55'+raw+'?text='+msg);}
+function relEmail(){if(!verificarLimite('relatorio'))return;const email=$('cfgEmail')&&$('cfgEmail').value;if(!email)return toast('Digite um e-mail','warn');let valorTotal=0;const linhas=todosProds.map(p=>{const qtd=p.quantidade||0;valorTotal+=qtd*(p.preco_custo||0);const alerta=qtd<=(p.estoque_minimo||0)?' (!) abaixo do minimo':'';return (p.emoji||'')+' '+p.nome+': '+fmtN(qtd)+' '+(p.unidade||'un')+alerta;}).join('%0A');const corpo=linhas+'%0A%0AValor total em estoque: R$ '+fmtN(valorTotal);const sub=encodeURIComponent('Relatorio de Estoque - '+new Date().toLocaleDateString('pt-BR'));let url='mailto:'+email+'?subject='+sub+'&body='+corpo;if(url.length>1900){if(navigator.clipboard)navigator.clipboard.writeText(decodeURIComponent(corpo.replace(/%0A/g,'\n')));toast('Lista grande: copiei o texto, e so colar no email','info');url='mailto:'+email+'?subject='+sub;}relAbrirLink(url);}
 
-<!-- Modal Novo Recebimento -->
-<div class="overlay" id="ovReceb">
-  <div class="modal">
-    <div class="mt" id="recebTit">📋 Novo Recebimento</div>
-    <input type="hidden" id="recebId">
-    <div class="fg"><label class="fl">Fornecedor *</label>
-      <input class="inp" id="recebFornec" placeholder="Ex: Fornecedor São Paulo Ltda">
-    </div>
-    <div class="fg"><label class="fl">Nº da NF *</label>
-      <input class="inp" id="recebNF" placeholder="Ex: 001234" inputmode="numeric">
-    </div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
-      <div class="fg"><label class="fl">Valor Total (R$)</label>
-        <input class="inp" id="recebValor" placeholder="0,00" type="number" step="0.01" inputmode="decimal">
-      </div>
-      <div class="fg"><label class="fl">Volumes/Caixas</label>
-        <input class="inp" id="recebVolumes" placeholder="Ex: 5" type="number" inputmode="numeric">
-      </div>
-    </div>
-    <div class="fg"><label class="fl">Observação</label>
-      <input class="inp" id="recebObs" placeholder="Ex: Caixa 3 avariada, faltou 2 unid...">
-    </div>
-    <div class="fg">
-      <label class="fl">📷 Foto da NF</label>
-      <div id="recebFotoPreview" style="display:none;margin-bottom:8px;border-radius:10px;overflow:hidden;max-height:420px;text-align:center;background:#000;">
-        <img id="recebFotoImg" src="" style="max-width:100%;max-height:420px;object-fit:contain;" alt="Foto NF">
-      </div>
-      <input type="file" id="recebFotoInput" accept="image/jpeg,image/png,image/webp" capture="environment" style="display:none;" onchange="previewFoto(this)">
-      <button onclick="$('recebFotoInput').click()" style="width:100%;padding:11px;background:var(--c2);border:1px dashed var(--brd);border-radius:12px;color:var(--t2);font-size:13px;font-weight:600;cursor:pointer;font-family:Inter,sans-serif;" id="recebFotoBtn">
-        📷 Tirar foto / escolher imagem
-      </button>
-      <div id="recebFotoStatus" style="font-size:11px;color:var(--t3);margin-top:4px;text-align:center;"></div>
-    </div>
-    <div class="fg"><label class="fl">✍️ Assinar com PIN</label>
-      <input class="inp" id="recebPin" placeholder="Seu PIN de 4 dígitos" type="password" inputmode="numeric" maxlength="4">
-    </div>
-    <button class="mb-gn" onclick="salvarRecebimento()">✅ Confirmar Recebimento</button>
-    <button class="mb-d" onclick="fM('ovReceb')" style="width:100%;margin-top:6px;">Cancelar</button>
-  </div>
-</div>
+/* ===== RELATÓRIO DE MOVIMENTAÇÕES (histórico já gravado em ge_movimentacoes) ===== */
+function movLabelTipo(m){const t=m.tipo;if(t==='entrada')return 'Entrada';if(t==='ajuste'||m.subtipo==='ajuste')return 'Ajuste';if(t==='saida')return 'Saida'+(m.subtipo?' ('+m.subtipo+')':'');return t||'-';}
+async function movBuscar(mesRef){
+  let url='ge_movimentacoes?restaurante_id=eq.'+REST_ID+'&select=*&order=created_at.desc';
+  if(mesRef&&mesRef!=='tudo'){
+    const [ano,mes]=mesRef.split('-').map(Number);
+    const ini=new Date(ano,mes-1,1).toISOString();
+    const fim=new Date(ano,mes,1).toISOString();
+    url+='&created_at=gte.'+ini+'&created_at=lt.'+fim;
+  }
+  url+='&limit=5000';
+  return await sb(url);
+}
+function movNomeProd(pid){const p=todosProds.find(x=>x.id===pid);return p?((p.emoji||'')+' '+p.nome):'(produto removido)';}
+function movRotuloMes(mesRef){if(!mesRef||mesRef==='tudo')return 'Todo o periodo';const [a,m]=mesRef.split('-');const meses=['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];return meses[(+m)-1]+'/'+a;}
+async function relMovCSV(mesRef){if(!verificarLimite('relatorio'))return;const movs=await movBuscar(mesRef);if(!movs.length)return toast('Sem movimentacoes no periodo','warn');const rows=[['Data','Produto','Tipo','Qtd','Antes','Depois','Responsavel','Observacao'],...movs.map(m=>{const dt=new Date(m.created_at).toLocaleString('pt-BR');return [dt,movNomeProd(m.produto_id),movLabelTipo(m),fmtN(m.quantidade||0),fmtN(m.quantidade_anterior||0),fmtN(m.quantidade_nova||0),m.funcionario_nome||'-',m.observacao||''];})];const csv=rows.map(r=>r.map(c=>'"'+String(c).replace(/"/g,'""')+'"').join(';')).join('\n');const a=document.createElement('a');a.href='data:text/csv;charset=utf-8,\uFEFF'+encodeURIComponent(csv);a.download='movimentacoes_'+(mesRef||'tudo')+'.csv';a.click();toast('\u2705 CSV de movimentacoes baixado!');}
+async function relMovPDF(mesRef){if(!verificarLimite('relatorio'))return;const movs=await movBuscar(mesRef);if(!movs.length)return toast('Sem movimentacoes no periodo','warn');let entradas=0,saidas=0,ajustes=0;const linhas=movs.map(m=>{const t=movLabelTipo(m);if(t.indexOf('Entrada')>=0)entradas++;else if(t.indexOf('Saida')>=0)saidas++;else ajustes++;const dt=new Date(m.created_at).toLocaleString('pt-BR');const cor=t.indexOf('Entrada')>=0?'#16A34A':t.indexOf('Saida')>=0?'#DC2626':'#2563EB';return '<tr><td>'+dt+'</td><td>'+movNomeProd(m.produto_id)+'</td><td style="color:'+cor+';font-weight:700;">'+t+'</td><td style="text-align:right;">'+fmtN(m.quantidade||0)+'</td><td style="text-align:right;">'+fmtN(m.quantidade_anterior||0)+'</td><td style="text-align:right;">'+fmtN(m.quantidade_nova||0)+'</td><td>'+(m.funcionario_nome||'-')+'</td><td>'+(m.observacao||'')+'</td></tr>';}).join('');const doc='<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Movimentacoes</title><style>*{margin:0;padding:0;box-sizing:border-box;}body{font-family:Arial,sans-serif;padding:20px;color:#111;}.rel-toolbar{text-align:center;padding:12px;background:#f4f4f5;border-bottom:1px solid #ddd;margin:-20px -20px 16px;position:sticky;top:0;}.rel-toolbar button{font-size:15px;font-weight:700;border:none;border-radius:10px;padding:12px 20px;margin:0 5px;cursor:pointer;}.rel-print{background:#22C55E;color:#fff;}.rel-close{background:#e4e4e7;color:#333;}h2{color:#16A34A;margin-bottom:4px;}.sub{font-size:11px;color:#999;margin-bottom:2px;}.resumo{margin:10px 0;font-size:12px;font-weight:700;}table{width:100%;border-collapse:collapse;margin-top:12px;}th,td{border:1px solid #ddd;padding:6px;font-size:10.5px;}th{background:#16A34A;color:#fff;text-align:left;}tr:nth-child(even){background:#f9f9f9;}@media print{.rel-toolbar{display:none !important;}body{padding:0;}@page{margin:10mm;}}</style></head><body><div class="rel-toolbar"><button class="rel-print" onclick="window.print()">🖨️ Imprimir / Salvar PDF</button><button class="rel-close" onclick="window.close()">Fechar</button></div><h2>📈 Relatorio de Movimentacoes</h2><div class="sub">Gerencion Estoque · gerencion.com.br</div><div class="sub">Periodo: '+movRotuloMes(mesRef)+' · Emitido em '+new Date().toLocaleDateString('pt-BR')+'</div><div class="resumo">Total: '+movs.length+' movimentacoes · Entradas: '+entradas+' · Saidas: '+saidas+' · Ajustes: '+ajustes+'</div><table><thead><tr><th>Data</th><th>Produto</th><th>Tipo</th><th>Qtd</th><th>Antes</th><th>Depois</th><th>Responsavel</th><th>Obs</th></tr></thead><tbody>'+linhas+'</tbody></table></body></html>';const w=window.open('','_blank');if(!w){toast('Libere pop-ups para gerar o PDF','warn');return;}w.document.open();w.document.write(doc);w.document.close();}
+async function relMovWpp(mesRef){if(!verificarLimite('relatorio'))return;const raw=($('cfgWpp').value||'').replace(/\D/g,'');if(!raw)return toast('Configure o WhatsApp','warn');const movs=await movBuscar(mesRef);if(!movs.length)return toast('Sem movimentacoes no periodo','warn');let entradas=0,saidas=0,ajustes=0;movs.forEach(m=>{const t=movLabelTipo(m);if(t.indexOf('Entrada')>=0)entradas++;else if(t.indexOf('Saida')>=0)saidas++;else ajustes++;});const msg=encodeURIComponent('\ud83d\udcc8 *Movimentacoes - '+movRotuloMes(mesRef)+'*\n\nTotal: '+movs.length+'\n\u2b06\ufe0f Entradas: '+entradas+'\n\u2b07\ufe0f Saidas: '+saidas+'\n\ud83d\udd04 Ajustes: '+ajustes+'\n\n_Relatorio completo no app (PDF/CSV)_');relAbrirLink('https://wa.me/55'+raw+'?text='+msg);}
+async function relMovEmail(mesRef){if(!verificarLimite('relatorio'))return;const email=$('cfgEmail')&&$('cfgEmail').value;if(!email)return toast('Digite um e-mail','warn');const movs=await movBuscar(mesRef);if(!movs.length)return toast('Sem movimentacoes no periodo','warn');const linhas=movs.slice(0,200).map(m=>{const dt=new Date(m.created_at).toLocaleString('pt-BR');return dt+' - '+movNomeProd(m.produto_id)+' - '+movLabelTipo(m)+' - '+fmtN(m.quantidade||0)+' ('+(m.funcionario_nome||'-')+')';}).join('%0A');const sub=encodeURIComponent('Movimentacoes '+movRotuloMes(mesRef));let url='mailto:'+email+'?subject='+sub+'&body='+linhas;if(url.length>1900){if(navigator.clipboard)navigator.clipboard.writeText(decodeURIComponent(linhas.replace(/%0A/g,'\n')));toast('Lista grande: copiei o texto, e so colar no email','info');url='mailto:'+email+'?subject='+sub;}relAbrirLink(url);}
 
-<!-- Modal Ver Foto -->
-<div class="overlay" id="ovFoto">
-  <div class="modal" style="padding:10px;">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
-      <div style="font-size:14px;font-weight:800;">📷 Foto da NF</div>
-      <button onclick="fM('ovFoto')" style="background:none;border:none;font-size:20px;cursor:pointer;color:var(--t2);">✕</button>
-    </div>
-    <img id="fotoZoom" src="" style="width:100%;border-radius:10px;" alt="NF">
-    <div id="fotoZoomInfo" style="font-size:11px;color:var(--t3);text-align:center;margin-top:8px;"></div>
-    <button id="btnApagarFoto" onclick="apagarRecebimento()" style="display:none;width:100%;margin-top:10px;padding:11px;background:var(--rd);border:none;border-radius:12px;color:#fff;font-weight:800;font-size:13px;cursor:pointer;font-family:Inter,sans-serif;">🗑️ Apagar Recebimento</button>
-  </div>
-</div>
-
-</body></html>`);w.document.close();setTimeout(()=>w.print(),500);}
-function relCSV(){if(!verificarLimite('relatorio'))return;if(!todosProds.length)return toast('Sem produtos','warn');const rows=[['Nome','Categoria','Emoji','Qtd','Unidade','Mín','Custo','Validade','Fabricação'],...todosProds.map(p=>[p.nome,p.categoria||'',p.emoji||'',p.quantidade||0,p.unidade||'',p.estoque_minimo||0,p.preco_custo||0,p.data_validade||'',p.data_fabricacao||''])];const csv=rows.map(r=>r.map(c=>`"${String(c).replace(/"/g,'""')}"`).join(',')).join('\n');const a=document.createElement('a');a.href='data:text/csv;charset=utf-8,\uFEFF'+encodeURIComponent(csv);a.download='estoque.csv';a.click();toast('✅ CSV baixado!');}
+function relPDF(){if(!verificarLimite('relatorio'))return;if(!todosProds.length)return toast('Sem produtos','warn');const hoje=new Date().toLocaleDateString('pt-BR');let valorTotalEstoque=0;const linhas=todosProds.map(p=>{const qtd=p.quantidade||0;const custo=p.preco_custo||0;const valorTotal=qtd*custo;valorTotalEstoque+=valorTotal;const min=p.estoque_minimo||0;const abaixo=qtd<=min;const situacao=abaixo?'<span style="color:#DC2626;font-weight:700;">Abaixo</span>':'<span style="color:#16A34A;font-weight:700;">OK</span>';return '<tr><td>'+(p.emoji||'')+' '+(p.nome||'')+'</td><td>'+(p.categoria||'-')+'</td><td style="text-align:right;">'+fmtN(qtd)+'</td><td>'+(p.unidade||'un')+'</td><td style="text-align:right;">'+fmtN(min)+'</td><td style="text-align:center;">'+situacao+'</td><td style="text-align:right;">R$ '+fmtN(custo)+'</td><td style="text-align:right;">R$ '+fmtN(valorTotal)+'</td><td>'+(p.data_validade||'-')+'</td><td>'+(p.data_fabricacao||'-')+'</td></tr>';}).join('');const totalProds=todosProds.length;const doc='<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Relatorio de Estoque</title><style>*{margin:0;padding:0;box-sizing:border-box;}body{font-family:Arial,sans-serif;padding:20px;color:#111;}.rel-toolbar{text-align:center;padding:12px;background:#f4f4f5;border-bottom:1px solid #ddd;margin:-20px -20px 16px;position:sticky;top:0;}.rel-toolbar button{font-size:15px;font-weight:700;border:none;border-radius:10px;padding:12px 20px;margin:0 5px;cursor:pointer;}.rel-print{background:#22C55E;color:#fff;}.rel-close{background:#e4e4e7;color:#333;}h2{color:#16A34A;margin-bottom:4px;}.sub{font-size:11px;color:#999;margin-bottom:2px;}table{width:100%;border-collapse:collapse;margin-top:12px;}th,td{border:1px solid #ddd;padding:7px;font-size:11px;}th{background:#16A34A;color:#fff;text-align:left;}tr:nth-child(even){background:#f9f9f9;}tfoot td{font-weight:800;background:#f0f0f0;font-size:12px;}@media print{.rel-toolbar{display:none !important;}body{padding:0;}@page{margin:10mm;}}</style></head><body><div class="rel-toolbar"><button class="rel-print" onclick="window.print()">🖨️ Imprimir / Salvar PDF</button><button class="rel-close" onclick="window.close()">Fechar</button></div><h2>📦 Relatorio de Estoque</h2><div class="sub">Gerencion Estoque · gerencion.com.br</div><div class="sub">Emitido em '+hoje+'</div><table><thead><tr><th>Produto</th><th>Categoria</th><th>Qtd</th><th>Un</th><th>Min</th><th>Situacao</th><th>Custo</th><th>Valor Total</th><th>Validade</th><th>Fabricacao</th></tr></thead><tbody>'+linhas+'</tbody><tfoot><tr><td colspan="7" style="text-align:right;">TOTAL EM ESTOQUE ('+totalProds+' produtos):</td><td style="text-align:right;">R$ '+fmtN(valorTotalEstoque)+'</td><td colspan="2"></td></tr></tfoot></table></body></html>';const w=window.open('','_blank');if(!w){toast('Libere pop-ups para gerar o PDF','warn');return;}w.document.open();w.document.write(doc);w.document.close();}
+function relCSV(){if(!verificarLimite('relatorio'))return;if(!todosProds.length)return toast('Sem produtos','warn');let valorTotalEstoque=0;const dataRows=todosProds.map(p=>{const qtd=p.quantidade||0;const custo=p.preco_custo||0;const vt=qtd*custo;valorTotalEstoque+=vt;const min=p.estoque_minimo||0;const situacao=qtd<=min?'Abaixo do minimo':'OK';return [p.nome,p.categoria||'',p.emoji||'',fmtN(qtd),p.unidade||'',fmtN(min),situacao,fmtN(custo),fmtN(vt),p.data_validade||'',p.data_fabricacao||''];});const rows=[['Nome','Categoria','Emoji','Qtd','Unidade','Minimo','Situacao','Custo Unit','Valor Total','Validade','Fabricacao'],...dataRows,[],['TOTAL EM ESTOQUE',todosProds.length+' produtos','','','','','','','R$ '+fmtN(valorTotalEstoque),'','']];const csv=rows.map(r=>r.map(c=>'"'+String(c).replace(/"/g,'""')+'"').join(';')).join('\n');const a=document.createElement('a');a.href='data:text/csv;charset=utf-8,\uFEFF'+encodeURIComponent(csv);a.download='estoque_'+new Date().toISOString().slice(0,10)+'.csv';a.click();toast('\u2705 CSV baixado!');}
 
 
 
@@ -2182,7 +2620,7 @@ const TUTORIAIS={
     hi('🏷️','Emoji do Produto','Toque no botão de emoji ao lado do nome. São mais de <strong>1.900 ícones comerciais</strong> organizados em 22 categorias: alimentos, bebidas, carnes, pet shop, automotivo e muito mais. Facilita identificar o produto de longe.'),
     hi('📦','Estoque Mínimo — muito importante!','É a quantidade mínima que você quer ter sempre em estoque. Quando o produto ficar abaixo desse número, o sistema alerta automaticamente. Pense: <em>qual é o mínimo que não posso ficar sem?</em>'),
     hi('💰','Custo Unitário + Calculadora 🧮','Quanto você pagou por cada unidade? O sistema multiplica pelo estoque e mostra o <strong>valor total investido</strong> no painel inicial. Essencial para saber o capital parado.<br><br><strong>🧮 Calculadora embutida:</strong> comprou uma caixa e precisa saber o custo de cada unidade? Toque no botão <strong>🧮 Calcular</strong> acima do campo. Abre uma mini-calculadora:<br><strong>1.</strong> Digite a conta — ex: <strong>18,70 ÷ 12</strong> (valor da caixa ÷ unidades)<br><strong>2.</strong> Veja o resultado na hora<br><strong>3.</strong> Toque em <strong>✓</strong> e o valor entra sozinho no campo Custo Unitário<br>Toque de novo em 🧮 para abrir ou fechar a calculadora quando quiser.'),
-    hi('📅','Fabricação + Validade','Preencha as duas datas para controle preciso:<br>• <strong>Fabricação</strong>: evita alertas falsos em produtos novos<br>• <strong>Validade</strong>: o sistema avisa quando está perto de vencer<br>Digite a data no formato <strong>DD/MM/AAAA</strong> ou toque no campo para usar o teclado. O status aparece em tempo real: ✅ Válido · ⚠️ Vence em Xd · 🔴 VENCIDO'),
+    hi('📅','Fabricação + Validade','Preencha as duas datas para controle preciso:<br>• <strong>Fabricação</strong>: evita alertas falsos em produtos novos<br>• <strong>Validade</strong>: o sistema avisa quando está perto de vencer<br>Digite a data no formato <strong>DD/MM/AAAA</strong> (os números se formatam sozinhos). O status aparece em tempo real: ✅ Válido · ⚠️ Vence em Xd · 🔴 VENCIDO'),
     hi('🚚','Vincular ao Fornecedor','Selecione qual fornecedor vende este produto. Quando gerar a lista de compras, cada fornecedor recebe <strong>somente os seus produtos</strong> pelo WhatsApp. Muito mais organizado!'),
     hi('⏱️','Previsão de Quando Acaba','Com base nas saídas dos últimos 30 dias, o sistema calcula em quantos dias o produto vai acabar. Aparece embaixo de cada produto: 🔴 urgente ou ⚠️ atenção.'),
     hi('🔍','Busca e Filtros','Use a barra de busca para encontrar pelo nome. Use os botões de categoria para filtrar. Produtos críticos aparecem sempre no topo da lista.'),
@@ -2204,7 +2642,7 @@ const TUTORIAIS={
     hi('⚠️','Relatório de Perdas — impacto financeiro','Lista todas as perdas e vencimentos do mês com quantidade e <strong>valor em R$</strong>. No topo aparece o <strong>total perdido em dinheiro</strong>. Use para identificar o que mais desperdiça e agir para reduzir prejuízo.'),
     hi('🛒','Lista de Compras por Fornecedor','⭐ Disponível nos planos <strong>Profissional e Empresarial</strong>.<br><strong>Durante os 30 dias promocionais</strong> todos os clientes têm acesso!<br><br>Passo a passo:<br><strong>1.</strong> Toque em <strong>📲 Enviar Lista ao Fornecedor</strong><br><strong>2.</strong> Abre um card para cada fornecedor com os produtos em falta<br><strong>3.</strong> As quantidades são sugeridas automaticamente (mínimo − atual)<br><strong>4.</strong> Ajuste cada quantidade com − e + ou digitando<br><strong>5.</strong> Toque em <strong>📲 Enviar Pedido</strong> no card do fornecedor<br><strong>6.</strong> O WhatsApp abre com a mensagem pronta — só enviar!<br><strong>Dica:</strong> produtos sem fornecedor vão para uma lista geral.'),
   ],
-  nf:[
+  receb:[
     hi('📋','O que é o Módulo de Recebimento?','Aqui o conferente registra tudo que chega: fornecedor, número da NF, valor total, volumes e foto da nota. O registro fica salvo na nuvem e o proprietário e a estoquista podem consultar a qualquer hora.'),
     hi('+','Como registrar um recebimento — PASSO A PASSO','<strong>1.</strong> Toque no botão azul <strong>+</strong> no canto inferior direito<br><strong>2.</strong> Preencha o <strong>Fornecedor</strong> (nome de quem entregou)<br><strong>3.</strong> Preencha o <strong>Nº da NF</strong> (número da nota fiscal)<br><strong>4.</strong> Preencha o <strong>Valor Total</strong> da nota<br><strong>5.</strong> Preencha a <strong>Quantidade de Volumes/Caixas</strong><br><strong>6.</strong> Se houver problema (avaria, falta), descreva na <strong>Observação</strong><br><strong>7.</strong> Toque em <strong>📷 Tirar foto</strong> para fotografar a nota<br><strong>8.</strong> Digite seu <strong>PIN</strong> para assinar<br><strong>9.</strong> Toque em <strong>✅ Confirmar Recebimento</strong>'),
     hi('📷','Foto da NF — como funciona?','Ao tocar em 📷 Tirar foto, a câmera do celular abre direto. Tire a foto da nota fiscal na vertical (retrato). A foto é comprimida automaticamente e enviada para a nuvem. Se aparecer mensagem de memória, tente novamente — o celular libera espaço automaticamente.'),
@@ -2226,10 +2664,24 @@ config:[
     hi('🏪','Identidade do Estabelecimento','<strong>Nome</strong>: aparece no topo do app para todos os usuários.<br><strong>Tipo de negócio</strong>: classifica o seu estabelecimento.<br><strong>Logo</strong>: faça upload de uma foto quadrada (400×400px). Aparece no topo substituindo o "GE".'),
     hi('🏷️','Categorias de Produtos','Crie as categorias do seu negócio (ex: Carnes, Bebidas, Limpeza). Toque no emoji para escolher o ícone — mais de 1.900 opções. Facilita busca e relatórios.'),
     hi('📏','Unidades de Medida + Modo Edição ✏️','<strong>Todas</strong> as unidades são editáveis — as padrão (kg, g, l, ml...) e as que você criar. Adicione unidades específicas do seu negócio: porção, bandeja, ampola, rolo, envelope...<br><br><strong>✏️ Modo Edição:</strong> para organizar ou remover unidades, toque no botão <strong>✏️ Editar</strong>. Nesse modo aparece o ✕ ao lado de cada unidade — toque nele para remover a que não usa. Toque em ✏️ de novo (ou em <strong>Concluir</strong>) para sair do modo edição e travar a lista, evitando apagar algo sem querer no uso normal.'),
-    hi('📊','Relatórios completos','Envie o estoque completo por <strong>WhatsApp</strong> ou <strong>E-mail</strong>. Baixe em <strong>PDF</strong> (imprima pelo navegador) ou <strong>CSV</strong> para abrir no Excel. Inclui todos os produtos, quantidades, custos e valor total.'),
+    hi('📊','Relatório de Estoque','A "foto" do seu estoque agora. Mostra todos os produtos com quantidade, <strong>situação</strong> (🟢 OK ou 🔴 abaixo do mínimo), custo, <strong>valor total por produto</strong> e o <strong>valor total do estoque</strong> no rodapé. Envie por <strong>WhatsApp</strong> ou <strong>E-mail</strong>, ou baixe em <strong>PDF</strong> (para imprimir) ou <strong>CSV</strong> (abre no Excel). Preencha o número do WhatsApp e o e-mail nos campos antes de enviar.'),
+    hi('📈','Relatório de Movimentações','O "filme" do que aconteceu: todas as <strong>entradas, saídas e ajustes</strong> de um período. Escolha o <strong>mês</strong> (ou "todo o histórico") e envie/baixe nos mesmos 4 formatos. Mostra data, produto, tipo, quantidades, <strong>responsável</strong> e observação, com um resumo de quantas entradas/saídas/ajustes. Ótimo para o fechamento do mês e para o contador.'),
+    hi('💾','Guarde o fechamento do mês','No fim de cada mês, o app te lembra de salvar o Relatório de Movimentações. <strong>Guarde esse arquivo</strong> (no computador ou Google Drive) para seu controle e para o contador — é o seu histórico oficial. Um clique baixa tudo pronto.'),
     hi('🔔','Notificações Automáticas','O sistema pede permissão para enviar notificações ao seu celular. Quando ativado, você recebe alertas de:<br>• 🔴 Estoque crítico (zerado)<br>• ⚠️ Estoque baixo (abaixo do mínimo)<br>• 📅 Produtos vencidos ou vencendo em 3 dias<br><strong>Dica:</strong> as confirmações de ações importantes aparecem como mensagens coloridas no app — toque em ✓ Sim ou ✗ Não diretamente nelas.'),
     hi('💾','Backup Automático','A cada 30 dias o sistema lembra de fazer um backup em CSV do seu estoque. Guarde o arquivo no computador ou no Google Drive como segurança.'),
     hi('🗑️','Limpar Histórico','Remove todos os registros de movimentos antigos. Os produtos e quantidades são mantidos. Use no início de um novo período ou para limpar testes.'),
+  ],
+  etq:[
+    hi('🏷️','O que é o módulo de Etiquetas?','Aqui você cria e imprime etiquetas de identificação e validade para colar nos produtos — igual às que você vê em cozinhas e restaurantes profissionais. Ideal para produtos manipulados, porcionados ou embalados: cada etiqueta mostra o que é, quando foi feito, quando vence e quem foi o responsável.'),
+    hi('✍️','Como criar uma etiqueta — PASSO A PASSO','<strong>1.</strong> Preencha o <strong>Produto</strong> (obrigatório)<br><strong>2.</strong> Se quiser, preencha Lote, Peso/Qtd, Conservação, Fornecedor<br><strong>3.</strong> Preencha as datas de <strong>Manipulação</strong> e <strong>Validade</strong> (digite os números, formata sozinho)<br><strong>4.</strong> Adicione uma Observação se precisar<br><strong>5.</strong> Veja a etiqueta montando na <strong>pré-visualização</strong> em tempo real<br><strong>6.</strong> Toque em <strong>🖨️ Imprimir 1 etiqueta</strong><br><strong>7.</strong> Digite o <strong>PIN</strong> de quem é responsável<br>Pronto! Abre uma janela limpa só com a etiqueta — toque em Imprimir. <em>Campos em branco não aparecem na etiqueta.</em>'),
+    hi('🏷️','Formato BOPP 60×60 — o recomendado','É o formato <strong>profissional</strong>, igual ao das grandes cozinhas. Usa uma <strong>etiqueta térmica BOPP de 60×60mm em rolo</strong> e uma <strong>impressora térmica</strong> (ex: Zebra ZD220 ou similar). A BOPP é de plástico: <strong>resiste à água, ao congelamento e à refrigeração</strong> — não descola nem borra no freezer ou na geladeira. É a escolha certa para carnes, laticínios, congelados e tudo que vai ao frio.'),
+    hi('📄','Formato A4 papel — para estoque seco','Imprime várias etiquetas numa <strong>folha adesiva A4</strong> comum, em impressora de casa/escritório (jato de tinta ou laser). O modelo recomendado é a <strong>folha Colacril CA4361</strong> (ou Pimaco A4361): 63,5×46,6mm, 18 etiquetas por folha, fácil de achar e barata.<br><br><strong>⚠️ ATENÇÃO:</strong> a A4 é de <strong>papel</strong> — serve só para <strong>prateleira e estoque seco</strong> (grãos, enlatados, embalados). <strong>NÃO use no congelador ou geladeira</strong>: o papel encharca e descola. Para frio, use sempre a BOPP 60×60.'),
+    hi('🛒','Qual etiqueta e impressora comprar?','<strong>Para uso profissional / congelados e refrigerados:</strong><br>• Etiqueta: <strong>BOPP 60×60mm em rolo</strong><br>• Impressora: <strong>térmica</strong> (ex: Zebra ZD220)<br><br><strong>Para estoque seco / prateleira (opção econômica):</strong><br>• Folha: <strong>Colacril CA4361</strong> ou Pimaco A4361 (63,5×46,6mm)<br>• Impressora: qualquer <strong>jato de tinta ou laser</strong> comum<br><br>Dica: comece pela que faz mais sentido para o seu produto principal. A maioria dos restaurantes usa a BOPP térmica.'),
+    hi('📋','Fila: várias etiquetas de uma vez','Precisa etiquetar várias peças do mesmo produto com pesos diferentes (ex: 10 peças de mussarela)? Use a fila:<br><strong>1.</strong> Preencha os dados<br><strong>2.</strong> Toque em <strong>➕ Adicionar à folha</strong><br><strong>3.</strong> Mude só o peso e adicione de novo — o campo peso limpa sozinho para agilizar<br><strong>4.</strong> Repita quantas vezes precisar<br><strong>5.</strong> Toque em <strong>🖨️ Imprimir folha completa</strong> e digite o PIN<br>Sai tudo de uma vez: em grade na folha A4, ou uma após a outra na térmica.'),
+    hi('💡','Economia de folha (formato A4)','Ao montar a fila no formato A4, o app te avisa quantas folhas você vai gastar e quantos adesivos sobram. Ex: <em>"23 etiquetas = 2 folhas (13 adesivos sobrando)"</em>. Assim você decide se completa a folha para não desperdiçar. A folha CA4361 tem <strong>18 etiquetas</strong> (3 colunas × 6 linhas).'),
+    hi('🔑','PIN e responsável — rastreabilidade','Para imprimir qualquer etiqueta, é preciso digitar um <strong>PIN</strong>. O nome de quem digita o PIN entra na etiqueta como <strong>Responsável</strong>. Isso garante rastreabilidade: mesmo num computador compartilhado, fica registrado quem de fato etiquetou. Só imprime quem tem <strong>permissão de etiquetar</strong> — sem permissão, o app recusa o PIN.'),
+    hi('🔒','Permissão e plano para Etiquetas','O módulo de Etiquetas faz parte do plano <strong>Empresarial</strong> (liberado também durante os 30 dias de promoção). O proprietário define quem pode etiquetar: vá em <strong>⚙️ Config → Funcionários</strong>, toque no funcionário e ative <strong>🏷️ Imprimir Etiquetas</strong>. A aba de Etiqueta só aparece para quem tem permissão.'),
+    hi('🖨️','Se a impressão não abrir','Ao imprimir, o app abre uma <strong>janela nova</strong> só com a etiqueta. Se não abrir, seu navegador pode estar <strong>bloqueando pop-ups</strong> — libere pop-ups para o app e tente de novo. Na janela, você clica em 🖨️ Imprimir no seu tempo (não trava a impressora). Depois é só Fechar.'),
   ],
 };
 // Estado da navegação do tutorial
@@ -2238,7 +2690,7 @@ let HELP_IDX=0;
 
 function abrirAjuda(){
   const pg=pgAtual||'dash';
-  const titulos={dash:'🏠 Início',produtos:'📦 Produtos',hist:'📋 Histórico',insights:'📊 Relatório',config:'⚙️ Configurações',receb:'📋 Recebimentos NF'};
+  const titulos={dash:'🏠 Início',produtos:'📦 Produtos',hist:'📋 Histórico',insights:'📊 Relatório',config:'⚙️ Configurações',receb:'📋 Recebimentos NF',etq:'🏷️ Etiquetas'};
   $('helpTi').textContent='❓ '+(titulos[pg]||'Como usar');
   let itens=TUTORIAIS[pg]||TUTORIAIS['dash'];
   // Filtrar tutorial por permissões do funcionário
@@ -2381,23 +2833,32 @@ function verificarENotificar(){
   else if(vencendo.length)notificarLocal('Vencendo em breve',`${vencendo.length} produto(s) vencem em até 3 dias`,'⏰');
 }
 
-// BACKUP AUTOMÁTICO — exportar CSV mensalmente
+// LEMBRETE INTELIGENTE — fechamento de mês (salvar histórico)
 function verificarBackupAutomatico(){
   if(FUNC_ROLE!=='proprietario')return;
   const key='ge_ultimo_backup_'+REST_ID;
   const ultimo=localStorage.getItem(key);
   const agora=Date.now();
   const umMes=30*24*60*60*1000;
-  if(!ultimo||agora-parseInt(ultimo)>umMes){
-    // Avisar que está na hora do backup
+  const diaDoMes=new Date().getDate();
+  // Lembra se: nunca salvou, ou passou 1 mês, OU está nos primeiros 5 dias do mês (fechamento)
+  const passouMes=!ultimo||agora-parseInt(ultimo)>umMes;
+  const inicioMes=diaDoMes<=5;
+  if(passouMes||inicioMes){
     setTimeout(()=>{
+      // não repete no mesmo dia
+      const hojeStr=new Date().toDateString();
+      if(localStorage.getItem(key+'_dia')===hojeStr)return;
+      localStorage.setItem(key+'_dia',hojeStr);
       localStorage.setItem(key,agora.toString());
       const el=$('toast');
-      el.innerHTML=`💾 Dica: faça um backup do seu estoque! <span onclick="relCSV();fecharToast()" style="text-decoration:underline;cursor:pointer;margin-left:8px;font-weight:900;background:rgba(255,255,255,0.2);padding:2px 8px;border-radius:6px;font-family:Inter,sans-serif;">Baixar CSV</span>`;
+      if(!el)return;
+      el.innerHTML='📊 Fim de mês é hora de guardar seu histórico! Salve pro seu controle e contador. '+
+        '<span onclick="irPg(\'config\');setTimeout(()=>{const s=$(\'relMovMes\');if(s)s.scrollIntoView({behavior:\'smooth\'});},300);fecharToast()" style="text-decoration:underline;cursor:pointer;margin-left:6px;font-weight:900;background:rgba(255,255,255,0.2);padding:3px 9px;border-radius:6px;font-family:Inter,sans-serif;">Ver relatórios</span>';
       el.className='show info';
       el.style.pointerEvents='all';
       clearTimeout(el._t);
-      el._t=setTimeout(()=>{el.className='';el.innerHTML='';el.style.pointerEvents='';},8000);
+      el._t=setTimeout(()=>{el.className='';el.innerHTML='';el.style.pointerEvents='';},10000);
     },4000);
   }
 }
@@ -2701,7 +3162,7 @@ document.addEventListener('DOMContentLoaded',async()=>{
     if(sessUid){
       try{
         if(sessUid==='PROP'){const r=await sb(`ge_restaurantes?id=eq.${REST_ID}&select=nome,nome_proprietario,plano,validade_ate,ativo`);if(r.length){FUNC_NOME=r[0].nome_proprietario||r[0].nome;REST_NOME=r[0].nome;FUNC_ROLE='proprietario';if(r[0].plano)PLANO_ATUAL=r[0].plano;if(r[0].validade_ate)VALIDADE_ATE=r[0].validade_ate;if(r[0].ativo===false||trialVencido()){mostrarBloqueio();return;}await entrarApp();return;}}
-        else{const r=await sb(`ge_funcionarios?id=eq.${sessUid}&restaurante_id=eq.${REST_ID}&select=*`);if(r.length){FUNC_ID=r[0].id;FUNC_NOME=r[0].nome;FUNC_PERMS={historico:r[0].perm_historico,insights:r[0].perm_insights,produtos:r[0].perm_produtos,valor:r[0].perm_valor_estoque,estornar:r[0].perm_estornar,movimento:r[0].perm_movimento!==false,conferente:r[0].perm_conferente};const rr=await sb(`ge_restaurantes?id=eq.${REST_ID}&select=nome,plano,validade_ate,ativo`);REST_NOME=rr.length?rr[0].nome:'';if(rr.length&&rr[0].plano)PLANO_ATUAL=rr[0].plano;if(rr.length&&rr[0].validade_ate)VALIDADE_ATE=rr[0].validade_ate;FUNC_ROLE='funcionario';if((rr.length&&rr[0].ativo===false)||trialVencido()){mostrarBloqueio();return;}await entrarApp();return;}}
+        else{const r=await sb(`ge_funcionarios?id=eq.${sessUid}&restaurante_id=eq.${REST_ID}&select=*`);if(r.length){FUNC_ID=r[0].id;FUNC_NOME=r[0].nome;FUNC_PERMS={historico:r[0].perm_historico,insights:r[0].perm_insights,produtos:r[0].perm_produtos,valor:r[0].perm_valor_estoque,estornar:r[0].perm_estornar,movimento:r[0].perm_movimento!==false,conferente:r[0].perm_conferente,etiquetas:r[0].perm_etiquetas};const rr=await sb(`ge_restaurantes?id=eq.${REST_ID}&select=nome,plano,validade_ate,ativo`);REST_NOME=rr.length?rr[0].nome:'';if(rr.length&&rr[0].plano)PLANO_ATUAL=rr[0].plano;if(rr.length&&rr[0].validade_ate)VALIDADE_ATE=rr[0].validade_ate;FUNC_ROLE='funcionario';if((rr.length&&rr[0].ativo===false)||trialVencido()){mostrarBloqueio();return;}await entrarApp();return;}}
       }catch(e){limparSessao();}
     }
     try{
@@ -2738,7 +3199,8 @@ document.addEventListener('DOMContentLoaded',async()=>{
     <div class="mt" id="recebTit">📋 Novo Recebimento</div>
     <input type="hidden" id="recebId">
     <div class="fg"><label class="fl">Fornecedor *</label>
-      <input class="inp" id="recebFornec" placeholder="Ex: Fornecedor São Paulo Ltda">
+      <input class="inp" id="recebFornec" placeholder="Ex: Fornecedor São Paulo Ltda" list="dlFornecedoresReceb" autocomplete="off">
+      <datalist id="dlFornecedoresReceb"></datalist>
     </div>
     <div class="fg"><label class="fl">Nº da NF *</label>
       <input class="inp" id="recebNF" placeholder="Ex: 001234" inputmode="numeric">
@@ -2788,5 +3250,3 @@ document.addEventListener('DOMContentLoaded',async()=>{
 
 </body>
 </html>
-
-Commit changes
