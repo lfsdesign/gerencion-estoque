@@ -836,6 +836,7 @@ input[type=number]{-moz-appearance:textfield;appearance:textfield;}
         <button class="menu-item" onclick="menuIr('insights')"><span class="menu-ico">📊</span><div class="menu-txt"><div class="menu-nome">Relatórios</div><div class="menu-desc">Estoque e movimentações</div></div><span class="menu-seta">›</span></button>
         <button class="menu-item" onclick="menuIr('hist')"><span class="menu-ico">📋</span><div class="menu-txt"><div class="menu-nome">Histórico</div><div class="menu-desc">Tudo que entrou e saiu</div></div><span class="menu-seta">›</span></button>
         <button class="menu-item" id="menuCfg" onclick="menuIr('config')"><span class="menu-ico">⚙️</span><div class="menu-txt"><div class="menu-nome">Configurações</div><div class="menu-desc">Funcionários, planos e ajustes</div></div><span class="menu-seta">›</span></button>
+        <button class="menu-item" id="menuGuia" onclick="abrirMenu();reabrirGuia();"><span class="menu-ico">🚀</span><div class="menu-txt"><div class="menu-nome">Guia de Configuração</div><div class="menu-desc">Passo a passo para configurar o sistema</div></div><span class="menu-seta">›</span></button>
       </div>
     </div>
   </div>
@@ -1661,6 +1662,11 @@ async function entrarApp(){mostrarTela('telaApp');$('topNome').textContent=REST_
   }
   const ico=$('topIco');if(ico){if(logoSalva)ico.innerHTML='<img src="'+logoSalva+'" style="width:34px;height:34px;object-fit:cover;border-radius:8px;">';else ico.textContent='GE';}
   const navCfg=$('navCfg');if(navCfg)navCfg.style.display=FUNC_ROLE==='proprietario'?'flex':'none';const navReceb=$('navReceb');if(navReceb)navReceb.style.display=(FUNC_ROLE==='proprietario'||FUNC_PERMS.conferente)?'flex':'none';const navEtq=$('navEtq');if(navEtq){const podeEtqPerm=(FUNC_ROLE==='proprietario'||FUNC_PERMS.etiquetas);navEtq.style.display=podeEtqPerm?'flex':'none';}const navPratos=$('navPratos');if(navPratos){navPratos.style.display=(FUNC_ROLE==='proprietario'||FUNC_PERMS.pratos)?'flex':'none';}await Promise.all([carregarProds(),carregarFuncs(),carregarCats(),carregarUnits(),carregarFornecs()]);document.querySelectorAll('.pg').forEach(p=>p.classList.remove('on'));$('pg-dash')&&$('pg-dash').classList.add('on');document.querySelectorAll('.nav-btn').forEach((b,i)=>{if(i===0)b.classList.add('on');else b.classList.remove('on');});renderDash();
+  // primeira vez do proprietário? mostra as boas-vindas do guia
+  if(FUNC_ROLE==='proprietario'&&!localStorage.getItem('ge_bemvindo_'+REST_ID)&&!localStorage.getItem('ge_guia_fechado_'+REST_ID)){
+    localStorage.setItem('ge_bemvindo_'+REST_ID,'1');
+    setTimeout(()=>{const ov=$('ovBemVindo');if(ov)ov.classList.add('on');},600);
+  }
   // Solicitar permissão de notificação e verificar alertas
   solicitarPermissaoNotificacao().then(()=>setTimeout(verificarENotificar,2000));
   // Verificar backup automático
@@ -2213,7 +2219,7 @@ function adicionarIngredienteAoPrato(p, conteudo){
     conteudo_base:conteudo,
     preco_item:p.preco_custo||0,
     custo_por_base:custoBase, // R$ por g/ml
-    qtd_uso:100 // padrão 100g, o cliente ajusta
+    qtd_uso:null // vazio: o cliente digita a quantidade real
   });
   renderPratoIngredientes();
   pratoRecalc();
@@ -2228,14 +2234,14 @@ function renderPratoIngredientes(){
     return;
   }
   cnt.innerHTML=pratoIngredientes.map((ing,i)=>{
-    const custoIng=ing.custo_por_base*ing.qtd_uso;
+    const custoIng=(ing.qtd_uso!=null)?ing.custo_por_base*ing.qtd_uso:0;
     return `<div style="background:var(--s2);border:1px solid var(--b);border-radius:12px;padding:11px;">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
         <span style="font-size:13px;font-weight:700;color:var(--t);">${ing.emoji} ${ing.nome}</span>
         <button onclick="removerIngrediente(${i})" style="background:none;border:none;color:var(--rd);font-size:18px;cursor:pointer;line-height:1;">×</button>
       </div>
       <div style="display:flex;align-items:center;gap:8px;">
-        <input class="inp" type="number" min="0" step="1" value="${ing.qtd_uso}" inputmode="decimal" oninput="ajustarQtdIng(${i},this.value)" style="width:90px;padding:7px;text-align:center;">
+        <input class="inp" type="number" min="0" step="1" value="${ing.qtd_uso!=null?ing.qtd_uso:''}" placeholder="0" inputmode="decimal" oninput="ajustarQtdIng(${i},this.value)" style="width:90px;padding:7px;text-align:center;">
         <span style="font-size:12px;color:var(--t2);">g/ml usados</span>
         <span style="margin-left:auto;font-size:14px;font-weight:800;color:var(--gn);">${fmt(custoIng)}</span>
       </div>
@@ -2244,10 +2250,10 @@ function renderPratoIngredientes(){
 }
 
 function ajustarQtdIng(i, valor){
-  const q=parseFloat(String(valor).replace(',','.'))||0;
+  const v=String(valor).trim();
+  const q=(v==='')?null:(parseFloat(v.replace(',','.'))||0);
   if(pratoIngredientes[i])pratoIngredientes[i].qtd_uso=q;
   pratoRecalc();
-  // atualiza só o custo do item sem redesenhar tudo (mantém foco no input)
   renderPratoIngredientes();
 }
 
@@ -2261,7 +2267,7 @@ function removerIngrediente(i){
 function pratoRecalc(){
   const rend=parseFloat($('pratoRend').value)||1;
   let total=0;
-  pratoIngredientes.forEach(ing=>{total+=ing.custo_por_base*ing.qtd_uso;});
+  pratoIngredientes.forEach(ing=>{if(ing.qtd_uso!=null)total+=ing.custo_por_base*ing.qtd_uso;});
   const porPorcao=total/(rend>0?rend:1);
   if(pratoIngredientes.length){
     $('pratoResultado').style.display='block';
@@ -2378,8 +2384,8 @@ async function excluirPrato(){
 }
 
 async function carregarProds(){try{todosProds=await sb(`ge_produtos?restaurante_id=eq.${REST_ID}&select=*&order=nome.asc`);}catch(e){todosProds=[];toast('Erro ao carregar produtos','err');}}
-function renderProds(){const busca=($('sprod')&&$('sprod').value||'').toLowerCase();const cnt=$('prodList');if(!cnt)return;let lista=todosProds.filter(p=>!busca||p.nome.toLowerCase().includes(busca)||(p.categoria||'').toLowerCase().includes(busca));if(!lista.length){cnt.innerHTML='<div style="padding:40px;text-align:center;color:var(--t3)">Nenhum produto encontrado</div>';return;}cnt.innerHTML=lista.map(p=>{const sv=labelVal(p);const baixo=(p.quantidade||0)<=(p.estoque_minimo||0)&&(p.estoque_minimo||0)>0;const valB=p.data_validade?`<span style="font-size:10px;padding:2px 6px;border-radius:5px;background:${sv.cls==='venc'?'var(--rd2)':sv.cls==='warn'?'var(--am2)':'var(--gn2)'};color:${sv.cls==='venc'?'var(--rd)':sv.cls==='warn'?'var(--am)':'var(--gn)'};">${sv.ico} ${sv.txt}</span>`:'';const estB=baixo?'<span style="font-size:10px;padding:2px 6px;border-radius:5px;background:var(--rd2);color:var(--rd);">⚠️ Baixo</span>':'';return`<div style="background:var(--s1);border:1px solid ${baixo?'var(--rd3)':sv.cls==='venc'?'var(--rd3)':'var(--b)'};border-radius:15px;padding:13px;margin-bottom:9px;cursor:pointer;" onclick="abrirProd('${p.id}')"><div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:7px;"><div><div style="font-size:14px;font-weight:700;">${p.emoji||'📦'} ${p.nome}</div><div style="font-size:11px;color:var(--t2);margin-top:2px;">${p.categoria||'Sem categoria'}</div><div style="display:flex;gap:4px;flex-wrap:wrap;margin-top:5px;">${estB}${valB}</div></div><div style="text-align:right;flex-shrink:0;"><div style="font-size:24px;font-weight:800;color:${baixo?'var(--rd)':'var(--gn)'};">${fmtN(p.quantidade||0)}</div><div style="font-size:10px;color:var(--t2);">${p.unidade||'un'}</div><div style="font-size:10px;color:var(--t3);margin-top:2px;">${fmt(p.preco_custo||0)}</div></div></div><div style="height:5px;background:var(--s3);border-radius:20px;overflow:hidden;"><div style="height:100%;border-radius:20px;background:${baixo?'var(--rd)':'var(--gn)'};width:${Math.min(100,(p.estoque_minimo>0?(p.quantidade||0)/p.estoque_minimo*100:100))}%;transition:width .5s;"></div></div><div id="prev-${p.id}" style="font-size:10px;color:var(--t3);margin-top:5px;">⏳ Calculando previsão...</div></div>`;}).join('');
-  renderCatPills();
+function renderProds(){renderCatPills();renderProdsLista();}
+function renderProdsLista(){const busca=($('sprod')&&$('sprod').value||'').toLowerCase();const cnt=$('prodList');if(!cnt)return;let lista=todosProds.filter(p=>{const okBusca=!busca||p.nome.toLowerCase().includes(busca)||(p.categoria||'').toLowerCase().includes(busca);const okCat=!catFiltroAtual||p.categoria===catFiltroAtual;return okBusca&&okCat;});if(!lista.length){cnt.innerHTML='<div style="padding:40px;text-align:center;color:var(--t3)">Nenhum produto encontrado</div>';return;}cnt.innerHTML=lista.map(p=>{const sv=labelVal(p);const baixo=(p.quantidade||0)<=(p.estoque_minimo||0)&&(p.estoque_minimo||0)>0;const valB=p.data_validade?`<span style="font-size:10px;padding:2px 6px;border-radius:5px;background:${sv.cls==='venc'?'var(--rd2)':sv.cls==='warn'?'var(--am2)':'var(--gn2)'};color:${sv.cls==='venc'?'var(--rd)':sv.cls==='warn'?'var(--am)':'var(--gn)'};">${sv.ico} ${sv.txt}</span>`:'';const estB=baixo?'<span style="font-size:10px;padding:2px 6px;border-radius:5px;background:var(--rd2);color:var(--rd);">⚠️ Baixo</span>':'';return`<div style="background:var(--s1);border:1px solid ${baixo?'var(--rd3)':sv.cls==='venc'?'var(--rd3)':'var(--b)'};border-radius:15px;padding:13px;margin-bottom:9px;cursor:pointer;" onclick="abrirProd('${p.id}')"><div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:7px;"><div><div style="font-size:14px;font-weight:700;">${p.emoji||'📦'} ${p.nome}</div><div style="font-size:11px;color:var(--t2);margin-top:2px;">${p.categoria||'Sem categoria'}</div><div style="display:flex;gap:4px;flex-wrap:wrap;margin-top:5px;">${estB}${valB}</div></div><div style="text-align:right;flex-shrink:0;"><div style="font-size:24px;font-weight:800;color:${baixo?'var(--rd)':'var(--gn)'};">${fmtN(p.quantidade||0)}</div><div style="font-size:10px;color:var(--t2);">${p.unidade||'un'}</div><div style="font-size:10px;color:var(--t3);margin-top:2px;">${fmt(p.preco_custo||0)}</div></div></div><div style="height:5px;background:var(--s3);border-radius:20px;overflow:hidden;"><div style="height:100%;border-radius:20px;background:${baixo?'var(--rd)':'var(--gn)'};width:${Math.min(100,(p.estoque_minimo>0?(p.quantidade||0)/p.estoque_minimo*100:100))}%;transition:width .5s;"></div></div><div id="prev-${p.id}" style="font-size:10px;color:var(--t3);margin-top:5px;">⏳ Calculando previsão...</div></div>`;}).join('');
   // Carregar previsões em background
   todosProds.filter(p=>(p.quantidade||0)>0).forEach(async p=>{
     const el=document.getElementById('prev-'+p.id);
@@ -2393,8 +2399,9 @@ function renderProds(){const busca=($('sprod')&&$('sprod').value||'').toLowerCas
     el.textContent=`${ico} Previsão: acaba em ~${dias} dias (${prev.mediaXDia.toFixed(1)} ${p.unidade||'un'}/dia)`;
   });
 }
-function renderCatPills(){const el=$('catPills');if(!el)return;const cats=[...new Set(todosProds.map(p=>p.categoria).filter(Boolean))];el.innerHTML=['<button class="cat on" onclick="filtroCat(\'\',this)">Todos</button>',...cats.map(c=>`<button class="cat" onclick="filtroCat('${c}',this)">${c}</button>`)].join('');}
-function filtroCat(cat,btn){document.querySelectorAll('#catPills .cat').forEach(b=>b.classList.remove('on'));btn&&btn.classList.add('on');renderProds();}
+function renderCatPills(){const el=$('catPills');if(!el)return;const cats=[...new Set(todosProds.map(p=>p.categoria).filter(Boolean))];el.innerHTML=[`<button class="cat ${!catFiltroAtual?'on':''}" onclick="filtroCat('',this)">Todos</button>`,...cats.map(c=>`<button class="cat ${catFiltroAtual===c?'on':''}" onclick="filtroCat('${c}',this)">${c}</button>`)].join('');}
+let catFiltroAtual=''; // categoria selecionada no filtro (vazio = todos)
+function filtroCat(cat,btn){catFiltroAtual=cat;document.querySelectorAll('#catPills .cat').forEach(b=>b.classList.remove('on'));btn&&btn.classList.add('on');renderProdsLista();}
 
 function abrirProd(id){const cb=$('calcBox');if(cb)cb.style.display='none';
   const dica=$('mpDicaPeso');if(dica)dica.style.display=ehSegmentoComida()?'block':'none';
@@ -2414,8 +2421,8 @@ function abrirProd(id){const cb=$('calcBox');if(cb)cb.style.display='none';
   const allUnits=[...UNITS_PAD,...todasUnits.map(u=>u.nome||u)];
   const unitSel=$('mpUnit');
   if(unitSel)unitSel.innerHTML=allUnits.map(u=>`<option value="${u}" ${p&&p.unidade===u?'selected':''}>${u}</option>`).join('');
-  $('mpQty').value=p?(p.quantidade||0):0;
-  $('mpMin').value=p?(p.estoque_minimo||0):0;
+  $('mpQty').value=p&&p.quantidade?p.quantidade:'';
+  $('mpMin').value=p&&p.estoque_minimo?p.estoque_minimo:'';
   $('mpCusto').value=p&&p.preco_custo?fmtMoedaInput(p.preco_custo):'';
   $('mpFab').value=p?(p.data_fabricacao||''):'';$('mpVal').value=p?(p.data_validade||''):'';
   const fornSel=$('mpFornec');
@@ -2554,6 +2561,14 @@ async function registrarMov(){const pid=$('mmProd').value;const tipo=$('mmTipo')
 
 // DASHBOARD
 // ===== GUIA DE PRIMEIROS PASSOS (onboarding) =====
+function fecharTodosModais(){document.querySelectorAll('.overlay.on').forEach(o=>o.classList.remove('on'));}
+// Reabre o guia de configuração (pelo menu)
+function reabrirGuia(){
+  localStorage.removeItem('ge_guia_fechado_'+REST_ID);
+  fecharTodosModais();
+  irPg('dash',null);
+  setTimeout(()=>{renderGuiaPrimeirosPassos();const g=$('guiaPrimeirosPassos');if(g)g.scrollIntoView({behavior:'smooth',block:'center'});},300);
+}
 function renderGuiaPrimeirosPassos(){
   const box=$('guiaPrimeirosPassos');if(!box)return;
   // só o proprietário vê o guia (é quem configura o sistema)
@@ -2567,11 +2582,11 @@ function renderGuiaPrimeirosPassos(){
   const temCategoria=(todasCats||[]).length>0;
   const temMovimento=(todosProds||[]).some(p=>(p.quantidade||0)>0);
   const passos=[
-    {ok:true, titulo:'Criar seu estabelecimento', desc:'Feito! Seu sistema está no ar.', acao:null},
-    {ok:temCategoria, titulo:'Criar categorias', desc:'Organize seus produtos (ex: Bebidas, Carnes, Limpeza).', acao:"irPg('config',null);setTimeout(()=>{var e=$('novaCatNome');if(e)e.scrollIntoView({behavior:'smooth'});},300)", btn:'Criar categoria'},
-    {ok:temFornecedor, titulo:'Cadastrar um fornecedor', desc:'Adicione de quem você compra. Aparece nas sugestões depois.', acao:"irPg('config',null)", btn:'Adicionar fornecedor'},
-    {ok:temProduto, titulo:'Cadastrar seu primeiro produto', desc:'O coração do sistema. Adicione um item ao estoque.', acao:"abrirProd()", btn:'Cadastrar produto'},
-    {ok:temMovimento, titulo:'Registrar uma entrada ou saída', desc:'Movimente o estoque: deu entrada ou vendeu algo.', acao:"irPg('produtos',null)", btn:'Ir para produtos'}
+    {ok:true, titulo:'Criar seu estabelecimento', desc:'Feito! Seu sistema está no ar e pronto para configurar.', acao:null},
+    {ok:temCategoria, titulo:'Criar suas categorias', desc:'Organize seus produtos em grupos (ex: Cereais, Bebidas, Carnes). Toque no botão, digite o nome da categoria e salve. Crie quantas quiser!', acao:"fecharTodosModais();irPg('config',null);setTimeout(()=>{var e=$('novaCatNome')||$('catNome');if(e){e.scrollIntoView({behavior:'smooth',block:'center'});e.focus();}},400)", btn:'Criar categoria'},
+    {ok:temFornecedor, titulo:'Cadastrar seus fornecedores', desc:'Adicione de quem você compra. Depois eles aparecem prontos nas sugestões quando você cadastra produtos e notas.', acao:"fecharTodosModais();irPg('config',null);setTimeout(()=>{var e=$('fornecNome');if(e){e.scrollIntoView({behavior:'smooth',block:'center'});}},400)", btn:'Adicionar fornecedor'},
+    {ok:temProduto, titulo:'Cadastrar seus produtos', desc:'O coração do sistema! Adicione os itens do seu estoque com nome, categoria, custo e quantidade. Dica: inclua o peso no nome (ex: Arroz 5kg).', acao:"fecharTodosModais();abrirProd()", btn:'Cadastrar produto'},
+    {ok:temMovimento, titulo:'Registrar entradas e saídas', desc:'Movimente o estoque: registre quando chega mercadoria (entrada) ou quando vende/consome (saída). Assim o estoque fica sempre certo.', acao:"fecharTodosModais();irPg('produtos',null)", btn:'Ver produtos'}
   ];
   const feitos=passos.filter(p=>p.ok).length;
   const total=passos.length;
@@ -3644,7 +3659,7 @@ function renderRecebimentos(){
           '<div style="font-size:13px;font-weight:800;color:var(--t1);">'+r.fornecedor+'</div>'+
           '<div style="font-size:11px;color:var(--t2);">NF '+r.numero_nf+' · '+dt+'</div>'+
         '</div>'+
-        (r.foto_url?'<button onclick="verFoto(\''+r.id+'\')" style="padding:5px 10px;background:var(--bl2);border:1px solid var(--bl3);border-radius:8px;color:var(--bl);font-size:11px;font-weight:700;cursor:pointer;font-family:Inter,sans-serif;">📷 Ver NF</button>':'<span style="font-size:11px;color:var(--t3);">Sem foto</span>')+
+        (r.foto_url?'<button onclick="verFoto(\''+r.id+'\')" style="padding:5px 10px;background:var(--bl2);border:1px solid var(--bl3);border-radius:8px;color:var(--bl);font-size:11px;font-weight:700;cursor:pointer;font-family:Inter,sans-serif;">📷 Ver NF</button>':(FUNC_ROLE==='proprietario'?'<button onclick="apagarRecebimentoDireto(\''+r.id+'\')" style="padding:5px 10px;background:var(--rd2);border:1px solid var(--rd3);border-radius:8px;color:var(--rd);font-size:11px;font-weight:700;cursor:pointer;font-family:Inter,sans-serif;">🗑️ Excluir</button>':'<span style="font-size:11px;color:var(--t3);">Sem foto</span>'))+
       '</div>'+
       '<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:8px;">'+
         '<div style="background:var(--bg);border-radius:8px;padding:7px;text-align:center;">'+
@@ -3697,6 +3712,24 @@ async function apagarRecebimento(){
     recebApagarId=null;
     await carregarRecebimentos();
   }catch(e){toast('Erro ao apagar','err');}
+}
+
+// Apaga recebimento direto do card (funciona com ou sem foto)
+async function apagarRecebimentoDireto(id){
+  if(FUNC_ROLE!=='proprietario'){toast('Apenas o proprietário pode excluir','warn');return;}
+  const r=todosRecebimentos.find(x=>x.id===id);
+  const nome=r?(r.fornecedor+' · NF '+r.numero_nf):'este recebimento';
+  if(!confirm('Excluir o recebimento de "'+nome+'"?\n\nEssa ação não pode ser desfeita.'))return;
+  try{
+    // se tiver foto, apaga do storage também
+    if(r&&r.foto_url){
+      const path=r.foto_url.split('/object/public/recebimentos-nf/')[1];
+      if(path){try{await fetch(SB_URL+'/storage/v1/object/recebimentos-nf/'+path,{method:'DELETE',headers:{'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY}});}catch(e){}}
+    }
+    await sb('ge_recebimentos?id=eq.'+id,{method:'DELETE'});
+    toast('🗑️ Recebimento excluído','warn');
+    await carregarRecebimentos();
+  }catch(e){toast('Erro ao excluir','err');}
 }
 // ============================================================
 
@@ -3804,6 +3837,20 @@ document.addEventListener('DOMContentLoaded',async()=>{
 </div>
 
 <!-- Modal Novo Recebimento -->
+<div class="overlay" id="ovBemVindo">
+  <div class="modal" onclick="event.stopPropagation()" style="max-width:400px;text-align:center;">
+    <div style="font-size:46px;margin-bottom:6px;">👋</div>
+    <div style="font-size:20px;font-weight:800;color:var(--t);margin-bottom:8px;">Bem-vindo ao Gerencion!</div>
+    <div style="font-size:13px;color:var(--t2);line-height:1.6;margin-bottom:8px;">Vou te guiar para deixar seu sistema pronto para uso, <strong>passo a passo</strong>. É rápido e simples — em poucos minutos você estará no controle total do seu estoque.</div>
+    <div style="background:var(--gn2);border:1px solid var(--gn3);border-radius:12px;padding:13px;margin:14px 0;text-align:left;">
+      <div style="font-size:12px;font-weight:800;color:var(--gn);margin-bottom:8px;">O que vamos fazer juntos:</div>
+      <div style="font-size:12px;color:var(--t2);line-height:1.9;">1️⃣ Criar categorias (organizar)<br>2️⃣ Cadastrar fornecedores<br>3️⃣ Cadastrar seus produtos<br>4️⃣ Registrar entradas e saídas</div>
+    </div>
+    <button onclick="fM('ovBemVindo');irPg('dash',null);" style="width:100%;padding:13px;background:var(--gn);border:none;border-radius:12px;color:#fff;font-size:14px;font-weight:800;cursor:pointer;font-family:Inter,sans-serif;">Vamos começar! 🚀</button>
+    <button onclick="fecharGuia();fM('ovBemVindo');" style="width:100%;padding:10px;background:none;border:none;color:var(--t3);font-size:12px;cursor:pointer;margin-top:6px;">Agora não, obrigado</button>
+  </div>
+</div>
+
 <div class="overlay" id="ovReceb">
   <div class="modal">
     <div class="mt" id="recebTit">📋 Novo Recebimento</div>
