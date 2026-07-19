@@ -2582,13 +2582,27 @@ function renderGuiaPrimeirosPassos(){
   const temFornecedor=(todosFornecs||[]).length>0;
   const temCategoria=(todasCats||[]).length>0;
   const temMovimento=(todosProds||[]).some(p=>(p.quantidade||0)>0);
+  const temFuncionario=(todosFuncs||[]).length>0;
+  // capacidades do plano/segmento (guia inteligente: só mostra o que faz sentido)
+  const lim=(typeof PLANOS!=='undefined'&&PLANOS[PLANO_ATUAL])?PLANOS[PLANO_ATUAL]:{};
+  const trial=(typeof verificarTrialAtivo==='function')&&verificarTrialAtivo();
+  const podeEtiquetas=lim.etiquetas||trial;
+  const podePratos=(lim.pratos||trial)&&(typeof ehSegmentoComida==='function')&&ehSegmentoComida();
   const passos=[
     {ok:true, titulo:'Criar seu estabelecimento', desc:'Feito! Seu sistema está no ar e pronto para configurar.', acao:null},
     {ok:temCategoria, titulo:'Criar suas categorias', desc:'Organize seus produtos em grupos (ex: Cereais, Bebidas, Carnes). Toque no botão, digite o nome da categoria e salve. Crie quantas quiser!', acao:"fecharTodosModais();irPg('config',null);setTimeout(()=>{var e=$('novaCatNome')||$('catNome');if(e){e.scrollIntoView({behavior:'smooth',block:'center'});e.focus();}},400)", btn:'Criar categoria'},
     {ok:temFornecedor, titulo:'Cadastrar seus fornecedores', desc:'Adicione de quem você compra. Depois eles aparecem prontos nas sugestões quando você cadastra produtos e notas.', acao:"fecharTodosModais();irPg('config',null);setTimeout(()=>{var e=$('fornecNome');if(e){e.scrollIntoView({behavior:'smooth',block:'center'});}},400)", btn:'Adicionar fornecedor'},
     {ok:temProduto, titulo:'Cadastrar seus produtos', desc:'O coração do sistema! Adicione os itens do seu estoque com nome, categoria, custo e quantidade. Dica: inclua o peso no nome (ex: Arroz 5kg).', acao:"fecharTodosModais();abrirProd()", btn:'Cadastrar produto'},
-    {ok:temMovimento, titulo:'Registrar entradas e saídas', desc:'Movimente o estoque: registre quando chega mercadoria (entrada) ou quando vende/consome (saída). Assim o estoque fica sempre certo.', acao:"fecharTodosModais();irPg('produtos',null)", btn:'Ver produtos'}
+    {ok:temMovimento, titulo:'Registrar entradas e saídas', desc:'Movimente o estoque: registre quando chega mercadoria (entrada) ou quando vende/consome (saída). Assim o estoque fica sempre certo.', acao:"fecharTodosModais();irPg('produtos',null)", btn:'Ver produtos'},
+    {ok:temFuncionario, titulo:'Cadastrar sua equipe (opcional)', desc:'Adicione seus funcionários e defina o que cada um pode fazer (as permissões). Cada um acessa com seu próprio PIN. Você controla quem cadastra, edita ou exclui.', acao:"fecharTodosModais();irPg('config',null);setTimeout(()=>{var e=$('mfNome');if(e){e.scrollIntoView({behavior:'smooth',block:'center'});}},400)", btn:'Cadastrar equipe'}
   ];
+  // Passos EXTRAS — só aparecem se o plano/segmento permite (guia inteligente)
+  if(podePratos){
+    passos.push({ok:(typeof todosPratos!=='undefined'&&todosPratos.length>0), titulo:'Montar seus pratos (CMV)', desc:'Descubra o custo real de cada prato do seu cardápio. Monte a receita com os ingredientes do estoque e veja o custo por porção — essencial para precificar com lucro.', acao:"fecharTodosModais();irPg('pratos',null)", btn:'Custo de Pratos'});
+  }
+  if(podeEtiquetas){
+    passos.push({ok:false, opcional:true, titulo:'Conhecer as etiquetas', desc:'Imprima etiquetas profissionais dos seus produtos (com validade, lote e responsável). Útil para organização e controle de vencimento.', acao:"fecharTodosModais();irPg('etq',null)", btn:'Ver etiquetas'});
+  }
   const feitos=passos.filter(p=>p.ok).length;
   const total=passos.length;
   const pct=Math.round(feitos/total*100);
