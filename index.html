@@ -30,6 +30,10 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--t);font-siz
 #toast.err{border-color:var(--rd3);color:var(--rd);}
 #toast.warn{border-color:var(--am3);color:var(--am);}
 #toast.info{border-color:var(--bl3);color:var(--bl);}
+/* tarjas sólidas para avisos de assinatura (texto branco, alta legibilidade) */
+#toast.tarja-verde{background:linear-gradient(135deg,#16a34a,#22c55e);border-color:#16a34a;color:#fff;font-weight:700;}
+#toast.tarja-vermelha{background:linear-gradient(135deg,#dc2626,#ef4444);border-color:#dc2626;color:#fff;font-weight:700;}
+#toast.tarja-verde strong,#toast.tarja-vermelha strong{color:#fff;}
 .tela{display:none !important;min-height:100vh;}
 .tela.on{display:block !important;}
 #telaSetup.on,#telaLogin.on,#tela1Acesso.on,#telaCodigoFunc.on{display:flex !important;}
@@ -1811,19 +1815,20 @@ function verificarAvisaTrial(){
   const el=$('toast');
   if(!el)return;
   setTimeout(()=>{
+    el.className='';el.style.background='';
     if(fase==='avisando'){
-      // Fase 1: cordial e motivador, com contagem regressiva
+      // Fase 1: cordial e motivador, com contagem regressiva — TARJA VERDE
       const dias=diasRestantesTrial();
       const txtDias=dias===0?'hoje':(dias===1?'amanhã':'em <strong>'+dias+' dias</strong>');
       el.innerHTML='💚 Sua assinatura vence '+txtDias+'. Renove e continue no controle total do seu estoque!';
-      el.className='show';el.style.background='linear-gradient(135deg,#16a34a,#22c55e)';
+      el.className='show tarja-verde';
     }else if(fase==='carencia'){
-      // Fase 2: firme mas justo, informa a data do bloqueio
+      // Fase 2: firme mas justo, informa a data do bloqueio — TARJA VERMELHA
       const dataTrava=dataBloqueioBR();
       const desde=diasDesdeVencimento();
       const diasAteTravar=DIAS_CARENCIA-desde;
-      el.innerHTML='⚠️ Sua assinatura <strong>venceu</strong>. O acesso será bloqueado em <strong>'+dataTrava+'</strong> ('+(diasAteTravar===1?'amanhã':diasAteTravar+' dias')+'). Renove para não parar!';
-      el.className='show warn';
+      el.innerHTML='⚠️ Sua assinatura <strong>venceu</strong>. Acesso bloqueado em <strong>'+dataTrava+'</strong> ('+(diasAteTravar===1?'amanhã':diasAteTravar+' dias')+'). Renove para não parar!';
+      el.className='show tarja-vermelha';
     }
     el.style.pointerEvents='all';
     clearTimeout(el._t);
