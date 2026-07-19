@@ -2567,6 +2567,7 @@ function reabrirGuia(){
   localStorage.removeItem('ge_guia_fechado_'+REST_ID);
   fecharTodosModais();
   irPg('dash',null);
+  window._guiaModoTutorial=true; // força mostrar todos os passos como tutorial
   setTimeout(()=>{renderGuiaPrimeirosPassos();const g=$('guiaPrimeirosPassos');if(g)g.scrollIntoView({behavior:'smooth',block:'center'});},300);
 }
 function renderGuiaPrimeirosPassos(){
@@ -2591,8 +2592,9 @@ function renderGuiaPrimeirosPassos(){
   const feitos=passos.filter(p=>p.ok).length;
   const total=passos.length;
   const pct=Math.round(feitos/total*100);
-  // se completou tudo, mostra parabéns e some depois
-  if(feitos===total){
+  const modoTutorial=window._guiaModoTutorial;
+  // se completou tudo (e NÃO está no modo tutorial), mostra parabéns
+  if(feitos===total&&!modoTutorial){
     box.style.display='block';
     box.innerHTML=`<div style="background:linear-gradient(135deg,var(--gn2),rgba(20,27,45,0.4));border:1px solid var(--gn3);border-radius:16px;padding:18px;margin-bottom:16px;text-align:center;">
       <div style="font-size:15px;font-weight:800;color:var(--gn);">🎉 Tudo pronto! Você já domina o essencial.</div>
@@ -2608,18 +2610,19 @@ function renderGuiaPrimeirosPassos(){
       <div style="font-size:14px;font-weight:800;color:var(--t);">🚀 Primeiros passos</div>
       <button onclick="fecharGuia()" style="background:none;border:none;color:var(--t3);font-size:12px;cursor:pointer;">ocultar</button>
     </div>
-    <div style="font-size:11px;color:var(--t2);margin-bottom:10px;">Siga o guia para começar. ${feitos} de ${total} concluídos.</div>
+    <div style="font-size:11px;color:var(--t2);margin-bottom:10px;">${modoTutorial?'Toque em cada passo para aprender como fazer. Você pode refazer quando quiser.':'Siga o guia para começar. '+feitos+' de '+total+' concluídos.'}</div>
     <div style="height:6px;background:var(--s2);border-radius:4px;overflow:hidden;margin-bottom:14px;"><div style="height:100%;width:${pct}%;background:linear-gradient(90deg,var(--gn),var(--gn3));border-radius:4px;transition:width .4s;"></div></div>
     <div style="display:flex;flex-direction:column;gap:8px;">
       ${passos.map((p,i)=>{
         const ehProximo=(i===proximoIdx);
+        const mostrarDetalhe=ehProximo||(modoTutorial&&p.acao); // no tutorial, mostra tudo
         return `<div style="display:flex;align-items:center;gap:11px;padding:10px;background:${ehProximo?'var(--gn2)':'transparent'};border:1px solid ${ehProximo?'var(--gn3)':'var(--b)'};border-radius:11px;">
-          <div style="width:26px;height:26px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;background:${p.ok?'var(--gn)':(ehProximo?'var(--gn3)':'var(--s2)')};color:${p.ok||ehProximo?'#fff':'var(--t3)'};">${p.ok?'✓':(i+1)}</div>
+          <div style="width:26px;height:26px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;background:${p.ok?'var(--gn)':(ehProximo?'var(--gn3)':'var(--s2)')};color:${p.ok||ehProximo?'#fff':'var(--t3)'};">${p.ok&&!modoTutorial?'✓':(i+1)}</div>
           <div style="flex:1;min-width:0;">
-            <div style="font-size:13px;font-weight:700;color:${p.ok?'var(--t3)':'var(--t)'};${p.ok?'text-decoration:line-through;':''}">${p.titulo}</div>
-            ${ehProximo?`<div style="font-size:11px;color:var(--t2);margin-top:2px;">${p.desc}</div>`:''}
+            <div style="font-size:13px;font-weight:700;color:${p.ok&&!modoTutorial?'var(--t3)':'var(--t)'};${p.ok&&!modoTutorial?'text-decoration:line-through;':''}">${p.titulo}${p.ok&&modoTutorial?' <span style="font-size:9px;color:var(--gn);">✓ feito</span>':''}</div>
+            ${mostrarDetalhe?`<div style="font-size:11px;color:var(--t2);margin-top:2px;">${p.desc}</div>`:''}
           </div>
-          ${ehProximo&&p.acao?`<button onclick="${p.acao}" style="flex-shrink:0;padding:7px 13px;background:var(--gn);border:none;border-radius:9px;color:#fff;font-size:11px;font-weight:700;cursor:pointer;font-family:Inter,sans-serif;">${p.btn||'Fazer'}</button>`:''}
+          ${mostrarDetalhe&&p.acao?`<button onclick="${p.acao}" style="flex-shrink:0;padding:7px 13px;background:var(--gn);border:none;border-radius:9px;color:#fff;font-size:11px;font-weight:700;cursor:pointer;font-family:Inter,sans-serif;">${p.btn||'Fazer'}</button>`:''}
         </div>`;
       }).join('')}
     </div>
@@ -2627,6 +2630,7 @@ function renderGuiaPrimeirosPassos(){
 }
 function fecharGuia(){
   localStorage.setItem('ge_guia_fechado_'+REST_ID,'1');
+  window._guiaModoTutorial=false;
   const box=$('guiaPrimeirosPassos');if(box)box.style.display='none';
 }
 function renderDash(){renderGuiaPrimeirosPassos();const h=new Date().getHours();const saud=h<12?'Bom dia':h<18?'Boa tarde':'Boa noite';$('dGreet')&&($('dGreet').textContent=saud+' '+(FUNC_NOME||'').split(' ')[0]+' 👋');$('dDate')&&($('dDate').textContent=new Date().toLocaleDateString('pt-BR',{weekday:'long',day:'numeric',month:'long'}));$('stTot')&&($('stTot').textContent=todosProds.length);const baixos=todosProds.filter(p=>(p.quantidade||0)<=(p.estoque_minimo||0)&&(p.estoque_minimo||0)>0);const criticos=todosProds.filter(p=>(p.quantidade||0)===0&&(p.estoque_minimo||0)>0);$('stBx')&&($('stBx').textContent=baixos.length);$('stCr')&&($('stCr').textContent=criticos.length);const badge=$('alertBadge');if(badge){$('alertCnt').textContent=baixos.length;badge.style.display=baixos.length?'flex':'none';}if(FUNC_ROLE==='proprietario'||(FUNC_PERMS&&FUNC_PERMS.valor)){const total=todosProds.reduce((a,p)=>a+(p.preco_custo||0)*(p.quantidade||0),0);const vb=$('veBox');if(vb)vb.style.display='flex';$('veVal')&&($('veVal').textContent=fmt(total));}else{const vb=$('veBox');if(vb)vb.style.display='none';}const secA=$('secA'),dAlerts=$('dAlerts');if(dAlerts){if(baixos.length){secA&&(secA.style.display='block');dAlerts.innerHTML=baixos.slice(0,5).map(p=>`<div class="alert-c ${(p.quantidade||0)===0?'a-rd':'a-am'}"><div class="a-ico">${p.emoji||'📦'}</div><div class="a-info"><div class="a-nome">${p.nome}</div><div class="a-qty">${fmtN(p.quantidade||0)} ${p.unidade||'un'} · Mín: ${fmtN(p.estoque_minimo||0)}</div></div><button class="a-btn" onclick="abrirMov('entrada')">+ Repor</button></div>`).join('');}else{secA&&(secA.style.display='none');dAlerts.innerHTML='';}}const vencendo=todosProds.filter(p=>{const d=diasParaVencer(p.data_validade);return d!==null&&d>=0&&d<=30;});const secV=$('secV'),dValid=$('dValid');if(dValid){if(vencendo.length){secV&&(secV.style.display='block');dValid.innerHTML=vencendo.map(p=>{const sv=labelVal(p);return`<div class="alert-c a-cy"><div class="a-ico">${p.emoji||'📦'}</div><div class="a-info"><div class="a-nome">${p.nome}</div><div class="a-qty" style="color:${sv.cls==='venc'?'var(--rd)':'var(--am)'}">${sv.ico} ${sv.txt}</div></div></div>`;}).join('');}else{secV&&(secV.style.display='none');dValid.innerHTML='';}}renderMovsRecentes();}
@@ -3491,9 +3495,9 @@ function renderRecebItens(){
     </div>
     <div style="display:flex;align-items:center;gap:7px;flex-wrap:wrap;">
       <span style="font-size:11px;color:var(--t2);">Qtd:</span>
-      <input class="inp" type="number" min="0" step="1" value="${it.qtd}" inputmode="decimal" oninput="recebAjustarItem(${i},'qtd',this.value)" style="width:70px;padding:6px;text-align:center;">
+      <input class="inp" type="number" min="0" step="1" value="${it.qtd||''}" placeholder="0" inputmode="decimal" oninput="recebAjustarItem(${i},'qtd',this.value)" style="width:70px;padding:6px;text-align:center;">
       <span style="font-size:11px;color:var(--t2);">Custo R$:</span>
-      <input class="inp" type="number" min="0" step="0.01" value="${it.custo}" inputmode="decimal" oninput="recebAjustarItem(${i},'custo',this.value)" style="width:80px;padding:6px;text-align:center;" title="Custo de compra deste produto nesta nota">
+      <input class="inp" type="text" value="${it.custo?fmtMoedaInput(it.custo):''}" placeholder="0,00" inputmode="numeric" oninput="mascaraMoeda(this);recebAjustarItem(${i},'custo',this.value)" style="width:90px;padding:6px;text-align:center;" title="Custo de compra deste produto nesta nota">
     </div>
     ${!it.novo?`<div style="font-size:10px;color:var(--t3);margin-top:5px;">💡 Confira o custo — atualize se o preço mudou nesta compra.</div>`:''}
   </div>`).join('');
@@ -3502,6 +3506,7 @@ function renderRecebItens(){
 function recebAjustarItem(i,campo,valor){
   if(!recebItens[i])return;
   if(campo==='nome'){recebItens[i].nome=valor;}
+  else if(campo==='custo'){recebItens[i].custo=moedaParaNumero(valor);}
   else{recebItens[i][campo]=parseFloat(String(valor).replace(',','.'))||0;}
 }
 function recebRemoverItem(i){recebItens.splice(i,1);renderRecebItens();}
