@@ -1609,11 +1609,13 @@ function pinDel(){if(pinDigitos.length>0){pinDigitos=pinDigitos.slice(0,-1);rend
 function renderPin(){for(let i=0;i<4;i++){const el=$('pd'+i);if(el)el.classList.toggle('filled',i<pinDigitos.length);}const err=$('pinErro');if(err)err.textContent='';}
 async function validarPin(){try{
   // Verificar se licença está ativa
-  const lic=await sb(`ge_restaurantes?id=eq.${REST_ID}&select=ativo,validade_ate,plano`);
+  const lic=await sb(`ge_restaurantes?id=eq.${REST_ID}&select=ativo,validade_ate,plano,nome,nome_proprietario`);
+  let restNome='',restDono='';
   if(lic.length){
     const r=lic[0];
     if(r.plano)PLANO_ATUAL=r.plano;
     if(r.validade_ate)VALIDADE_ATE=r.validade_ate;
+    restNome=r.nome||'';restDono=r.nome_proprietario||'';
     if(r.ativo===false){
       pinDigitos='';renderPin();
       $('pinErro').textContent='';
@@ -1630,7 +1632,38 @@ async function validarPin(){try{
       }
     }
   }
-  const rp=await sb(`ge_restaurantes?id=eq.${REST_ID}&pin_dono=eq.${pinDigitos}&select=id,nome,nome_proprietario`);if(rp.length){FUNC_ID=null;FUNC_NOME=rp[0].nome_proprietario||rp[0].nome;REST_NOME=rp[0].nome;FUNC_ROLE='proprietario';salvarSessao('PROP');salvarSessaoSupabase(REST_ID);await entrarApp();return;}const rf=await sb(`ge_funcionarios?restaurante_id=eq.${REST_ID}&select=*`);const rfF=rf.filter(f=>f.pin===pinDigitos);if(rfF&&rfF.length){FUNC_ID=rfF[0].id;FUNC_NOME=rfF[0].nome;FUNC_ROLE='funcionario';FUNC_PERMS={historico:rfF[0].perm_historico,insights:rfF[0].perm_insights,produtos:rfF[0].perm_produtos,valor:rfF[0].perm_valor_estoque,estornar:rfF[0].perm_estornar,movimento:rfF[0].perm_movimento!==false,conferente:rfF[0].perm_conferente,etiquetas:rfF[0].perm_etiquetas};salvarSessao(rfF[0].id,true);const rrest=await sb(`ge_restaurantes?id=eq.${REST_ID}&select=nome`);REST_NOME=rrest.length?rrest[0].nome:'';await entrarApp();return;}pinDigitos='';renderPin();const err=$('pinErro');if(err){err.textContent='PIN incorreto. Tente novamente.';setTimeout(()=>err.textContent='',2000);}}catch(e){toast('Erro: '+e.message,'err');pinDigitos='';renderPin();}}
+  // Passo 3: PIN não é mais conferido no navegador — a Edge Function login-pin
+  // confere contra pin_dono/pin no servidor e devolve sessão + perfil.
+  const resp=await fetch(`${SB_URL}/functions/v1/login-pin`,{method:'POST',headers:{'apikey':SB_KEY,'Authorization':`Bearer ${SB_KEY}`,'Content-Type':'application/json'},body:JSON.stringify({REST_ID:REST_ID,pin:pinDigitos,device_id:DEVICE_ID})});
+  if(resp.status===429){
+    pinDigitos='';renderPin();
+    const err=$('pinErro');
+    if(err){err.textContent='Muitas tentativas. Aguarde um momento e tente novamente.';setTimeout(()=>err.textContent='',3000);}
+    return;
+  }
+  if(!resp.ok){
+    pinDigitos='';renderPin();
+    const err=$('pinErro');
+    if(err){err.textContent='PIN incorreto. Tente novamente.';setTimeout(()=>err.textContent='',2000);}
+    return;
+  }
+  const data=await resp.json();
+  const perfil=data.perfil||{};
+  REST_NOME=restNome;
+  if(perfil.role==='proprietario'){
+    FUNC_ID=null;FUNC_NOME=restDono||restNome;FUNC_ROLE='proprietario';
+    salvarSessao('PROP');salvarSessaoSupabase(REST_ID);
+  }else{
+    // login-pin não devolve o id do funcionário no perfil; o e-mail sintético
+    // da sessão (`<id>@ge.internal`) é a mesma derivação que a função usa no servidor.
+    const email=(data.session&&data.session.user&&data.session.user.email)||'';
+    FUNC_ID=email.split('@')[0]||null;
+    FUNC_NOME=perfil.nome||'';FUNC_ROLE='funcionario';
+    FUNC_PERMS={historico:perfil.perm_historico,insights:perfil.perm_insights,produtos:perfil.perm_produtos,valor:perfil.perm_valor_estoque,estornar:perfil.perm_estornar,movimento:perfil.perm_movimento!==false,conferente:perfil.perm_conferente,etiquetas:perfil.perm_etiquetas};
+    salvarSessao(FUNC_ID,true);
+  }
+  await entrarApp();
+}catch(e){toast('Erro: '+e.message,'err');pinDigitos='';renderPin();}}
 function trocarEst(){
   const el=document.getElementById('toast');
   el.innerHTML='🔄 Trocar estabelecimento? <button onclick="confirmarTrocarEst()" style="margin-left:8px;padding:2px 10px;background:rgba(255,255,255,0.2);border:none;border-radius:6px;color:#fff;font-weight:900;cursor:pointer;font-family:Inter,sans-serif;">✓ Sim</button> <button onclick="fecharToast()" style="margin-left:4px;padding:2px 10px;background:rgba(255,255,255,0.2);border:none;border-radius:6px;color:#fff;cursor:pointer;font-family:Inter,sans-serif;">✗ Não</button>';
