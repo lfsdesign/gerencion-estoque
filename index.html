@@ -2950,7 +2950,7 @@ async function comFeedback(btn, textoOcupado, acao){
     btn.style.minWidth='';
   }
 }
-async function salvarFunc(){const nome=$('mfNome').value.trim();const pin=$('mfPin').value;if(!nome)return toast('Nome obrigatório','err');if(!funcAtual&&(!pin||pin.length!==4||isNaN(pin)))return toast('PIN deve ter 4 números','err');
+async function salvarFunc(){const nome=$('mfNome').value.trim();const pin=$('mfPin').value;if(!nome)return toast('Nome obrigatório','err');if((!funcAtual&&!pin)||(pin&&!/^\d{4}$/.test(pin)))return toast('O PIN deve ter exatamente 4 dígitos numéricos','err');
   // PIN pode ser igual ao do proprietário — o sistema distingue pelo contexto de login
   const perms=funcAtual?{perm_historico:$('permHist').checked,perm_insights:$('permInsights').checked,perm_produtos:$('permProdutos').checked,perm_valor_estoque:$('permValor').checked,perm_estornar:$('permEstornar').checked,perm_movimento:$('permMovimento').checked,perm_conferente:$('permConferente').checked,perm_etiquetas:$('permEtiquetas').checked}:{};
   const dados={restaurante_id:REST_ID,nome,...(pin?{pin}:{}),...perms};try{const id=$('mfId').value;if(id)await sb(`ge_funcionarios?id=eq.${id}`,{method:'PATCH',body:JSON.stringify(dados)});else await sb('ge_funcionarios',{method:'POST',body:JSON.stringify(dados)});toast(id?'✅ Funcionário atualizado!':'✅ Funcionário criado!');fM('ovFunc');await carregarFuncs();renderFuncs();}catch(e){toast('Erro: '+JSON.stringify(e),'err');}}
