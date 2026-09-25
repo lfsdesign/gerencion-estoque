@@ -1595,7 +1595,7 @@ async function calcularPrevisao(prodId, qtdAtual, unidade){
 function atualizarStatusVal(){const el=$('mpValStatus');if(!el)return;const dtVal=($('mpVal')&&($('mpVal').dataset.isoDate||($('mpVal').value&&$('mpVal').value.match(/^\d{4}-/)&&$('mpVal').value)))||'';const dtFab=($('mpFab')&&($('mpFab').dataset.isoDate||($('mpFab').value&&$('mpFab').value.match(/^\d{4}-/)&&$('mpFab').value)))||'';if(!dtVal){el.style.display='none';return;}const s=labelVal({data_validade:dtVal,data_fabricacao:dtFab||null});el.textContent=s.ico+' '+s.txt;el.style.display='block';el.style.background=s.cls==='venc'?'var(--rd2)':s.cls==='warn'?'var(--am2)':'var(--gn2)';el.style.color=s.cls==='venc'?'var(--rd)':s.cls==='warn'?'var(--am)':'var(--gn)';el.style.border=`1px solid ${s.cls==='venc'?'var(--rd3)':s.cls==='warn'?'var(--am3)':'var(--gn3)'}`;}
 
 // SETUP
-async function criarEstabelecimento(){const nome=$('sNome').value.trim();const tipo=$('sTipo').value.trim();const cnpj=($('sCnpj')?$('sCnpj').value.trim():'');const dono=$('sDonoNome').value.trim();const pin=$('sPin').value;if(!$('chkTermos')||!$('chkTermos').checked)return toast('Você precisa aceitar os Termos de Uso para continuar','warn',3000);if(!nome||!tipo||!dono||!pin)return toast('Preencha todos os campos','err');if(pin.length!==4||isNaN(pin))return toast('PIN deve ter 4 números','err');try{const cod=Math.random().toString(36).substring(2,8).toUpperCase();const planoTrial=localStorage.getItem('ge_plano_escolhido')||'basico';
+async function criarEstabelecimento(){const nome=$('sNome').value.trim();const tipo=$('sTipo').value.trim();const cnpj=($('sCnpj')?$('sCnpj').value.trim():'');const dono=$('sDonoNome').value.trim();const pin=$('sPin').value;if(!$('chkTermos')||!$('chkTermos').checked)return toast('Você precisa aceitar os Termos de Uso para continuar','warn',3000);if(!nome||!tipo||!dono||!pin)return toast('Preencha todos os campos','err');if(!/^\d{4}$/.test(pin))return toast('O PIN deve ter exatamente 4 dígitos numéricos','err');try{const cod=Math.random().toString(36).substring(2,8).toUpperCase();const planoTrial=localStorage.getItem('ge_plano_escolhido')||'basico';
 const valTrial=new Date();valTrial.setDate(valTrial.getDate()+30);
 const validadeTrial=valTrial.toISOString().split('T')[0];
 const r=await sb('ge_restaurantes',{method:'POST',body:JSON.stringify({nome:nome,tipo_negocio:tipo,cnpj:cnpj||null,nome_proprietario:dono,pin_dono:pin,codigo_acesso:cod,ativo:true,plano:planoTrial,validade_ate:validadeTrial,observacao:'Trial 30 dias'})});REST_ID=r[0].id;REST_NOME=nome;localStorage.setItem('ge_rest_id',REST_ID);salvarSessaoSupabase(REST_ID);localStorage.removeItem('ge_cod_pendente');FUNC_NOME=dono;FUNC_ROLE='proprietario';toast('✅ Estabelecimento criado!');setTimeout(()=>entrarApp(),1000);}catch(e){toast('Erro: '+JSON.stringify(e),'err');}}
@@ -2009,7 +2009,7 @@ function etqAbrirPin(){etqPinDigitos='';const inp=$('etqPinInput');if(inp)inp.va
 async function etqConfirmarPin(){
   const pin=($('etqPinInput')?.value||'').trim();
   const err=$('etqPinErro');
-  if(pin.length<4){if(err)err.textContent='Digite o PIN (4 dígitos).';return;}
+  if(!/^\d{4}$/.test(pin)){if(err)err.textContent='Digite um PIN válido de 4 dígitos numéricos.';return;}
   let nomeResp=null, temPerm=false;
   try{
     const rp=await sb(`ge_restaurantes?id=eq.${REST_ID}&pin_dono=eq.${pin}&select=nome,nome_proprietario`);
@@ -3602,7 +3602,7 @@ async function salvarRecebimento(){
   const pin=$('recebPin').value.trim();
   if(!fornec)return toast('Informe o nome do fornecedor','err');
   if(!nf)return toast('Informe o nº da NF','err');
-  if(!pin||pin.length!==4||isNaN(pin))return toast('PIN deve ter 4 dígitos','err');
+  if(!pin||!/^\d{4}$/.test(pin))return toast('O PIN deve ter exatamente 4 dígitos numéricos','err');
 
   // Validar PIN
   try{
